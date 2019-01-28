@@ -97,7 +97,7 @@ CREATE TABLE post(
     FOREIGN KEY (idUtente) REFERENCES utente(idUtente) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (idFoto) REFERENCES foto(idFoto) ON DELETE CASCADE ON UPDATE CASCADE );
     
-CREATE TABLE likeP(
+CREATE TABLE clipshot.like(
 	idUtente VARCHAR(32),
     idPost INT(11),
     idUtentePost VARCHAR(32),
