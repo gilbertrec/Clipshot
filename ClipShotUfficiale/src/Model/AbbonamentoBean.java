@@ -13,10 +13,10 @@ public class AbbonamentoBean {
 	public AbbonamentoBean() {
 	}
 	
-	public AbbonamentoBean(String idUtente, Date datascadenza, int ncarta, String stato) {
+	public AbbonamentoBean(String idUtente, Date dataScadenza, int ncarta, String stato) {
 		
 		this.idUtente = idUtente;
-		this.dataScadenza = datascadenza;
+		this.dataScadenza = dataScadenza;
 		this.numeroCarta = ncarta;
 		this.stato = stato;
 	}
@@ -26,11 +26,11 @@ public class AbbonamentoBean {
 	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
-	public Date getDatascadenza() {
+	public Date getDataScadenza() {
 		return dataScadenza;
 	}
-	public void setDatascadenza(Date datascadenza) {
-		this.dataScadenza = datascadenza;
+	public void setDataScadenza(Date dataScadenza) {
+		this.dataScadenza = dataScadenza;
 	}
 	public int getNumeroCarta() {
 		return numeroCarta;

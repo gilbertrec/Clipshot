@@ -12,6 +12,7 @@ public class CartaDiCreditoBean {
 	public CartaDiCreditoBean() {
 		
 	}
+	
 	public CartaDiCreditoBean(int ncarta, String idUtente, String intestatario, Date dataScadenza, String cvv) {
 		this.numeroCarta = ncarta;
 		this.idUtente = idUtente;
