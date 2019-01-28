@@ -6,6 +6,10 @@ public class FotoBean
 	private String path;
 	private Double prezzo;
 	
+	public FotoBean() {
+		
+	}
+	
 	public FotoBean(String idFoto, String path)
 	{
 		this.idFoto = idFoto;

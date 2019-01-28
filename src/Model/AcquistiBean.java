@@ -7,6 +7,10 @@ public class AcquistiBean {
 	private String idFoto;
 	private Date data;
 	
+	
+	public AcquistiBean() {
+	}
+	
 	public AcquistiBean(String idUtente, String idFoto, Date data){
 		this.idUtente = idUtente;
 		this.idFoto = idFoto;

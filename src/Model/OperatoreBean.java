@@ -8,6 +8,11 @@ public class OperatoreBean {
 	private String email;
 	private String tipo;
 	
+	
+	
+	public OperatoreBean() {
+		
+	}
 	public OperatoreBean(String idUtente, String password, String nome, String cognome, String email, String tipo) {
 		this.idUtente = idUtente;
 		this.password = password;

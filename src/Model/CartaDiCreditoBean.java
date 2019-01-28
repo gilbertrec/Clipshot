@@ -1,26 +1,28 @@
 package Model;
 
 public class CartaDiCreditoBean {
-	private int ncarta;
+	private int numeroCarta;
 	private String idUtente;
 	private String intestatario;
 	private String dataScadenza;
 	private String cvv;
 	
+	public CartaDiCreditoBean() {
+	}
 	public CartaDiCreditoBean(int ncarta, String idUtente, String intestatario, String dataScadenza, String cvv) {
-		this.ncarta = ncarta;
+		this.numeroCarta = ncarta;
 		this.idUtente = idUtente;
 		this.intestatario = intestatario;
 		this.dataScadenza = dataScadenza;
 		this.cvv = cvv;
 	}
 
-	public int getNcarta() {
-		return ncarta;
+	public int getNumeroCarta() {
+		return numeroCarta;
 	}
 
-	public void setNcarta(int ncarta) {
-		this.ncarta = ncarta;
+	public void setNumeroCarta(int ncarta) {
+		this.numeroCarta = ncarta;
 	}
 
 	public String getIdUtente() {

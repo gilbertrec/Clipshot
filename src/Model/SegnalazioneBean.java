@@ -9,6 +9,11 @@ public class SegnalazioneBean {
 	private Date data;
 	private String descrizione;
 	
+	
+	public SegnalazioneBean() {
+		
+	}
+	
 	public SegnalazioneBean(String idSegnalazione, String causa, String stato, Date data) {
 		this.idSegnalazione = idSegnalazione;
 		this.causa = causa;

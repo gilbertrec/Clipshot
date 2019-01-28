@@ -5,15 +5,19 @@ import java.sql.Date;
 public class AbbonamentoBean {
 	private String idUtente;
 	private Date datascadenza;
-	private int ncarta;
+	private int numeroCarta;
 	private String stato;
 	
 	
+	
+	public AbbonamentoBean() {
+	}
+	
 	public AbbonamentoBean(String idUtente, Date datascadenza, int ncarta, String stato) {
-		super();
+		
 		this.idUtente = idUtente;
 		this.datascadenza = datascadenza;
-		this.ncarta = ncarta;
+		this.numeroCarta = ncarta;
 		this.stato = stato;
 	}
 	public String getIdUtente() {
@@ -28,11 +32,11 @@ public class AbbonamentoBean {
 	public void setDatascadenza(Date datascadenza) {
 		this.datascadenza = datascadenza;
 	}
-	public int getNcarta() {
-		return ncarta;
+	public int getNumeroCarta() {
+		return numeroCarta;
 	}
-	public void setNcarta(int ncarta) {
-		this.ncarta = ncarta;
+	public void setNumeroCarta(int ncarta) {
+		this.numeroCarta = ncarta;
 	}
 	public String getStato() {
 		return stato;

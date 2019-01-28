@@ -4,6 +4,10 @@ public class LikeBean {
 	private String idFollower;
 	private String idFollowing;
 	
+	
+	public LikeBean() {
+	}
+	
 	public LikeBean(String idFollower, String idFollowing) {
 
 		this.idFollower = idFollower;

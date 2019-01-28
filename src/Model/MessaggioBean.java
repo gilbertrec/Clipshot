@@ -10,6 +10,9 @@ public class MessaggioBean {
 	private Time ora;
 	private String corpo;
 	
+	
+	public MessaggioBean() {
+	}
 	public MessaggioBean(String idMittente, String idDestinatario, Date dataMessaggio, Time ora, String corpo) {
 		super();
 		this.idMittente = idMittente;

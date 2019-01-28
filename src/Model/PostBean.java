@@ -10,6 +10,11 @@ public class PostBean {
 	private String idUtente;
 	private String idFoto;
 	
+	
+	public PostBean() {
+		
+	}
+	
 	public PostBean(String idPost, String descrizione, Date data, String stato, String idUtente, String idFoto) {
 		this.idPost = idPost;
 		this.descrizione = descrizione;

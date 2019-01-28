@@ -4,6 +4,11 @@ public class StatisticheBean {
 	private String idUtente;
 	private int numeroVisualizzazioni;
 	
+	
+	public StatisticheBean() {
+		
+	}
+	
 	public StatisticheBean(String idUtente, int numeroVisualizzazioni) {
 		this.idUtente = idUtente;
 		this.numeroVisualizzazioni = numeroVisualizzazioni;

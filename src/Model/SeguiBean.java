@@ -4,7 +4,9 @@ public class SeguiBean {
 	private String idFollower;
 	private String idFollowing;
 	
-	
+	public SeguiBean() {
+		
+	}
 	public SeguiBean(String idFollower, String idFollowing) {
 		
 		this.idFollower = idFollower;

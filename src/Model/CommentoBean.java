@@ -10,6 +10,9 @@ public class CommentoBean {
 	private Time ora;
 	private String descrizione;
 	
+	
+	public CommentoBean() {
+	}
 	public CommentoBean(String idUtente, String idPost, Date data, Time ora, String descrizione) {
 		
 		this.idUtente = idUtente;
@@ -46,6 +49,7 @@ public class CommentoBean {
 	public String getDescrizione() {
 		return descrizione;
 	}
+	
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
