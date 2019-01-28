@@ -1,19 +1,20 @@
 package Model;
 
 import java.sql.Date;
+import java.sql.Time;
 
 public class MessaggioAssistenzaBean {
 	private String idDestinatario;
 	private String idMittente;
 	private Date data;
-	private String ora;
+	private Time ora;
 	private String corpo;
 	
-	
 	public MessaggioAssistenzaBean() {
+		
 	}
 	
-	public MessaggioAssistenzaBean(String idDestinatario, String idMittente, Date data, String ora, String corpo) {
+	public MessaggioAssistenzaBean(String idDestinatario, String idMittente, Date data, Time ora, String corpo) {
 		
 		this.idDestinatario = idDestinatario;
 		this.idMittente = idMittente;
@@ -46,11 +47,11 @@ public class MessaggioAssistenzaBean {
 		this.data = data;
 	}
 
-	public String getOra() {
+	public Time getOra() {
 		return ora;
 	}
 
-	public void setOra(String ora) {
+	public void setOra(Time ora) {
 		this.ora = ora;
 	}
 
