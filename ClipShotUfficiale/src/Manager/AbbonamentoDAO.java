@@ -18,7 +18,7 @@ public class AbbonamentoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(AbbonamentoBean a) throws Exception{
-		AbbonamentoBean temp = doRetriveByKey(a.getIdUtente());
+		AbbonamentoBean temp = doRetrieveByKey(a.getIdUtente());
 		if(temp==null) {
 			doSave(a);
 		}
@@ -34,7 +34,7 @@ public class AbbonamentoDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized AbbonamentoBean doRetriveByKey(String idUtente) throws Exception{
+	public synchronized AbbonamentoBean doRetrieveByKey(String idUtente) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		AbbonamentoBean a = new AbbonamentoBean();
 		a.setIdUtente(idUtente);
@@ -51,7 +51,7 @@ public class AbbonamentoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return a;	
 	}
-	public synchronized ArrayList<AbbonamentoBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<AbbonamentoBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<AbbonamentoBean> abbonamenti = new ArrayList<AbbonamentoBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.abbonamento");

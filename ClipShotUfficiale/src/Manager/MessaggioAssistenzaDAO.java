@@ -23,7 +23,7 @@ public class MessaggioAssistenzaDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(MessaggioAssistenzaBean ma) throws Exception{
-		MessaggioAssistenzaBean temp = doRetriveByKey(ma.getIdUtente(), ma.getIdOperatore(), ma.getDataMessaggio(), ma.getOra());
+		MessaggioAssistenzaBean temp = doRetrieveByKey(ma.getIdUtente(), ma.getIdOperatore(), ma.getDataMessaggio(), ma.getOra());
 		if(temp==null) {
 			doSave(ma);
 		}
@@ -42,7 +42,7 @@ public class MessaggioAssistenzaDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized MessaggioAssistenzaBean doRetriveByKey(String idUtente, String idOperatore, Date dataMessaggio, Time ora) throws Exception{
+	public synchronized MessaggioAssistenzaBean doRetrieveByKey(String idUtente, String idOperatore, Date dataMessaggio, Time ora) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		MessaggioAssistenzaBean ma = new MessaggioAssistenzaBean();
 		ma.setIdUtente(idUtente);
@@ -65,7 +65,7 @@ public class MessaggioAssistenzaDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return ma;	
 	}
-	public synchronized ArrayList<MessaggioAssistenzaBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<MessaggioAssistenzaBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<MessaggioAssistenzaBean> messaggiAssistenza = new ArrayList<MessaggioAssistenzaBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.messaggioAssistenza");

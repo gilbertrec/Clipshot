@@ -21,7 +21,7 @@ public class MessaggioDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(MessaggioBean m) throws Exception{
-		MessaggioBean temp = doRetriveByKey(m.getIdMittente(), m.getIdDestinatario(), m.getDataMessaggio(), m.getOra());
+		MessaggioBean temp = doRetrieveByKey(m.getIdMittente(), m.getIdDestinatario(), m.getDataMessaggio(), m.getOra());
 		if(temp==null) {
 			doSave(m);
 		}
@@ -38,7 +38,7 @@ public class MessaggioDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized MessaggioBean doRetriveByKey(String idMittente, String idDestinatario, Date dataMessaggio, Time ora) throws Exception{
+	public synchronized MessaggioBean doRetrieveByKey(String idMittente, String idDestinatario, Date dataMessaggio, Time ora) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		MessaggioBean m = new MessaggioBean();
 		m.setIdMittente(idMittente);
@@ -59,7 +59,7 @@ public class MessaggioDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return m;	
 	}
-	public synchronized ArrayList<MessaggioBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<MessaggioBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<MessaggioBean> messaggi = new ArrayList<MessaggioBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.messaggio");
