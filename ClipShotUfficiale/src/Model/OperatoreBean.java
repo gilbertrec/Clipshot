@@ -5,18 +5,18 @@ public class OperatoreBean {
 	private String password;
 	private String nome;
 	private String cognome;
-	private String mail;
+	private String email;
 	private String tipo;
 	
 	public OperatoreBean() {
 		
 	}
-	public OperatoreBean(String username, String password, String nome, String cognome, String mail, String tipo) {
+	public OperatoreBean(String username, String password, String nome, String cognome, String email, String tipo) {
 		this.username = username;
 		this.password = password;
 		this.nome = nome;
 		this.cognome = cognome;
-		this.mail = mail;
+		this.email = email;
 		this.tipo = tipo;
 	}
 
@@ -50,12 +50,12 @@ public class OperatoreBean {
 		this.cognome = cognome;
 	}
 
-	public String getMail() {
-		return mail;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getTipo() {

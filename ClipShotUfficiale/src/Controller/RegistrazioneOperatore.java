@@ -50,7 +50,7 @@ public class RegistrazioneOperatore extends HttpServlet {
 		o.setCognome(request.getParameter("cognome"));
 		o.setPassword(request.getParameter("password"));
 		o.setUsername(request.getParameter("username"));
-		o.setMail(request.getParameter("email"));
+		o.setEmail(request.getParameter("email"));
 		try {
 			model.doSave(o);
 		} catch (Exception e) {
