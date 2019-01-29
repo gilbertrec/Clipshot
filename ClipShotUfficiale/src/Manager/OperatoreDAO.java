@@ -14,7 +14,7 @@ public class OperatoreDAO {
 	public synchronized void doSave(OperatoreBean o) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
-			"insert into clipshot.operatore (username, password, nome, cognome, email, tipo) values (?, ?, ?, ?, ?, ?)");
+			"insert into clipshot.operatore (username, password, nome, cognome, mail, tipo) values (?, ?, ?, ?, ?, ?)");
 		query.setString(1, o.getUsername());
 		query.setString(2, o.getPassword());
 		query.setString(3, o.getNome());
