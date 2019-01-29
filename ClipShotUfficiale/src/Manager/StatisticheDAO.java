@@ -16,7 +16,7 @@ public class StatisticheDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(StatisticheBean s) throws Exception{
-		StatisticheBean temp = doRetriveByKey(s.getIdUtente());
+		StatisticheBean temp = doRetrieveByKey(s.getIdUtente());
 		if(temp==null) {
 			doSave(s);
 		}
@@ -30,7 +30,7 @@ public class StatisticheDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized StatisticheBean doRetriveByKey(String idUtente) throws Exception{
+	public synchronized StatisticheBean doRetrieveByKey(String idUtente) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		StatisticheBean s = new StatisticheBean();
 		s.setIdUtente(idUtente);
@@ -45,7 +45,7 @@ public class StatisticheDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return s;	
 	}
-	public synchronized ArrayList<StatisticheBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<StatisticheBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<StatisticheBean> statistiche = new ArrayList<StatisticheBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.statistiche");

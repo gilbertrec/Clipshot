@@ -20,7 +20,7 @@ public class OperatoreDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(OperatoreBean o) throws Exception{
-		OperatoreBean temp = doRetriveByKey(o.getUsername());
+		OperatoreBean temp = doRetrieveByKey(o.getUsername());
 		if(temp==null) {
 			doSave(o);
 		}
@@ -38,7 +38,7 @@ public class OperatoreDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized OperatoreBean doRetriveByKey(String username) throws Exception{
+	public synchronized OperatoreBean doRetrieveByKey(String username) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		OperatoreBean o = new OperatoreBean();
 		o.setUsername(username);
@@ -57,7 +57,7 @@ public class OperatoreDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return o;	
 	}
-	public synchronized ArrayList<OperatoreBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<OperatoreBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<OperatoreBean> operatori = new ArrayList<OperatoreBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.operatore");

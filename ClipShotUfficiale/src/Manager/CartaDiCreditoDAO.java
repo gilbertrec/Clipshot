@@ -19,7 +19,7 @@ public class CartaDiCreditoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(CartaDiCreditoBean c) throws Exception{
-		CartaDiCreditoBean temp = doRetriveByKey(c.getNumeroCarta());
+		CartaDiCreditoBean temp = doRetrieveByKey(c.getNumeroCarta());
 		if(temp==null) {
 			doSave(c);
 		}
@@ -36,7 +36,7 @@ public class CartaDiCreditoDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized CartaDiCreditoBean doRetriveByKey(int numeroCarta) throws Exception{
+	public synchronized CartaDiCreditoBean doRetrieveByKey(int numeroCarta) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		CartaDiCreditoBean c = new CartaDiCreditoBean();
 		c.setNumeroCarta(numeroCarta);
@@ -54,7 +54,7 @@ public class CartaDiCreditoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return c;	
 	}
-	public synchronized ArrayList<CartaDiCreditoBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<CartaDiCreditoBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<CartaDiCreditoBean> carte = new ArrayList<CartaDiCreditoBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.cartadiCredito");

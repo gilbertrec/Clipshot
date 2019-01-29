@@ -22,7 +22,7 @@ public class SegnalazioneDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	public synchronized void doSaveOrUpdate(SegnalazioneBean se) throws Exception{
-		SegnalazioneBean temp = doRetriveByKey(se.getIdSegnalazione(), se.getIdUtente());
+		SegnalazioneBean temp = doRetrieveByKey(se.getIdSegnalazione(), se.getIdUtente());
 		if(temp==null) {
 			doSave(se);
 		}
@@ -42,7 +42,7 @@ public class SegnalazioneDAO {
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized SegnalazioneBean doRetriveByKey(int idSegnalazione, String idUtente) throws Exception{
+	public synchronized SegnalazioneBean doRetrieveByKey(int idSegnalazione, String idUtente) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		SegnalazioneBean se = new SegnalazioneBean();
 		se.setIdSegnalazione(idSegnalazione);
@@ -64,7 +64,7 @@ public class SegnalazioneDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return se;	
 	}
-	public synchronized ArrayList<SegnalazioneBean> doRetriveAll() throws Exception{
+	public synchronized ArrayList<SegnalazioneBean> doRetrieveAll() throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<SegnalazioneBean> segnalazioni = new ArrayList<SegnalazioneBean>();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.segnalazione");
