@@ -1,4 +1,4 @@
-package Controller;
+package Controller.GestioneOperatori;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -45,7 +45,6 @@ public class RegistrazioneOperatore extends HttpServlet {
 		}else if(tipo.equalsIgnoreCase("Operatore")) {
 			o.setTipo("Operatore");
 		}
-		
 		o.setNome(request.getParameter("nome"));
 		o.setCognome(request.getParameter("cognome"));
 		o.setPassword(request.getParameter("password"));
