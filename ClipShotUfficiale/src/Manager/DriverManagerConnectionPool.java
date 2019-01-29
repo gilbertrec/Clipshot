@@ -3,52 +3,49 @@ package Manager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-public class DriverManagerConnectionPool {
-	private static ArrayList<Connection> listaConnessione;
+public class DriverManagerConnectionPool{
 	static {
-		//istanzio la listaConnesione
-		listaConnessione= new ArrayList<Connection>();
-		//carico il jar
+		freeDbConnections = new LinkedList<Connection>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			System.out.println("DB driver not found:"+ e.getMessage());
+		} 
 	}
-	
-	public static Connection createDBConnection () throws SQLException {
-		String url = "jdbc:mysql://localhost:3306/clipshot?autoReconect=true&useSSL=false"; //connessione attraverso jdbc, 3306: numero di porte
-		String user = "root"; 
-		String pwd= "root";
-		Connection con=DriverManager.getConnection(url, user, pwd);
-		con.setAutoCommit(true);
-		return con;
+	private static synchronized Connection createDBConnection() throws SQLException {
+		Connection newConnection = null;
+		String ip = "localhost";
+		String port = "3306";
+		String db = "clipshot";
+		String username = "root";
+		String password = "root";
+		newConnection = DriverManager.getConnection("jdbc:mysql://"+ ip+":"+ port+"/"+db+"?autoReconnect=true&useSSL=false", username, password);
+		newConnection.setAutoCommit(true);
+		return newConnection;
 	}
-	
-	public static synchronized Connection getConnection () throws SQLException {
-		Connection con;
-		if (listaConnessione.isEmpty())
-			con=createDBConnection();
-		else {
-			con=listaConnessione.get(0);
-			listaConnessione.remove(0);
+	public static synchronized Connection getConnection() throws SQLException {
+		Connection connection;
+		if (!freeDbConnections.isEmpty()) {
+			connection = (Connection) freeDbConnections.get(0);
+			freeDbConnections.remove(0);
+
 			try {
-				if (con.isClosed())
-					con=getConnection();
+				if (connection.isClosed())
+					connection = getConnection();
+			} catch (SQLException e) {
+				connection.close();
+				connection = getConnection();
 			}
-			catch (SQLException e){
-				con.close();
-				con=getConnection();
-			}
+		} else {
+			connection = createDBConnection();		
 		}
-		return con;
+		return connection;
 	}
-	
-	public static synchronized void releaseConnection(Connection con) {
-		if (con!=null)
-			listaConnessione.add(con);
+	public static synchronized void releaseConnection(Connection connection) throws SQLException {
+		if(connection != null) freeDbConnections.add(connection);
 	}
+	private static List<Connection> freeDbConnections;
 }
