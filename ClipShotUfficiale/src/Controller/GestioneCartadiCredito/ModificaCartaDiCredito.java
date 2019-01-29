@@ -16,16 +16,16 @@ import Manager.CartaDiCreditoDAO;
 import Model.CartaDiCreditoBean;
 
 /**
- * Servlet implementation class AggiungiCartaDiCredito
+ * Servlet implementation class ModificaCartaDiCredito
  */
-@WebServlet("/AggiungiCartaDiCredito")
-public class AggiungiCartaDiCredito extends HttpServlet {
+@WebServlet("/ModificaCartaDiCredito")
+public class ModificaCartaDiCredito extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AggiungiCartaDiCredito() {
+    public ModificaCartaDiCredito() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -76,11 +76,12 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 	        
 	        CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
 	        try {
-				cartaDAO.doSave(carta);
+				cartaDAO.doSaveOrUpdate(carta);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
+
 }

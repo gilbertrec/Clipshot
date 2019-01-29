@@ -10,7 +10,7 @@ public class CartaDiCreditoDAO {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 			"insert into clipshot.cartadiCredito (numeroCarta, idUtente, intestatario, dataScadenza, cvv) values (?, ?, ?, ?, ?)");
-		query.setInt(1, c.getNumeroCarta());
+		query.setString(1, c.getNumeroCarta());
 		query.setString(2, c.getIdUtente());
 		query.setString(3, c.getIntestatario());
 		query.setDate(4, c.getDataScadenza());
@@ -31,17 +31,17 @@ public class CartaDiCreditoDAO {
 			query.setString(2, c.getIntestatario());
 			query.setDate(3, c.getDataScadenza());
 			query.setString(4, c.getCvv());
-			query.setInt(5, c.getNumeroCarta());
+			query.setString(5, c.getNumeroCarta());
 			query.executeUpdate();
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
 	}
-	public synchronized CartaDiCreditoBean doRetrieveByKey(int numeroCarta) throws Exception{
+	public synchronized CartaDiCreditoBean doRetrieveByKey(String numeroCarta) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		CartaDiCreditoBean c = new CartaDiCreditoBean();
 		c.setNumeroCarta(numeroCarta);
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.cartadiCredito where numeroCarta=?");
-		query.setInt(1, c.getNumeroCarta());
+		query.setString(1, c.getNumeroCarta());
 		ResultSet result = query.executeQuery();
 		if(!result.next()) {
 			throw new Exception();
@@ -61,7 +61,7 @@ public class CartaDiCreditoDAO {
 		ResultSet result = query.executeQuery();
 		while(result.next()) {
 			CartaDiCreditoBean c = new CartaDiCreditoBean();
-			c.setNumeroCarta(result.getInt("numeroCarta"));
+			c.setNumeroCarta(result.getString("numeroCarta"));
 			c.setIdUtente(result.getString("idUtente"));
 			c.setIntestatario(result.getString("intestatario"));
 			c.setDataScadenza(result.getDate("dataScadenza"));
@@ -73,10 +73,10 @@ public class CartaDiCreditoDAO {
 		return carte;
 	}
 	
-	public void doDelete(int numeroCarta) throws Exception {
+	public void doDelete(String numeroCarta) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("DELETE FROM clipshot.cartadiCredito WHERE numeroCarta=?");
-		query.setInt(1, numeroCarta);
+		query.setString(1, numeroCarta);
 		query.executeUpdate();
 		DriverManagerConnectionPool.releaseConnection(con);
 	}	

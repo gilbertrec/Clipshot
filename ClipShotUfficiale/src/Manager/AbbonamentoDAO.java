@@ -12,7 +12,7 @@ public class AbbonamentoDAO {
 			"insert into clipshot.abbonamento (idUtente, dataScadenza, numeroCarta, stato) values (?, ?, ?, ?)");
 		query.setString(1, a.getIdUtente());
 		query.setDate(2, a.getDataScadenza());
-		query.setInt(3, a.getNumeroCarta());
+		query.setString(3, a.getNumeroCarta());
 		query.setString(4, a.getStato());
 		query.executeUpdate();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -27,7 +27,7 @@ public class AbbonamentoDAO {
 			PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 					"update clipshot.abbonamento set dataScadenza=? , numeroCarta=? , stato=? where idUtente =?");	
 			query.setDate(1, a.getDataScadenza());
-			query.setInt(2, a.getNumeroCarta());
+			query.setString(2, a.getNumeroCarta());
 			query.setString(3, a.getStato());
 			query.setString(4, a.getIdUtente());
 			query.executeUpdate();
@@ -45,7 +45,7 @@ public class AbbonamentoDAO {
 			throw new Exception();
 		}
 		a.setDataScadenza(result.getDate("dataScadenza"));
-		a.setNumeroCarta(result.getInt("numeroCarta"));
+		a.setNumeroCarta(result.getString("numeroCarta"));
 		a.setStato(result.getString("stato"));
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -60,7 +60,7 @@ public class AbbonamentoDAO {
 			AbbonamentoBean a = new AbbonamentoBean();
 			a.setIdUtente(result.getString("idUtente"));
 			a.setDataScadenza(result.getDate("dataScadenza"));
-			a.setNumeroCarta(result.getInt("numeroCarta"));
+			a.setNumeroCarta(result.getString("numeroCarta"));
 			a.setStato(result.getString("stato"));
 			abbonamenti.add(a);
 		}

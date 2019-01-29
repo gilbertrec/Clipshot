@@ -3,7 +3,7 @@ package Model;
 import java.sql.Date;
 
 public class CartaDiCreditoBean {
-	private int numeroCarta;
+	private String numeroCarta;
 	private String idUtente;
 	private String intestatario;
 	private Date dataScadenza;
@@ -11,7 +11,7 @@ public class CartaDiCreditoBean {
 	
 	public CartaDiCreditoBean() {
 	}
-	public CartaDiCreditoBean(int ncarta, String idUtente, String intestatario, Date dataScadenza, String cvv) {
+	public CartaDiCreditoBean(String ncarta, String idUtente, String intestatario, Date dataScadenza, String cvv) {
 		this.numeroCarta = ncarta;
 		this.idUtente = idUtente;
 		this.intestatario = intestatario;
@@ -19,11 +19,11 @@ public class CartaDiCreditoBean {
 		this.cvv = cvv;
 	}
 
-	public int getNumeroCarta() {
+	public String getNumeroCarta() {
 		return numeroCarta;
 	}
 
-	public void setNumeroCarta(int ncarta) {
+	public void setNumeroCarta(String ncarta) {
 		this.numeroCarta = ncarta;
 	}
 
