@@ -2,17 +2,15 @@ package Controller.GestioneCartadiCredito;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Manager.CartaDiCreditoDAO;
-import Manager.OperatoreDAO;
 import Model.CartaDiCreditoBean;
-import Model.OperatoreBean;
 
 /**
  * Servlet implementation class AggiungiCartaDiCredito
@@ -34,16 +32,7 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		OperatoreDAO opDAO = new OperatoreDAO();
-		OperatoreBean oper = new OperatoreBean("porco", "dio", "cazzo", "figa", "porno", "1");
-		try {
-			opDAO.doDelete(oper.getUsername());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		doPost(request, response);
 	}
 
 	/**
@@ -51,7 +40,23 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		CartaDiCreditoBean carta = new CartaDiCreditoBean();
+		String numeroCarta = request.getParameter("numeroCarta");
+		if(Integer.parseInt(numeroCarta) > 15) {
+			carta.setNumeroCarta(Integer.parseInt(numeroCarta));
+		}
+		String intestatario = request.getParameter("intestatario");
+		if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
+			carta.setIntestatario(intestatario);
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String dataScadenza = request.getParameter("dataScadenza");
+        try {
+			Date parsed = (Date) format.parse(dataScadenza);
+			carta.setDataScadenza(parsed);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
-
+	
 }
