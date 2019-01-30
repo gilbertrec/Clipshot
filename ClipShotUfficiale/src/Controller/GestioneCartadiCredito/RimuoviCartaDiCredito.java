@@ -38,7 +38,7 @@ public class RimuoviCartaDiCredito extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
-		String numeroCarta = request.getParameter("numeroCarta");
+		String numeroCarta = request.getParameter("numeroCartaCarta");
 		try {
 			cartaDAO.doDelete(numeroCarta);
 			

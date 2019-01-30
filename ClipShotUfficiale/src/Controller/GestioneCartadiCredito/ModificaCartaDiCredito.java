@@ -47,7 +47,7 @@ public class ModificaCartaDiCredito extends HttpServlet {
 		synchronized (ssn)
 		{
 			CartaDiCreditoBean carta = new CartaDiCreditoBean();
-			String numeroCarta = request.getParameter("numeroCarta");
+			String numeroCarta = request.getParameter("numeroCartaCarta");
 			if(numeroCarta.length() == 16) {
 				carta.setNumeroCarta(numeroCarta);
 			}
@@ -55,13 +55,13 @@ public class ModificaCartaDiCredito extends HttpServlet {
 			String idUtente = (String) ssn.getAttribute("idUtente");
 			carta.setIdUtente(idUtente);
 			
-			String intestatario = request.getParameter("intestatario");
+			String intestatario = request.getParameter("intestatarioCarta");
 			if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
 				carta.setIntestatario(intestatario);
 			}
 			
 			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-			String dataScadenza = request.getParameter("dataScadenza");
+			String dataScadenza = request.getParameter("dataScadenzaCarta");
 	        try {
 				Date parsed = (Date) format.parse(dataScadenza);
 				carta.setDataScadenza(parsed);
@@ -69,7 +69,7 @@ public class ModificaCartaDiCredito extends HttpServlet {
 				e.printStackTrace();
 			}
 	        
-	        String cvv = request.getParameter("cvv");
+	        String cvv = request.getParameter("cvvCarta");
 	        if(cvv.length() == 3) {
 	        	carta.setCvv(cvv);
 	        }
