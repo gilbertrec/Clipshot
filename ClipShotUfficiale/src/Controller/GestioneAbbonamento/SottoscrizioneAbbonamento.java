@@ -1,41 +1,83 @@
 package Controller.GestioneAbbonamento;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class SottoscrizioneAbbonamento
- */
+import Manager.AbbonamentoDAO;
+import Model.AbbonamentoBean;
+
 @WebServlet("/SottoscrizioneAbbonamento")
 public class SottoscrizioneAbbonamento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public SottoscrizioneAbbonamento() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		doPost(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		HttpSession ssn = request.getSession();
+		if(ssn != null) {
+			AbbonamentoBean abbonamento = new AbbonamentoBean();
+			AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
+			
+			String idUtente = (String) ssn.getAttribute("idUtente");
+			if(idUtente != null) {
+				abbonamento.setIdUtente(idUtente);
+				
+				//l'abbonamento quanto dura?
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.YEAR, 0);
+				cal.add(Calendar.MONTH, 1);
+				cal.add(Calendar.DAY_OF_MONTH, 0);
+				java.sql.Date dataScadenza = (Date) cal.getTime();
+				abbonamento.setDataScadenza(dataScadenza);
+				
+				try {
+					if(abbonamentoDAO.doRetrieveByCond(idUtente).getNumeroCarta() != null) {
+						abbonamento.setNumeroCarta(abbonamentoDAO.doRetrieveByCond(idUtente).getNumeroCarta());
+					}
+					else {//carta not exist
+						//implements with dispacher
+						String numeroCarta = request.getParameter("numeroCartaAbbonamento");
+						if(numeroCarta.length() == 16) {
+							abbonamento.setNumeroCarta(numeroCarta);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String stato = request.getParameter("statoAbbonamento");
+				if(stato.equals("attivo")) {
+					abbonamento.setStato("1");
+				}
+				else {//sospeso
+					abbonamento.setStato("2");
+				}
+			}//idUtente==null
+			else {}
+		}//ssn==null
+		else {}
 	}
 
 }
+
+
+
+
+
+
+
+
+

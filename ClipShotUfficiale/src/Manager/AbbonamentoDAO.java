@@ -68,7 +68,18 @@ public class AbbonamentoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return abbonamenti;
 	}
-	
+	public synchronized AbbonamentoBean doRetrieveByCond(String idUtente) throws Exception{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		AbbonamentoBean a = new AbbonamentoBean();
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM clipshot.utente u JOIN clipshot.cartadicredito c WHERE u.idUtente = c.idUtente AND u.idUtente = '?'");
+		query.setString(1, idUtente);
+		ResultSet result = query.executeQuery();
+		if(!result.next()) {
+			throw new Exception();
+		}
+		a.setNumeroCarta(result.getString("c.numeroCarta"));
+		return a;
+	}
 	public void doDelete(String idUtente) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("DELETE FROM clipshot.abbonamento WHERE idUtente=?");

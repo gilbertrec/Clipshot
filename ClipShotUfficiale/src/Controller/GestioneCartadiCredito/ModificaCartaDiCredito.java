@@ -15,37 +15,19 @@ import javax.servlet.http.HttpSession;
 import Manager.CartaDiCreditoDAO;
 import Model.CartaDiCreditoBean;
 
-/**
- * Servlet implementation class ModificaCartaDiCredito
- */
 @WebServlet("/ModificaCartaDiCredito")
 public class ModificaCartaDiCredito extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public ModificaCartaDiCredito() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doPost(request, response);
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HttpSession ssn = request.getSession();
-		synchronized (ssn)
-		{
+		if(ssn != null) {
 			CartaDiCreditoBean carta = new CartaDiCreditoBean();
 			String numeroCarta = request.getParameter("numeroCartaCarta");
 			if(numeroCarta.length() == 16) {
@@ -78,10 +60,10 @@ public class ModificaCartaDiCredito extends HttpServlet {
 	        try {
 				cartaDAO.doSaveOrUpdate(carta);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		else {}
 	}
 
 }
