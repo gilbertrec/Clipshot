@@ -1,17 +1,14 @@
 package Controller.GestioneCartadiCredito;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import Manager.CartaDiCreditoDAO;
 import Model.CartaDiCreditoBean;
 
@@ -60,15 +57,18 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 				carta.setIntestatario(intestatario);
 			}
 			
-			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-			String dataScadenza = request.getParameter("dataScadenza");
-	        try {
-				Date parsed = (Date) format.parse(dataScadenza);
-				carta.setDataScadenza(parsed);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-	        
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String dataScadenza =  request.getParameter("dataScadenza");
+			
+			try {
+				java.util.Date fromDate = format.parse(dataScadenza);
+				java.sql.Date sqlDate = new java.sql.Date(fromDate.getTime()); 
+				carta.setDataScadenza(sqlDate);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+			
 	        String cvv = request.getParameter("cvv");
 	        if(cvv.length() == 3) {
 	        	carta.setCvv(cvv);
@@ -84,3 +84,4 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 		}
 	}
 }
+
