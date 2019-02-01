@@ -26,46 +26,49 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 		HttpSession ssn = request.getSession();
 		if(ssn != null) {
 			CartaDiCreditoBean carta = new CartaDiCreditoBean();
-			String numeroCarta = request.getParameter("numeroCartaCarta");
-			if(numeroCarta.length() == 16) {
-				carta.setNumeroCarta(numeroCarta);
-			}
 			
-			if(ssn.getAttribute("idUtente") != null) {
-				String idUtente = (String) ssn.getAttribute("idUtente");
+			String idUtente = (String) ssn.getAttribute("idUtente");
+			if(idUtente != null) {
 				carta.setIdUtente(idUtente);
-			}
-			
-			String intestatario = request.getParameter("intestatarioCarta");
-			if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
-				carta.setIntestatario(intestatario);
-			}
-			
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			String dataScadenza =  request.getParameter("dataScadenzaCarta");
-			try {
-				java.util.Date fromDate = format.parse(dataScadenza);
-				java.sql.Date sqlDate = new java.sql.Date(fromDate.getTime()); 
-				carta.setDataScadenza(sqlDate);
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}  
-			
-	        String cvv = request.getParameter("cvvCarta");
-	        if(cvv.length() == 3) {
-	        	carta.setCvv(cvv);
-	        }
-	        
-	        CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
-	        try {
-				cartaDAO.doSave(carta);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		else {
-			
-		}
+				
+				String numeroCarta = request.getParameter("numeroCartaCarta");
+				if(numeroCarta.length() == 16) {
+					carta.setNumeroCarta(numeroCarta);
+				} 
+				else {}//numeroCarta == null
+				
+				String intestatario = request.getParameter("intestatarioCarta");
+				if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
+					carta.setIntestatario(intestatario);
+				}
+				else {}// intestatario == null
+				
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String dataScadenza =  request.getParameter("dataScadenzaCarta");
+				try {
+					java.util.Date fromDate = format.parse(dataScadenza);
+					java.sql.Date sqlDate = new java.sql.Date(fromDate.getTime()); 
+					carta.setDataScadenza(sqlDate);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}  //dataScadenza == null
+				
+		        String cvv = request.getParameter("cvvCarta");
+		        if(cvv.length() == 3) {
+		        	carta.setCvv(cvv);
+		        }
+		        else {} //cvv == null
+		        
+		        CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
+		        try {
+					cartaDAO.doSave(carta);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}	
+			else {} // idUtente == null
+		}		
+		else {} // ssn == null
 	}
 }
 

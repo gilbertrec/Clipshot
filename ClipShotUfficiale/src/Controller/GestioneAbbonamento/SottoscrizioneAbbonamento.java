@@ -35,7 +35,6 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 			if(idUtente != null) {
 				abbonamento.setIdUtente(idUtente);
 				
-				//l'abbonamento quanto dura?
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.YEAR, 0);
 				cal.add(Calendar.MONTH, 1);
@@ -48,7 +47,7 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 						abbonamento.setNumeroCarta(abbonamentoDAO.doRetrieveByCond(idUtente).getNumeroCarta());
 					}
 					else {//carta not exist
-						//implements with dispacher
+						//implements with dispacher at addCarta
 						String numeroCarta = request.getParameter("numeroCartaAbbonamento");
 						if(numeroCarta.length() == 16) {
 							abbonamento.setNumeroCarta(numeroCarta);
@@ -58,12 +57,12 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					e.printStackTrace();
 				}
 				
-				String stato = request.getParameter("statoAbbonamento");
-				if(stato.equals("attivo")) {
-					abbonamento.setStato("1");
-				}
-				else {//sospeso
-					abbonamento.setStato("2");
+				abbonamento.setStato("1");
+				
+				try {
+					abbonamentoDAO.doSave(abbonamento);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}//idUtente==null
 			else {}
