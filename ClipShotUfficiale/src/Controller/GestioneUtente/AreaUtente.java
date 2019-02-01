@@ -1,12 +1,16 @@
 package Controller.GestioneUtente;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Manager.UtenteDAO;
 import Model.UtenteBean;
 
 public class AreaUtente extends HttpServlet{
@@ -20,12 +24,24 @@ public class AreaUtente extends HttpServlet{
 		HttpSession ssn = request.getSession();
 		if(ssn != null) {
 			UtenteBean utente = new UtenteBean();
-			
+			UtenteDAO utenteDAO = new UtenteDAO();
 			String idUtente = (String) ssn.getAttribute("idUtente");
-			if(idUtente != null) {
-				
+			//no bott statico nela chiamata
+			String mod = request.getParameter("mod");
+			if(mod!=null) { //Dispatch at jsp mod
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("");
+				requestDispatcher.forward(request, response);	
 			}
-			else {} //idUtente == null
+			else {//dispatch at jsp areaUtente
+				try {
+					utente = utenteDAO.doRetrieveByKey(idUtente);
+					request.setAttribute("utenteDAO", utente);
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);	
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		else {} // ssn == null
 	}

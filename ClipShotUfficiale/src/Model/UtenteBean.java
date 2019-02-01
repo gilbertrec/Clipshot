@@ -9,28 +9,33 @@ public class UtenteBean
 	private String password;
 	private String nome;
 	private String cognome;
-	private Date data;
+	private Date dataNascita;
 	private String sesso;
 	private String indirizzo;
 	private String professione;
 	private String pathFotoProfilo;
 	private String stato;
 	private String tipo;
-	
+	private String fotoProfilo;
 	
 	public UtenteBean() {
 		
 	}
-	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, Date data, String sesso){
+	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, Date dataNascita, String sesso){
 		this.idUtente = idUtente;
 		this.email = email;
 		this.password = password;
 		this.nome = nome;
 		this.cognome = cognome;
-		this.data = data;
+		this.dataNascita = dataNascita;
 		this.sesso = sesso;
 	}
-
+	public String getFotoProfilo() {
+		return fotoProfilo;
+	}
+	public void setFotoProfilo(String fotoProfilo) {
+		this.fotoProfilo = fotoProfilo;
+	}
 	public String getIdUtente() {
 		return idUtente;
 	}
@@ -71,12 +76,12 @@ public class UtenteBean
 		this.cognome = cognome;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getDataNascita() {
+		return dataNascita;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataNascita(Date dataNascita) {
+		this.dataNascita = dataNascita;
 	}
 
 	public String getSesso() {
