@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +30,8 @@ public class ModificaCartaDiCredito extends HttpServlet {
 		HttpSession ssn = request.getSession();
 		if(ssn != null) {
 			CartaDiCreditoBean carta = new CartaDiCreditoBean();
+			CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
+			
 			String numeroCarta = request.getParameter("numeroCartaCarta");
 			if(numeroCarta.length() == 16) {
 				carta.setNumeroCarta(numeroCarta);
@@ -56,14 +59,16 @@ public class ModificaCartaDiCredito extends HttpServlet {
 	        	carta.setCvv(cvv);
 	        }
 	        
-	        CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
 	        try {
 				cartaDAO.doSaveOrUpdate(carta);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		else {}
+		else {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+			requestDispatcher.forward(request, response);	
+		}
 	}
 
 }

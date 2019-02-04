@@ -71,7 +71,7 @@ public class AbbonamentoDAO {
 	public synchronized AbbonamentoBean doRetrieveByCond(String idUtente) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		AbbonamentoBean a = new AbbonamentoBean();
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM clipshot.utente u JOIN clipshot.cartadicredito c WHERE u.idUtente = c.idUtente AND u.idUtente = '?'");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM clipshot.utente u JOIN clipshot.cartadicredito c WHERE u.idUtente = c.idUtente AND u.idUtente = ?");
 		query.setString(1, idUtente);
 		ResultSet result = query.executeQuery();
 		if(!result.next()) {

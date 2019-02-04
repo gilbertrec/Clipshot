@@ -72,7 +72,21 @@ public class CartaDiCreditoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return carte;
 	}
-	
+	public synchronized CartaDiCreditoBean doRetrieveByCond(String idUtente) throws Exception{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		CartaDiCreditoBean c = new CartaDiCreditoBean();
+		c.setIdUtente(idUtente);
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM utente u JOIN cartadicredito c WHERE u.idUtente = c.idUtente AND c.idUtente = ?");
+		query.setString(1, c.getIdUtente());
+		ResultSet result = query.executeQuery();
+		if(!result.next()) {
+			throw new Exception();
+		}
+		c.setNumeroCarta(result.getString("numeroCarta"));
+		query.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+		return c;	
+	}
 	public void doDelete(String numeroCarta) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("DELETE FROM clipshot.cartadiCredito WHERE numeroCarta=?");

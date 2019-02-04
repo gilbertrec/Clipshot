@@ -3,6 +3,8 @@ package Controller.GestioneCartadiCredito;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,13 +37,19 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 				if(numeroCarta.length() == 16) {
 					carta.setNumeroCarta(numeroCarta);
 				} 
-				else {}//numeroCarta == null
+				else {
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}//numeroCarta == null
 				
 				String intestatario = request.getParameter("intestatarioCarta");
 				if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
 					carta.setIntestatario(intestatario);
 				}
-				else {}// intestatario == null
+				else {
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}// intestatario == null
 				
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				String dataScadenza =  request.getParameter("dataScadenzaCarta");
@@ -51,24 +59,48 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 					carta.setDataScadenza(sqlDate);
 				} catch (ParseException e1) {
 					e1.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
 				}  //dataScadenza == null
 				
 		        String cvv = request.getParameter("cvvCarta");
 		        if(cvv.length() == 3) {
 		        	carta.setCvv(cvv);
 		        }
-		        else {} //cvv == null
+		        else {
+		        	RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+		        } //cvv == null
 		        
 		        CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
 		        try {
 					cartaDAO.doSave(carta);
+					
+					String from = request.getParameter("from"); //<input type="hidden" value="from"> proveniente da addCarta di sottoscrizione abbonamento
+					if(from != null) { //riporta al form di sottoscrizione abbonamento
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}
+					else { // visualizza dati carta					
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);	
+					}
+										
 				} catch (Exception e) {
 					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
 				}
 			}	
-			else {} // idUtente == null
+			else {
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+				requestDispatcher.forward(request, response);	
+			} // idUtente == null
 		}		
-		else {} // ssn == null
+		else {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+			requestDispatcher.forward(request, response);	
+		} // ssn == null
 	}
 }
 

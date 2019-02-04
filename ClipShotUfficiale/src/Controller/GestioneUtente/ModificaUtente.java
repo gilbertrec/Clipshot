@@ -2,7 +2,6 @@ package Controller.GestioneUtente;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,13 +26,14 @@ public class ModificaUtente extends HttpServlet{
 			UtenteDAO utenteDAO = new UtenteDAO();
 			String idUtente = (String) ssn.getAttribute("idUtente");
 			
-			try {
-				utente = utenteDAO.doRetrieveByKey(idUtente);	
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
 			if(idUtente != null) {
+				
+				try {
+					utente = utenteDAO.doRetrieveByKey(idUtente);	
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
 				UtenteBean temp = new UtenteBean();
 				temp.setIdUtente(utente.getIdUtente());
 				
@@ -67,6 +67,7 @@ public class ModificaUtente extends HttpServlet{
 				}
 				String dataNascita = request.getParameter("dataNascitaModifica");
 				// scopri come si lavora 
+				
 				String sesso = request.getParameter("sessoModifica");
 				if(!sesso.equals("")) {
 					temp.setSesso(sesso);
@@ -98,8 +99,14 @@ public class ModificaUtente extends HttpServlet{
 				}
 				
 			}
-			else {} //idUtente == null
+			else {
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+				requestDispatcher.forward(request, response);	
+			} //idUtente == null
 		}
-		else {} // ssn == null
+		else {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+			requestDispatcher.forward(request, response);	
+		} // ssn == null
 	}
 }

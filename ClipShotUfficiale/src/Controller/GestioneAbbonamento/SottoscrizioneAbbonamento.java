@@ -3,6 +3,8 @@ package Controller.GestioneAbbonamento;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,6 +50,10 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					}
 					else {//carta not exist
 						//implements with dispacher at addCarta
+						request.setAttribute("from", "from");
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+						
 						String numeroCarta = request.getParameter("numeroCartaAbbonamento");
 						if(numeroCarta.length() == 16) {
 							abbonamento.setNumeroCarta(numeroCarta);
@@ -57,7 +63,7 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					e.printStackTrace();
 				}
 				
-				abbonamento.setStato("1");
+				abbonamento.setStato("1"); //attivo
 				
 				try {
 					abbonamentoDAO.doSave(abbonamento);
@@ -65,9 +71,15 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					e.printStackTrace();
 				}
 			}//idUtente==null
-			else {}
+			else {
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+				requestDispatcher.forward(request, response);
+			}
 		}//ssn==null
-		else {}
+		else {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+			requestDispatcher.forward(request, response);
+		}
 	}
 
 }

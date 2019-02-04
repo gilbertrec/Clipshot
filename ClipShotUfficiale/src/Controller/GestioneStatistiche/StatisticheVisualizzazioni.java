@@ -1,41 +1,64 @@
 package Controller.GestioneStatistiche;
 
 import java.io.IOException;
+import java.util.Date;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import Manager.AbbonamentoDAO;
+import Manager.StatisticheDAO;
+import Model.AbbonamentoBean;
+import Model.StatisticheBean;
 
-/**
- * Servlet implementation class StatisticheVisualizzazioni
- */
 @WebServlet("/StatisticheVisualizzazioni")
 public class StatisticheVisualizzazioni extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+      
     public StatisticheVisualizzazioni() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		doPost(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		HttpSession ssn = request.getSession();
+		if(ssn != null) {
+			String idUtente = (String) ssn.getAttribute("idUtente");
+			if(idUtente != null) {
+				AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
+				AbbonamentoBean abbonamentoBean = new AbbonamentoBean();
+				try {
+					abbonamentoBean = abbonamentoDAO.doRetrieveByKey(idUtente);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				if(abbonamentoBean.getStato().equals("ATTIVO") && abbonamentoBean.getDataScadenza().before(new Date())) {
+					StatisticheDAO statisticheDAO = new StatisticheDAO();
+					StatisticheBean statisticheBean = new StatisticheBean();
+					try {
+						statisticheBean = statisticheDAO.doRetrieveByKey(idUtente);
+						request.setAttribute("numeroVisualizzazioni", statisticheBean.getNumeroVisualizzazioni());
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else { // abbonamento SOSPESO opp. SCADUTO
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+			} else { //idUtente == null
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+				requestDispatcher.forward(request, response);
+			}
+		} else { //ssn == null
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+			requestDispatcher.forward(request, response);
+		}
 	}
-
 }
