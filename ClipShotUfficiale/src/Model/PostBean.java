@@ -2,22 +2,24 @@ package Model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.GregorianCalendar;
+
+import com.sun.org.apache.xpath.internal.operations.Gte;
 
 public class PostBean {
-	private String idPost;
+	private int idPost;
 	private String idUtente;
-	private String idFoto;
+	private int idFoto;
 	private String descrizione;
-	private Date data;
-	private Time ora;
+	private GregorianCalendar data;
+	private GregorianCalendar ora;
 	private String stato;
 	
 	
 	public PostBean() {
-		
 	}
 	
-	public PostBean(String idPost, String idUtente, String idFoto, String descrizione, Date data, Time ora, String stato) {
+	public PostBean(int idPost, String idUtente, int idFoto, String descrizione, GregorianCalendar data, GregorianCalendar ora, String stato) {
 		this.idPost = idPost;
 		this.idUtente=idUtente;
 		this.idFoto=idFoto;
@@ -27,11 +29,11 @@ public class PostBean {
 		this.stato = stato;
 	}
 
-	public String getIdPost() {
+	public int getIdPost() {
 		return idPost;
 	}
 
-	public void setIdPost(String idPost) {
+	public void setIdPost(int idPost) {
 		this.idPost = idPost;
 	}
 
@@ -43,11 +45,11 @@ public class PostBean {
 		this.idUtente = idUtente;
 	}
 
-	public String getIdFoto() {
+	public int getIdFoto() {
 		return idFoto;
 	}
 
-	public void setIdFoto(String idFoto) {
+	public void setIdFoto(int idFoto) {
 		this.idFoto = idFoto;
 	}
 
@@ -59,19 +61,19 @@ public class PostBean {
 		this.descrizione = descrizione;
 	}
 
-	public Date getData() {
+	public GregorianCalendar getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(GregorianCalendar data) {
 		this.data = data;
 	}
 
-	public Time getOra() {
+	public GregorianCalendar getOra() {
 		return ora;
 	}
 
-	public void setOra(Time ora) {
+	public void setOra(GregorianCalendar ora) {
 		this.ora = ora;
 	}
 
@@ -81,6 +83,38 @@ public class PostBean {
 
 	public void setStato(String stato) {
 		this.stato = stato;
+	}
+	
+	public int getYear() {
+		return this.data.get(GregorianCalendar.YEAR);
+	}
+	
+	public int getMonth() {
+		return this.data.get(GregorianCalendar.MONTH)+1;
+	}
+	
+	public int getDay() {
+		return this.data.get(GregorianCalendar.DAY_OF_MONTH);
+	}
+	
+	public int getHour() {
+		return this.ora.get(GregorianCalendar.HOUR_OF_DAY);
+	}
+	
+	public int getMinute() {
+		return this.ora.get(GregorianCalendar.MINUTE);
+	}
+	
+	public int getSecond() {
+		return this.ora.get(GregorianCalendar.SECOND);
+	}
+	
+	public String getStringData () {
+		return this.getYear()+"-"+this.getMonth()+"-"+this.getDay();
+	}
+	
+	public String getStringOra() {
+		return this.getHour()+":"+this.getMinute()+":"+this.getSecond();
 	}
 	
 	

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+import com.sun.javafx.font.freetype.FTFactory;
 
 import Model.FotoBean;
 
@@ -19,10 +20,18 @@ public class FotoBeanDao {
 	
 	public void doSave (FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
-		ps.setString(1, fotoBean.getIdFoto());
+		PreparedStatement ps;
+		if (fotoBean.getPrezzo()==null) {
+			ps=(PreparedStatement) con.prepareStatement("insert into foto (idFoto, path) values(?, ?);");
+			ps.setInt(1, fotoBean.getIdFoto());
+			ps.setString(2, fotoBean.getPath());
+		}
+		else {
+		ps=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
+		ps.setInt(1, fotoBean.getIdFoto());
 		ps.setString(2, fotoBean.getPath());
-		ps.setDouble(3, fotoBean.getPrezzo());
+		ps.setDouble(3,fotoBean.getPrezzo());
+		}
 		ps.executeUpdate();
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -31,7 +40,7 @@ public class FotoBeanDao {
 	public void doDelete (FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from foto where idFoto=?;");
-		ps.setString(1, fotoBean.getIdFoto());
+		ps.setInt(1, fotoBean.getIdFoto());
 		ps.executeUpdate();
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -44,7 +53,7 @@ public class FotoBeanDao {
 		ResultSet resultSet=ps.executeQuery();
 		FotoBean fotoBean= new FotoBean();
 		if (resultSet.next()) {
-			fotoBean.setIdFoto(resultSet.getString("idFoto"));
+			fotoBean.setIdFoto(resultSet.getInt("idFoto"));
 			fotoBean.setPath(resultSet.getString("path"));
 			fotoBean.setPrezzo(resultSet.getDouble("prezzo"));
 		}
@@ -56,21 +65,30 @@ public class FotoBeanDao {
 	public void doSaveOrUpdate(FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from foto where idFoto=?;");
-		ps.setString(1, fotoBean.getIdFoto());
+		ps.setInt(1, fotoBean.getIdFoto());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
 			ps=(PreparedStatement) con.prepareStatement("update foto set path=?, prezzo=? where idFoto=?;");
 			ps.setString(1, fotoBean.getPath());
 			ps.setDouble(2, fotoBean.getPrezzo());
-			ps.setString(3, fotoBean.getIdFoto());
+			ps.setInt(3, fotoBean.getIdFoto());
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
-			ps.setString(1, fotoBean.getIdFoto());
-			ps.setString(2, fotoBean.getPath());
-			ps.setDouble(3, fotoBean.getPrezzo());
+			PreparedStatement preparedStatement;
+			if (fotoBean.getPrezzo()==null) {
+				preparedStatement=(PreparedStatement) con.prepareStatement("insert into foto (idFoto, path) values(?, ?);");
+				preparedStatement.setInt(1, fotoBean.getIdFoto());
+				preparedStatement.setString(2, fotoBean.getPath());
+			}
+			else {
+				preparedStatement=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
+				preparedStatement.setInt(1, fotoBean.getIdFoto());
+				preparedStatement.setString(2, fotoBean.getPath());
+				preparedStatement.setDouble(3,fotoBean.getPrezzo());
+			}
 			ps.executeUpdate();
+			ps.close();
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -83,7 +101,7 @@ public class FotoBeanDao {
 		ResultSet resultSet=query.executeQuery("select * from foto;");
 		while (resultSet.next()) {
 			FotoBean fotoBean= new FotoBean();
-			fotoBean.setIdFoto(resultSet.getString("idFoto"));
+			fotoBean.setIdFoto(resultSet.getInt("idFoto"));
 			fotoBean.setPath(resultSet.getString("path"));
 			fotoBean.setPrezzo(resultSet.getDouble("prezzo"));
 			listaFoto.add(fotoBean);

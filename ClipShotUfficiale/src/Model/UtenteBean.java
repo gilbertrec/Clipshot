@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.Date;
+import java.util.GregorianCalendar;
 
 public class UtenteBean 
 {
@@ -9,7 +10,7 @@ public class UtenteBean
 	private String password;
 	private String nome;
 	private String cognome;
-	private Date dataNascita;
+	private GregorianCalendar dataNascita;
 	private String sesso;
 	private String indirizzo;
 	private String fotoProfilo;
@@ -18,8 +19,10 @@ public class UtenteBean
 	
 	
 	public UtenteBean() {
+		
 	}
-	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, Date dataNascita, String sesso){
+	
+	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, GregorianCalendar dataNascita, String sesso, String stato, String tipo){
 		this.idUtente = idUtente;
 		this.email = email;
 		this.password = password;
@@ -27,7 +30,12 @@ public class UtenteBean
 		this.cognome = cognome;
 		this.dataNascita = dataNascita;
 		this.sesso = sesso;
+		this.indirizzo=null;
+		this.fotoProfilo=null;
+		this.stato=stato;
+		this.tipo=tipo;
 	}
+
 	public String getIdUtente() {
 		return idUtente;
 	}
@@ -58,10 +66,10 @@ public class UtenteBean
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
-	public Date getDataNascita() {
+	public GregorianCalendar getDataNascita() {
 		return dataNascita;
 	}
-	public void setDataNascita(Date dataNascita) {
+	public void setDataNascita(GregorianCalendar dataNascita) {
 		this.dataNascita = dataNascita;
 	}
 	public String getSesso() {
@@ -94,7 +102,22 @@ public class UtenteBean
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
+	
+	public int getYear() {
+		return this.dataNascita.get(GregorianCalendar.YEAR);
+	}
+	
+	public int getMonth() {
+		return this.dataNascita.get(GregorianCalendar.MONTH)+1;
+	}
+	
+	public int getDay() {
+		return this.dataNascita.get(GregorianCalendar.DAY_OF_MONTH);
+	}
+	
+	public String getStringData() {
+		return this.getYear()+"-"+this.getMonth()+"-"+this.getDay();
+	}
 	
 	
 	

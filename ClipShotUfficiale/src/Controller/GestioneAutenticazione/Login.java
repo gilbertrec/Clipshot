@@ -1,0 +1,120 @@
+package Controller.GestioneAutenticazione;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import Manager.UtenteBeanDao;
+import Model.UtenteBean;
+import sun.rmi.server.Dispatcher;
+
+@WebServlet("/Login")
+
+public class Login extends HttpServlet{ 
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		String idUtente=null, password=null;
+		UtenteBeanDao utenteBeanDao;
+		ArrayList<UtenteBean> listaUtenti;
+		UtenteBean utenteBean;
+		HttpSession session;
+		Cookie cookie[];
+		int i;
+		
+		
+		//leggo le credenziali dai cookie
+		cookie=request.getCookies();
+		if (cookie!=null) {
+			for (i=0; i<cookie.length; i++) {
+				if (cookie[i].getName().equals("idUtente"))
+					idUtente=cookie[i].getValue();
+				else {
+					if (cookie[i].getName().equals("password"))
+						password=cookie[i].getValue();
+				}
+			}
+			if ((idUtente!=null)&&(password!=null)) {
+				 session= request.getSession();
+				 session.setAttribute("idUtente", idUtente);
+				 utenteBeanDao= new UtenteBeanDao();
+				 try {
+					utenteBean=utenteBeanDao.doRetrieveByKey(idUtente);
+					session.setAttribute("tipo", utenteBean.getTipo());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//effettuare il dispatcher alla home dell'applicazione
+				System.out.println("login attraverso i cookie");
+			}
+		}
+		
+		
+		
+		//non sono presenti all'interno dei cookie prova dalla request
+		if ((idUtente==null)&&(password==null)) {
+			//modficare con username
+			idUtente=request.getParameter("idUtente");
+			password=request.getParameter("passwordUtente");
+			if ((idUtente!=null)&&(password!=null)) {
+				System.out.println("request");
+				utenteBeanDao= new UtenteBeanDao();
+				utenteBean= new UtenteBean();
+				utenteBean.setIdUtente(idUtente);
+				utenteBean.setPassword(password);
+				try {
+					listaUtenti=utenteBeanDao.doRetrieveByCond(utenteBean);
+					//login effettuato
+					if (listaUtenti.size()==1) {
+						utenteBean=listaUtenti.get(0);
+						session=request.getSession();//creo la sessione
+						session.setAttribute("idUtente", utenteBean.getIdUtente());
+						session.setAttribute("tipo", utenteBean.getTipo());
+						//creo i cookie e li inserisco all'interno della response
+						Cookie c= new Cookie("idUtente", idUtente);
+						c.setMaxAge(2000);
+						Cookie c2= new Cookie("password", password);
+						c2.setMaxAge(2000);
+						response.addCookie(c);
+						response.addCookie(c2);
+						System.out.println("login effettuato");
+					}
+					else {
+						//effettuare il dispatcher alla pagina di login
+						System.out.println("errore login");
+					}
+				} 
+				catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			//effettuare il dispatcher alla pagina di login
+			else {
+				System.out.println("dispatcher");
+				RequestDispatcher view=request.getRequestDispatcher("login.jsp");
+				view.forward(request, response);
+			}
+			
+		}
+		
+		
+	}
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		this.doPost(request, response);
+	}
+
+}

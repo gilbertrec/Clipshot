@@ -2,14 +2,14 @@ package Model;
 
 public class LikeBean {
 	private String idUtente;
-	private String idPost;
+	private int idPost;
 	private String idUtentePost;
 	
 	
 	public LikeBean() {
 	}
 	
-	public LikeBean(String idUtente, String idPost, String idUtentePost) {
+	public LikeBean(String idUtente, int idPost, String idUtentePost) {
 		this.idUtente=idUtente;
 		this.idPost=idPost;
 		this.idUtentePost=idUtentePost;
@@ -23,11 +23,11 @@ public class LikeBean {
 		this.idUtente = idUtente;
 	}
 
-	public String getIdPost() {
+	public int getIdPost() {
 		return idPost;
 	}
 
-	public void setIdPost(String idPost) {
+	public void setIdPost(int idPost) {
 		this.idPost = idPost;
 	}
 

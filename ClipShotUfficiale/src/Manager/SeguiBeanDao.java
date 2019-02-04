@@ -29,7 +29,7 @@ public class SeguiBeanDao {
 	
 	public void doDelete(SeguiBean seguiBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from segui where userSeguente=? and userSeguito=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from segui where idFollower=? and idFollowing=?;");
 		ps.setString(1, seguiBean.getIdFollower());
 		ps.setString(2, seguiBean.getIdFollowing());
 		ps.executeUpdate();
@@ -39,14 +39,14 @@ public class SeguiBeanDao {
 	
 	public SeguiBean doRetrieveByKey(String idFollower, String idFollowing) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where userSeguente=? and userSeguito=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where idFollower=? and idFollowing=?;");
 		ps.setString(1, idFollower);
 		ps.setString(2, idFollowing);
 		ResultSet resultSet=ps.executeQuery();
 		SeguiBean seguiBean= new SeguiBean();
 		if (resultSet.next()) {
-			seguiBean.setIdFollower(resultSet.getString("userSeguente"));
-			seguiBean.setIdFollowing(resultSet.getString("userSeguito"));
+			seguiBean.setIdFollower(resultSet.getString("idFollower"));
+			seguiBean.setIdFollowing(resultSet.getString("idFollowing"));
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -60,8 +60,8 @@ public class SeguiBeanDao {
 		ResultSet resultSet=query.executeQuery("select * from segui;");
 		while (resultSet.next()) {
 			SeguiBean seguiBean= new SeguiBean();
-			seguiBean.setIdFollower(resultSet.getString("userSeguente"));
-			seguiBean.setIdFollowing(resultSet.getString("userSeguito"));
+			seguiBean.setIdFollower(resultSet.getString("idFollower"));
+			seguiBean.setIdFollowing(resultSet.getString("idFollowing"));
 			listaSegui.add(seguiBean);
 		}
 		query.close();
