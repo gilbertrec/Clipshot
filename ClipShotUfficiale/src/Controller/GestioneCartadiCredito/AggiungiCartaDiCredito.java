@@ -52,22 +52,21 @@ public class AggiungiCartaDiCredito extends HttpServlet {
 				}// intestatario == null
 				
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-				String dataScadenza =  request.getParameter("dataScadenzaCarta");
+				String temp =  request.getParameter("dataScadenzaCarta");
 				try {
-					java.util.Date fromDate = format.parse(dataScadenza);
-					java.sql.Date sqlDate = new java.sql.Date(fromDate.getTime()); 
-					carta.setDataScadenza(sqlDate);
-				} catch (ParseException e1) {
+					java.util.Date fromDate = format.parse(temp);
+					java.sql.Date dataScadenza = new java.sql.Date(fromDate.getTime()); 
+					carta.setDataScadenza(dataScadenza);
+				} catch (ParseException e1) { //dataScadenza == null
 					e1.printStackTrace();
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
-				}  //dataScadenza == null
+				} 
 				
 		        String cvv = request.getParameter("cvvCarta");
 		        if(cvv.length() == 3) {
 		        	carta.setCvv(cvv);
-		        }
-		        else {
+		        } else { // cvv == null
 		        	RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
 		        } //cvv == null

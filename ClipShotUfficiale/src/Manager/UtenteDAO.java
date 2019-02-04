@@ -1,8 +1,6 @@
 package Manager;
 
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -91,19 +89,7 @@ public class UtenteDAO {
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-			ps.setString(1, utente.getIdUtente());
-			ps.setString(2, utente.getPassword());
-			ps.setString(3, utente.getEmail());
-			ps.setString(4, utente.getNome());
-			ps.setString(5, utente.getCognome());
-			ps.setDate(6, utente.getDataNascita());
-			ps.setString(7, utente.getSesso());
-			ps.setString(8, utente.getIndirizzo());
-			ps.setString(9, utente.getStato());
-			ps.setString(10, utente.getTipo());
-			ps.setString(11, utente.getFotoProfilo());
-			ps.executeUpdate();
+			doSave(utente);
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);

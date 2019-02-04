@@ -1,8 +1,8 @@
 package Controller.GestioneAbbonamento;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,11 +37,9 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 			if(idUtente != null) {
 				abbonamento.setIdUtente(idUtente);
 				
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.YEAR, 0);
-				cal.add(Calendar.MONTH, 1);
-				cal.add(Calendar.DAY_OF_MONTH, 0);
-				java.sql.Date dataScadenza = (Date) cal.getTime();
+				//l'abbonamento dura un mese
+				GregorianCalendar dataScadenza = new GregorianCalendar();
+				dataScadenza.add(Calendar.MONTH, 1);
 				abbonamento.setDataScadenza(dataScadenza);
 				
 				try {

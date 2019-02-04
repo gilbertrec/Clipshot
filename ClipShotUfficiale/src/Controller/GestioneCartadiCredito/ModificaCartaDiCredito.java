@@ -1,7 +1,6 @@
 package Controller.GestioneCartadiCredito;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -32,40 +31,58 @@ public class ModificaCartaDiCredito extends HttpServlet {
 			CartaDiCreditoBean carta = new CartaDiCreditoBean();
 			CartaDiCreditoDAO cartaDAO = new CartaDiCreditoDAO();
 			
-			String numeroCarta = request.getParameter("numeroCartaCarta");
-			if(numeroCarta.length() == 16) {
-				carta.setNumeroCarta(numeroCarta);
-			}
-			
 			String idUtente = (String) ssn.getAttribute("idUtente");
-			carta.setIdUtente(idUtente);
-			
-			String intestatario = request.getParameter("intestatarioCarta");
-			if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
-				carta.setIntestatario(intestatario);
+			if(idUtente != null) {
+				carta.setIdUtente(idUtente);
+				
+				String numeroCarta = request.getParameter("numeroCartaCarta");
+				if(numeroCarta.length() == 16) {
+					carta.setNumeroCarta(numeroCarta);
+				} else { // numeroCarta == null
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+				
+				String intestatario = request.getParameter("intestatarioCarta");
+				if(intestatario.matches("^[0-9A-Za-z\\.-]+$")) {
+					carta.setIntestatario(intestatario);
+				} else { //intestatario == null
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+				
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String temp =  request.getParameter("dataScadenzaCarta");
+				try {
+					java.util.Date fromDate = format.parse(temp);
+					java.sql.Date dataScadenza = new java.sql.Date(fromDate.getTime()); 
+					carta.setDataScadenza(dataScadenza);
+				} catch (ParseException e1) { //dataScadenza == null
+					e1.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				} 
+		        
+		        String cvv = request.getParameter("cvvCarta");
+		        if(cvv.length() == 3) {
+		        	carta.setCvv(cvv);
+		        } else { //cvv == null
+		        	RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+		        }
+		        
+		        try {
+					cartaDAO.doSaveOrUpdate(carta);
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // idUtente == null
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+				requestDispatcher.forward(request, response);
 			}
-			
-			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-			String dataScadenza = request.getParameter("dataScadenzaCarta");
-	        try {
-				Date parsed = (Date) format.parse(dataScadenza);
-				carta.setDataScadenza(parsed);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-	        
-	        String cvv = request.getParameter("cvvCarta");
-	        if(cvv.length() == 3) {
-	        	carta.setCvv(cvv);
-	        }
-	        
-	        try {
-				cartaDAO.doSaveOrUpdate(carta);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		else {
+		} else { // ssn == null
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 			requestDispatcher.forward(request, response);	
 		}

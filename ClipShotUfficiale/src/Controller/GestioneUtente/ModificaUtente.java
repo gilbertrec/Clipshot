@@ -2,6 +2,9 @@ package Controller.GestioneUtente;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,8 +68,23 @@ public class ModificaUtente extends HttpServlet{
 				else {
 					temp.setCognome(utente.getCognome());
 				}
-				String dataNascita = request.getParameter("dataNascitaModifica");
-				// scopri come si lavora 
+				
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String temp1 =  request.getParameter("dataNascitaModifica");
+				try {
+					if(!temp1.equals("")) {
+						java.util.Date fromDate = format.parse(temp1);
+						java.sql.Date dataNascita = new java.sql.Date(fromDate.getTime()); 
+						temp.setDataNascita(dataNascita);
+					} else {
+						temp.setDataNascita(utente.getDataNascita());
+					}
+					
+				} catch (ParseException e1) { //dataScadenza == null
+					e1.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				} 
 				
 				String sesso = request.getParameter("sessoModifica");
 				if(!sesso.equals("")) {

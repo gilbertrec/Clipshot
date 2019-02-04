@@ -2,6 +2,8 @@ package Manager;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import com.mysql.jdbc.PreparedStatement;
 import Model.AbbonamentoBean;
 
@@ -11,7 +13,7 @@ public class AbbonamentoDAO {
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 			"insert into clipshot.abbonamento (idUtente, dataScadenza, numeroCarta, stato) values (?, ?, ?, ?)");
 		query.setString(1, a.getIdUtente());
-		query.setDate(2, a.getDataScadenza());
+		query.setString(2, a.getStringDataScadenza());
 		query.setString(3, a.getNumeroCarta());
 		query.setString(4, a.getStato());
 		query.executeUpdate();
@@ -26,7 +28,7 @@ public class AbbonamentoDAO {
 			java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 			PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 					"update clipshot.abbonamento set dataScadenza=? , numeroCarta=? , stato=? where idUtente =?");	
-			query.setDate(1, a.getDataScadenza());
+			query.setString(1, a.getStringDataScadenza());
 			query.setString(2, a.getNumeroCarta());
 			query.setString(3, a.getStato());
 			query.setString(4, a.getIdUtente());
@@ -44,7 +46,10 @@ public class AbbonamentoDAO {
 		if(!result.next()) {
 			throw new Exception();
 		}
-		a.setDataScadenza(result.getDate("dataScadenza"));
+		java.sql.Date data = result.getDate("dataScadenza");
+		GregorianCalendar dataScadenza = new GregorianCalendar();
+		dataScadenza.setTime(data);
+		a.setDataScadenza(dataScadenza);
 		a.setNumeroCarta(result.getString("numeroCarta"));
 		a.setStato(result.getString("stato"));
 		query.close();
@@ -59,7 +64,10 @@ public class AbbonamentoDAO {
 		while(result.next()) {
 			AbbonamentoBean a = new AbbonamentoBean();
 			a.setIdUtente(result.getString("idUtente"));
-			a.setDataScadenza(result.getDate("dataScadenza"));
+			java.sql.Date data = result.getDate("dataScadenza");
+			GregorianCalendar dataScadenza = new GregorianCalendar();
+			dataScadenza.setTime(data);
+			a.setDataScadenza(dataScadenza);
 			a.setNumeroCarta(result.getString("numeroCarta"));
 			a.setStato(result.getString("stato"));
 			abbonamenti.add(a);
