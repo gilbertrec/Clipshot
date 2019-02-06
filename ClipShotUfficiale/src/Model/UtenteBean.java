@@ -21,6 +21,17 @@ public class UtenteBean
 	public UtenteBean() {
 		
 	}
+	
+	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, Date dataNascita, String sesso,String stato, String tipo){
+		this.idUtente = idUtente;
+		this.email = email;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataNascita = dataNascita;
+		this.sesso = sesso;
+	}
+	
 	public UtenteBean(String idUtente, String email, String password, String nome, String cognome, Date dataNascita, String sesso){
 		this.idUtente = idUtente;
 		this.email = email;
