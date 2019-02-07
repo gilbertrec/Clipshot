@@ -1,0 +1,38 @@
+.img-profile {
+   max-width: inherit;
+}
+
+.img-box {
+    max-width: 25%;
+	display: flex;
+}
+.mp{
+	margin-top: auto 15px;
+}
+
+.interazione {
+    display: flex;
+    flex-direction: column;
+}
+
+.commento {
+    margin: 78% 0;
+}
+
+ul{
+	margin: 0px;
+	padding: 0px;
+}
+
+#dati_segnala{
+	display: flex;
+	flex-direction: row;
+}
+
+#dati_idUtente{
+	justify-content: flex-start;
+}
+#dati_idMittente{
+	justify-content: flex-end;
+	margin-left: 65%;
+}
