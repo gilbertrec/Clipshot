@@ -21,27 +21,27 @@ public class AreaUtente extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession ssn = request.getSession();
 		if(ssn != null) {
-			UtenteBean utente = new UtenteBean();
-			UtenteDAO utenteDAO = new UtenteDAO();
 			String idUtente = (String) ssn.getAttribute("idUtente");
 			if(idUtente != null) {
+				UtenteBean utenteBean = new UtenteBean();
+				UtenteDAO utenteDAO = new UtenteDAO();
 				try {
-					utente = utenteDAO.doRetrieveByKey(idUtente);
-					request.setAttribute("utenteBean", utente);
+					utenteBean = utenteDAO.doRetrieveByKey(idUtente);
+					request.setAttribute("utenteBean", utenteBean);
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);	
-				} catch (SQLException e) {
+				} catch (SQLException e) { //utente non trovato
 					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);	
 				}
-			}
-			else {
+			} else {//idUtente == null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);	
-			} //idUtente == null
-		}
-		else {
+			} 
+		} else {// ssn == null
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 			requestDispatcher.forward(request, response);	
-		} // ssn == null
+		} 
 	}
 }

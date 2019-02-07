@@ -1,7 +1,6 @@
 package Controller.GestioneStatistiche;
 
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,21 +33,28 @@ public class StatisticheVisualizzazioni extends HttpServlet {
 				AbbonamentoBean abbonamentoBean = new AbbonamentoBean();
 				try {
 					abbonamentoBean = abbonamentoDAO.doRetrieveByKey(idUtente);
-				} catch (Exception e1) {
+				} catch (Exception e1) { //abbonamento non presente
 					e1.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
 				}
-				if(abbonamentoBean.getStato().equals("ATTIVO") && new GregorianCalendar().before(abbonamentoBean.getDataScadenza())) {
+				if(abbonamentoBean.getStato().equals("ATTIVO") && abbonamentoBean.isScaduto(abbonamentoBean.getDataScadenza())) {
 					StatisticheDAO statisticheDAO = new StatisticheDAO();
 					StatisticheBean statisticheBean = new StatisticheBean();
 					try {
 						statisticheBean = statisticheDAO.doRetrieveByKey(idUtente);
 						request.setAttribute("numeroVisualizzazioni", statisticheBean.getNumeroVisualizzazioni());
+						
+						
+						
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);
-					} catch (Exception e) {
+					} catch (Exception e) { //nessuna statistica
 						e.printStackTrace();
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
 					}
-				} else { // abbonamento SOSPESO opp. SCADUTO
+				} else { // abbonamento SOSPESO opp. SCADUTO dispatch ad AttivaAbbonamento
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
 				}

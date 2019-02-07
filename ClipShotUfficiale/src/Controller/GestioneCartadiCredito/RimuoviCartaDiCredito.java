@@ -1,7 +1,6 @@
 package Controller.GestioneCartadiCredito;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import Manager.CartaDiCreditoDAO;
 import Model.CartaDiCreditoBean;
 
@@ -19,7 +17,6 @@ public class RimuoviCartaDiCredito extends HttpServlet {
 	
     public RimuoviCartaDiCredito() {
         super();
-
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,10 +32,16 @@ public class RimuoviCartaDiCredito extends HttpServlet {
 				CartaDiCreditoBean cartaBean = new CartaDiCreditoBean();
 				try {
 					cartaBean = cartaDAO.doRetrieveByCond(idUtente);
+				} catch (Exception e) { //nessuna carta
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+				try {
 					cartaDAO.doDelete(cartaBean.getNumeroCarta());
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
-				} catch (Exception e) {
+				} catch (Exception e) { //problemi di eliminazione
 					e.printStackTrace();
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);

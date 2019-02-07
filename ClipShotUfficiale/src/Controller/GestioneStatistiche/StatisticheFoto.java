@@ -1,7 +1,6 @@
 package Controller.GestioneStatistiche;
 
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +34,7 @@ public class StatisticheFoto extends HttpServlet {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				if(abbonamentoBean.getStato().equals("ATTIVO") && new GregorianCalendar().before(abbonamentoBean.getDataScadenza())) {
+				if(abbonamentoBean.getStato().equals("ATTIVO") && abbonamentoBean.isScaduto(abbonamentoBean.getDataScadenza())) {
 					
 					
 					

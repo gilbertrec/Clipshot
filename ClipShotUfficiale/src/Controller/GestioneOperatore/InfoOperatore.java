@@ -1,7 +1,6 @@
 package Controller.GestioneOperatore;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import Manager.OperatoreDAO;
 import Model.OperatoreBean;
 
@@ -30,19 +28,22 @@ public class InfoOperatore extends HttpServlet {
 			if(username != null) {
 				OperatoreDAO operatoreDAO = new OperatoreDAO();
 				OperatoreBean operatoreBean = new OperatoreBean();
+				String user = (String) request.getAttribute("usernameInfo");
 				try {
-					operatoreBean = operatoreDAO.doRetrieveByKey(username);
+					operatoreBean = operatoreDAO.doRetrieveByKey(user);
 					request.setAttribute("operatore", operatoreBean);
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
-				} catch (Exception e) {
+				} catch (Exception e) { //operatore not exist
 					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
 				}
-			} else { // username == null
+			} else { //username == null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);
 			}
-		} else { // ssn == null
+		} else { //ssn == null
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 			requestDispatcher.forward(request, response);
 		}

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Manager.AbbonamentoDAO;
+import Model.AbbonamentoBean;
 
 @WebServlet("/DisdettaAbbonamento")
 public class DisdettaAbbonamento extends HttpServlet {
@@ -28,14 +29,24 @@ public class DisdettaAbbonamento extends HttpServlet {
 			String idUtente = (String) ssn.getAttribute("idUtente");
 			if(idUtente != null) {
 				AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
+				AbbonamentoBean abbonamentoBean = new AbbonamentoBean();
 				try {
-					abbonamentoDAO.doDelete(idUtente);
+					abbonamentoBean = abbonamentoDAO.doRetrieveByKey(idUtente);
+				} catch (Exception e) { //nessun abbonamento
+					e.printStackTrace();
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
-			} else {
+				try {
+					abbonamentoDAO.doDelete(abbonamentoBean.getIdUtente());
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				} catch (Exception e) { //problemi di eliminazione
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+			} else { //idUtente == null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);
 			}

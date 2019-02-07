@@ -1,19 +1,18 @@
 package Manager;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.GregorianCalendar;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
-
 import Model.UtenteBean;
 
 public class UtenteDAO {
 	
-	public UtenteDAO() {	
-	}
+	public UtenteDAO() {}
 	
 	public void doSave(UtenteBean utente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
@@ -23,7 +22,7 @@ public class UtenteDAO {
 		ps.setString(3, utente.getEmail());
 		ps.setString(4, utente.getNome());
 		ps.setString(5, utente.getCognome());
-		ps.setDate(6, utente.getDataNascita());
+		ps.setString(6, utente.getStringData());
 		ps.setString(7, utente.getSesso());
 		ps.setString(8, utente.getIndirizzo());
 		ps.setString(9, utente.getStato());
@@ -56,7 +55,10 @@ public class UtenteDAO {
 			utente.setEmail(result.getString("email"));
 			utente.setNome(result.getString("nome"));
 			utente.setCognome(result.getString("cognome"));
-			utente.setDataNascita(result.getDate("dataNascita"));
+			Date dataFrom=result.getDate("dataNascita");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dataFrom);
+			utente.setDataNascita(data);
 			utente.setSesso(result.getString("sesso"));
 			utente.setIndirizzo(result.getString("indirizzo"));
 			utente.setStato(result.getString("stato"));
@@ -79,7 +81,7 @@ public class UtenteDAO {
 			ps.setString(2, utente.getEmail());
 			ps.setString(3, utente.getNome());
 			ps.setString(4, utente.getCognome());
-			ps.setDate(5, utente.getDataNascita());
+			ps.setString(5, utente.getStringData());
 			ps.setString(6, utente.getSesso());
 			ps.setString(7, utente.getIndirizzo());
 			ps.setString(8, utente.getStato());
@@ -100,9 +102,18 @@ public class UtenteDAO {
 		ArrayList<UtenteBean> listaUtente= new ArrayList<UtenteBean>();
 		String sql="select * from utente where ";
 		int flag=0;
-		if (utenteBean.getEmail()!=null) {
-			sql=sql+"email='"+utenteBean.getEmail()+"'";
+		if (utenteBean.getIdUtente()!=null) {
+			sql=sql+"idUtente='"+utenteBean.getIdUtente()+"'";
 			flag=1;
+		}
+		if (utenteBean.getEmail()!=null) {
+			if (flag==1) {
+				sql=sql+" and email'"+utenteBean.getEmail()+"'";
+			}
+			else {
+				sql=sql+"email='"+utenteBean.getEmail()+"'";
+				flag=1;
+			}
 		}
 		if (utenteBean.getPassword()!=null) {
 			if (flag==1) {
@@ -195,7 +206,10 @@ public class UtenteDAO {
 			utente.setEmail(result.getString("email"));
 			utente.setNome(result.getString("nome"));
 			utente.setCognome(result.getString("cognome"));
-			utente.setDataNascita(result.getDate("dataNascita"));
+			Date dataFrom=result.getDate("dataNascita");
+			GregorianCalendar data=new GregorianCalendar();
+			data.setTime(dataFrom);
+			utente.setDataNascita(data);
 			utente.setSesso(result.getString("sesso"));
 			utente.setIndirizzo(result.getString("indirizzo"));
 			utente.setStato(result.getString("stato"));
@@ -218,7 +232,10 @@ public class UtenteDAO {
 			utente.setEmail(result.getString("email"));
 			utente.setNome(result.getString("nome"));
 			utente.setCognome(result.getString("cognome"));
-			utente.setDataNascita(result.getDate("dataNascita"));
+			Date dataFrom=result.getDate("dataNascita");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dataFrom);
+			utente.setDataNascita(data);
 			utente.setSesso(result.getString("sesso"));
 			utente.setIndirizzo(result.getString("indirizzo"));
 			utente.setStato(result.getString("stato"));
@@ -230,7 +247,4 @@ public class UtenteDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaUtente;
 	}
-	
-	
-	
 }

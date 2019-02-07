@@ -2,6 +2,8 @@ package Manager;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import com.mysql.jdbc.PreparedStatement;
 import Model.CartaDiCreditoBean;
 
@@ -13,7 +15,7 @@ public class CartaDiCreditoDAO {
 		query.setString(1, c.getNumeroCarta());
 		query.setString(2, c.getIdUtente());
 		query.setString(3, c.getIntestatario());
-		query.setDate(4, c.getDataScadenza());
+		query.setString(4, c.getStringDataScadenza());
 		query.setString(5, c.getCvv());
 		query.executeUpdate();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -29,7 +31,7 @@ public class CartaDiCreditoDAO {
 					"update clipshot.cartadiCredito set idUtente=? , intestatario=? , dataScadenza=? , cvv=? where numeroCarta =?");	
 			query.setString(1, c.getIdUtente());
 			query.setString(2, c.getIntestatario());
-			query.setDate(3, c.getDataScadenza());
+			query.setString(3, c.getStringDataScadenza());
 			query.setString(4, c.getCvv());
 			query.setString(5, c.getNumeroCarta());
 			query.executeUpdate();
@@ -46,9 +48,12 @@ public class CartaDiCreditoDAO {
 		if(!result.next()) {
 			throw new Exception();
 		}
+		java.sql.Date data = result.getDate("dataScadenza");
+		GregorianCalendar dataScadenza = new GregorianCalendar();
+		dataScadenza.setTime(data);
 		c.setIdUtente(result.getString("idUtente"));
 		c.setIntestatario(result.getString("intestatario"));
-		c.setDataScadenza(result.getDate("dataScadenza"));
+		c.setDataScadenza(dataScadenza);
 		c.setCvv(result.getString("cvv"));
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -60,11 +65,14 @@ public class CartaDiCreditoDAO {
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.cartadiCredito");
 		ResultSet result = query.executeQuery();
 		while(result.next()) {
+			java.sql.Date data = result.getDate("dataScadenza");
+			GregorianCalendar dataScadenza = new GregorianCalendar();
+			dataScadenza.setTime(data);
 			CartaDiCreditoBean c = new CartaDiCreditoBean();
 			c.setNumeroCarta(result.getString("numeroCarta"));
 			c.setIdUtente(result.getString("idUtente"));
 			c.setIntestatario(result.getString("intestatario"));
-			c.setDataScadenza(result.getDate("dataScadenza"));
+			c.setDataScadenza(dataScadenza);
 			c.setCvv(result.getString("cvv"));
 			carte.add(c);
 		}

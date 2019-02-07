@@ -3,7 +3,6 @@ package Controller.GestioneAbbonamento;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import Manager.AbbonamentoDAO;
 import Model.AbbonamentoBean;
 
@@ -29,64 +27,53 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession ssn = request.getSession();
-		if(ssn != null) {
-			AbbonamentoBean abbonamento = new AbbonamentoBean();
-			AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
-			
+		if(ssn != null) {		
 			String idUtente = (String) ssn.getAttribute("idUtente");
 			if(idUtente != null) {
-				abbonamento.setIdUtente(idUtente);
-				
-				//l'abbonamento dura un mese
-				GregorianCalendar dataScadenza = new GregorianCalendar();
-				dataScadenza.add(Calendar.MONTH, 1);
-				abbonamento.setDataScadenza(dataScadenza);
-				
+				AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
+				AbbonamentoBean temp1 = new AbbonamentoBean();
 				try {
-					if(abbonamentoDAO.doRetrieveByCond(idUtente).getNumeroCarta() != null) {
-						abbonamento.setNumeroCarta(abbonamentoDAO.doRetrieveByCond(idUtente).getNumeroCarta());
-					}
-					else {//carta not exist
-						//implements with dispacher at addCarta
-						request.setAttribute("from", "from");
+					temp1 = abbonamentoDAO.doRetrieveByKey(idUtente);
+					if(temp1.getStato().equals("ATTIVO")) { //già artista
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);
-						
-						String numeroCarta = request.getParameter("numeroCartaAbbonamento");
-						if(numeroCarta.length() == 16) {
-							abbonamento.setNumeroCarta(numeroCarta);
-						}
+					} else { //sospeso, dispatch ad AttivaAbbonamento
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				abbonamento.setStato("1"); //attivo
-				
-				try {
-					abbonamentoDAO.doSave(abbonamento);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}//idUtente==null
-			else {
+				} catch (Exception e2) { //abbonamento dell'utente non trovato
+					e2.printStackTrace();
+					AbbonamentoBean abbonamentoBean = new AbbonamentoBean();
+					abbonamentoBean.setIdUtente(idUtente);
+					GregorianCalendar dataScadenza = new GregorianCalendar();
+					dataScadenza.add(Calendar.MONTH, 1); //l'abbonamento dura un mese
+					abbonamentoBean.setDataScadenza(dataScadenza);
+					AbbonamentoBean temp = new AbbonamentoBean();
+					try {
+						temp = abbonamentoDAO.doRetrieveByCond(idUtente); //conterrà solo la carta relativa all'utente in questione
+						abbonamentoBean.setNumeroCarta(temp.getNumeroCarta());
+					} catch (Exception e1) { //nessuna carta associata all'utente
+						e1.printStackTrace();
+						request.setAttribute("from", "from"); //dispatch ad aggiungiCarta ed invia l'attributo from per far visualizzare il tag di tipo hidden che servirà per ritornare qui
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}		
+					abbonamentoBean.setStato("1"); //attivo
+					try {
+						abbonamentoDAO.doSave(abbonamentoBean);
+					} catch (Exception e) { //errore di salvataggio
+						e.printStackTrace();
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}
+				}				
+			} else { //idUtente==null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);
 			}
-		}//ssn==null
-		else {
+		} else { //ssn==null
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 			requestDispatcher.forward(request, response);
 		}
 	}
-
 }
-
-
-
-
-
-
-
-
-

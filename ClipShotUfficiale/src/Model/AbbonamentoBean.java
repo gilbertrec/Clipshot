@@ -8,9 +8,7 @@ public class AbbonamentoBean {
 	private String numeroCarta;
 	private String stato;
 	
-	public AbbonamentoBean() {
-	}
-	
+	public AbbonamentoBean() {}	
 	public AbbonamentoBean(String idUtente, GregorianCalendar dataScadenza, String ncarta, String stato) {
 		
 		this.idUtente = idUtente;
@@ -18,6 +16,10 @@ public class AbbonamentoBean {
 		this.numeroCarta = ncarta;
 		this.stato = stato;
 	}
+	public boolean isScaduto(GregorianCalendar dataScadenza) {
+		return new GregorianCalendar().before(dataScadenza);
+	}
+	
 	public String getIdUtente() {
 		return idUtente;
 	}
@@ -39,7 +41,6 @@ public class AbbonamentoBean {
 	public int getMonth() {
 		return this.dataScadenza.get(GregorianCalendar.MONTH)+1;
 	}
-	
 	public int getDay() {
 		return this.dataScadenza.get(GregorianCalendar.DAY_OF_MONTH);
 	}
@@ -55,6 +56,4 @@ public class AbbonamentoBean {
 	public void setStato(String stato) {
 		this.stato = stato;
 	}
-	
-	
 }

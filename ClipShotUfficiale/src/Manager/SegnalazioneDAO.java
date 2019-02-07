@@ -85,7 +85,28 @@ public class SegnalazioneDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return segnalazioni;
 	}
-	
+	public synchronized ArrayList<SegnalazioneBean> doRetrieveByCond(String stato) throws Exception{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		ArrayList<SegnalazioneBean> segnalazioni = new ArrayList<SegnalazioneBean>();
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT * FROM clipshot.segnalazione WHERE = ?");
+		query.setString(1, stato);
+		ResultSet result = query.executeQuery();
+		while(result.next()) {
+			SegnalazioneBean se = new SegnalazioneBean();
+			se.setIdSegnalazione(result.getInt("idSegnalazione"));
+			se.setIdUtente(result.getString("idUtente"));
+			se.setIdPost(result.getInt("idPost"));
+			se.setIdUtentePost(result.getString("idUtentePost"));
+			se.setCausa(result.getString("causa"));
+			se.setStato(result.getString("stato"));
+			se.setData(result.getDate("data"));
+			se.setDescrizione(result.getString("descrizione"));
+			segnalazioni.add(se);
+		}
+		query.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+		return segnalazioni;		
+	}
 	public void doDelete(int idSegnalazione, String idUtente) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("DELETE FROM clipshot.segnalazione WHERE idSegnalazione =?, idUtente=?");
