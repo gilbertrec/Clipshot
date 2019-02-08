@@ -112,7 +112,4 @@ public class PostBean {
 	public String getStringOra() {
 		return this.getHour()+":"+this.getMinute()+":"+this.getSecond();
 	}
-	
-	
-
 }
