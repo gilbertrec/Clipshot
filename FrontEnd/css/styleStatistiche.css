@@ -1,0 +1,20 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.foto{
+	max-width: 20%;
+	padding: 2%
+}
+.img-foto{
+	display: flex;
+	justify-content: center;
+}
+
+.grafico {
+    background-color: #A3A;
+    max-width: 60%;
+    margin: 3% auto;
+    padding: 8%;
+}
