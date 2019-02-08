@@ -2,9 +2,12 @@
 <html>
 <head>
 	<title></title>
-	 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-	<link rel="stylesheet" type="text/css" href="styleInfo.css">
+	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+	<link rel="stylesheet" type="text/css" href="css/styleInfo.css">
+	<link rel="stylesheet" type="text/css" href="css/popup.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css'>
 </head>
 <body>
 <div id="user-profile-2" class="user-profile">
@@ -21,8 +24,10 @@
 							<div class="space space-4"></div>
 
 							<button>ABBONAMENTO</button>
-
-							<button>ELIMINA ACCOUNT</button>
+							<ul class="inline-popups">
+        						<a href="#test-popup" data-effect="mfp-zoom-in"><button>ELIMINA ACCOUNT</button></a>
+      						</ul>
+							
 						</div><!-- /.col -->
 
 						<div class="col-xs-12 col-sm-9">
@@ -139,5 +144,16 @@
 			</div>
 		</div>
 	</div>
+	<div id="test-popup" class="white-popup mfp-with-anim mfp-hide">
+        <p>
+          Sei sicuro di volere eliminare l'account?
+        </p>
+        <a href=""><button>Si</button></a>
+        <a href=""><button>No</button></a>
+      </div>
+	<!-- POP UP -->
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js'></script>
+	<script  src="js/index.js"></script>
 </body>
 </html>
