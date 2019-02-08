@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.AcquistiBeanDao;
+import Manager.AcquistiDAO;
 import Model.AcquistiBean;
 
 @WebServlet("/AcquistaFoto")
@@ -32,14 +32,17 @@ public class AcquistaFoto extends HttpServlet{
 		int idFoto;
 		GregorianCalendar data;
 		AcquistiBean acquistiBean;
-		AcquistiBeanDao acquistiBeanDao= new AcquistiBeanDao();
+		AcquistiDAO acquistiDAO= new AcquistiDAO();
 		idUtente=(String) session.getAttribute("idUtente");
 		idFoto=Integer.parseInt(request.getParameter("idFotoAcquisto"));
 		data= new GregorianCalendar();
 		if (idUtente!=null) {
-			acquistiBean=new AcquistiBean(idUtente, idFoto, data);
+			acquistiBean= new AcquistiBean();
+			acquistiBean.setIdUtente(idUtente);
+			acquistiBean.setIdFoto(idFoto);
+			acquistiBean.setData(data);
 			try {
-				acquistiBeanDao.doSave(acquistiBean);
+				acquistiDAO.doSave(acquistiBean);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

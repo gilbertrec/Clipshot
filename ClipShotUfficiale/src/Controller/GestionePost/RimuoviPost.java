@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.PostBeanDao;
+import Manager.PostDAO;
 import Model.PostBean;
 
 @WebServlet("/RimuoviPost")
@@ -30,9 +30,9 @@ public class RimuoviPost extends HttpServlet {
 			PostBean postBean= new PostBean();
 			postBean.setIdPost(idPost);
 			postBean.setIdUtente(idUtente);
-			PostBeanDao postBeanDao= new PostBeanDao();
+			PostDAO postDAO= new PostDAO();
 			try {
-				postBeanDao.doDelete(postBean);
+				postDAO.doDelete(postBean);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

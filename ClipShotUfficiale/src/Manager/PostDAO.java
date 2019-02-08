@@ -15,9 +15,9 @@ import com.mysql.jdbc.Statement;
 import Model.PostBean;
 import Model.UtenteBean;
 
-public class PostBeanDao {
+public class PostDAO {
 	
-	public PostBeanDao() {
+	public PostDAO() {
 	}
 	
 	public void doSave(PostBean postBean) throws SQLException {
@@ -45,10 +45,10 @@ public class PostBeanDao {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public PostBean doRetrieveByKey(String idPost, String idUtente) throws SQLException {
+	public PostBean doRetrieveByKey(int idPost, String idUtente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
-		ps.setString(1, idPost);
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from post where idPost=? and idUtente=?;");
+		ps.setInt(1, idPost);
 		ps.setString(2, idUtente);
 		ResultSet resultSet=ps.executeQuery();
 		PostBean postBean= new PostBean();
@@ -74,12 +74,12 @@ public class PostBeanDao {
 	
 	public void doSaveOrUpdate(PostBean postBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from post where idPost=? and idUtente=?;");
 		ps.setInt(1, postBean.getIdPost());
 		ps.setString(2, postBean.getIdUtente());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update segui set idFoto=?, descrizione=?, data=?, ora=?, stato=? where idPost=? and idUtente=?;");
+			ps=(PreparedStatement) con.prepareStatement("update post set idFoto=?, descrizione=?, data=?, ora=?, stato=? where idPost=? and idUtente=?;");
 			ps.setInt(1, postBean.getIdFoto());
 			ps.setString(2, postBean.getDescrizione());
 			ps.setString(3, postBean.getStringData());
@@ -90,15 +90,7 @@ public class PostBeanDao {
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into post values(?, ?, ?, ?, ?, ?, ?);");
-			ps.setInt(1, postBean.getIdPost());
-			ps.setString(2, postBean.getIdUtente());
-			ps.setInt(3, postBean.getIdFoto());
-			ps.setString(4, postBean.getDescrizione());
-			ps.setString(5, postBean.getStringData());
-			ps.setString(6, postBean.getStringOra());
-			ps.setString(7, postBean.getStato());
-			ps.executeUpdate();
+			this.doSave(postBean);
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -108,7 +100,7 @@ public class PostBeanDao {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
 		Statement query=(Statement) con.createStatement();
-		ResultSet resultSet=query.executeQuery("select *from segui");
+		ResultSet resultSet=query.executeQuery("select *from post");
 		while (resultSet.next()) {
 			PostBean postBean= new PostBean();
 			postBean.setIdPost(resultSet.getInt("idPost"));

@@ -7,13 +7,6 @@ public class SeguiBean {
 	public SeguiBean() {
 		
 	}
-	public SeguiBean(String idFollower, String idFollowing) {
-		
-		this.idFollower = idFollower;
-		this.idFollowing = idFollowing;
-	}
-
-
 	public String getIdFollower() {
 		return idFollower;
 	}

@@ -12,9 +12,9 @@ import com.sun.javafx.font.freetype.FTFactory;
 
 import Model.FotoBean;
 
-public class FotoBeanDao {
+public class FotoDAO {
 	
-	public FotoBeanDao() {
+	public FotoDAO() {
 		
 	}
 	
@@ -82,10 +82,7 @@ public class FotoBeanDao {
 				preparedStatement.setString(2, fotoBean.getPath());
 			}
 			else {
-				preparedStatement=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
-				preparedStatement.setInt(1, fotoBean.getIdFoto());
-				preparedStatement.setString(2, fotoBean.getPath());
-				preparedStatement.setDouble(3,fotoBean.getPrezzo());
+				this.doSave(fotoBean);
 			}
 			ps.executeUpdate();
 			ps.close();

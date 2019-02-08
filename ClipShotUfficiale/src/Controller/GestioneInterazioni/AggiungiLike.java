@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.LikeBeanDao;
+import Manager.LikeDAO;
 import Model.LikeBean;
 
 @WebServlet("/AggiungiLike")
@@ -29,10 +29,13 @@ public class AggiungiLike extends HttpServlet{
 		idPost=Integer.parseInt(request.getParameter("idPostLike"));
 		idUtentePost=request.getParameter("idUtentePostLike");
 		if (idUtente!=null) {
-			LikeBean likeBean= new LikeBean(idUtente, idPost, idUtentePost);
-			LikeBeanDao likeBeanDao= new LikeBeanDao();
+			LikeBean likeBean= new LikeBean();
+			likeBean.setIdUtente(idUtente);
+			likeBean.setIdPost(idPost);
+			likeBean.setIdUtentePost(idUtentePost);
+			LikeDAO likeDAO= new LikeDAO();
 			try {
-				likeBeanDao.doSave(likeBean);
+				likeDAO.doSave(likeBean);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

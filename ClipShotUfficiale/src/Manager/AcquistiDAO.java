@@ -13,9 +13,9 @@ import com.mysql.jdbc.Statement;
 
 import Model.AcquistiBean;
 
-public class AcquistiBeanDao {
+public class AcquistiDAO {
 	
-	public AcquistiBeanDao() {
+	public AcquistiDAO() {
 		
 	}
 	
@@ -73,11 +73,7 @@ public class AcquistiBeanDao {
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into acquisto(?, ?, ?);");
-			ps.setString(1, acquistiBean.getIdUtente());
-			ps.setInt(2, acquistiBean.getIdFoto());
-			ps.setString(3, acquistiBean.getStringData());
-			ps.executeUpdate();
+			this.doSave(acquistiBean);
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);

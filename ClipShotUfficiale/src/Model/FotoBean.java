@@ -9,21 +9,6 @@ public class FotoBean
 	public FotoBean() {
 		
 	}
-	public FotoBean(int idFoto) {
-		this.idFoto=idFoto;
-	}
-	
-	public FotoBean(int idFoto, String path) {
-		this.idFoto = idFoto;
-		this.path = path;
-		prezzo=null;
-	}
-	
-	public FotoBean(int idFoto, String path, Double prezzo){
-		this.idFoto = idFoto;
-		this.path = path;
-		this.prezzo = prezzo;
-	}
 
 	public int getIdFoto() {
 		return idFoto;

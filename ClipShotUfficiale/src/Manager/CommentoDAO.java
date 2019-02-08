@@ -14,9 +14,9 @@ import com.mysql.jdbc.Statement;
 
 import Model.CommentoBean;
 
-public class CommentoBeanDao {
+public class CommentoDAO {
 	
-	public CommentoBeanDao() {
+	public CommentoDAO() {
 		
 	}
 	
@@ -105,14 +105,7 @@ public class CommentoBeanDao {
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into commento values(?, ?, ?, ?, ?, ?);");
-			ps.setString(1, commentoBean.getIdUtente());
-			ps.setInt(2, commentoBean.getIdPost());
-			ps.setString(3, commentoBean.getIdUtentePost());
-			ps.setString(4, commentoBean.getStringData());
-			ps.setString(5, commentoBean.getStringOra());
-			ps.setString(6, commentoBean.getDescrizione());
-			ps.executeUpdate();
+			this.doSave(commentoBean);
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);	

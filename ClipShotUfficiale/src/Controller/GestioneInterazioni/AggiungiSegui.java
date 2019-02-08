@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.SeguiBeanDao;
+import Manager.SeguiDAO;
 import Model.SeguiBean;
 
 @WebServlet("/AggiungiSegui")
@@ -27,10 +27,12 @@ public class AggiungiSegui extends HttpServlet {
 		idFollower=(String) session.getAttribute("idUtente");
 		idFollowing=request.getParameter("idFollowingSegui");
 		if (idFollower!=null) {
-			SeguiBean seguiBean= new SeguiBean(idFollower, idFollowing);
-			SeguiBeanDao seguiBeanDao= new SeguiBeanDao();
+			SeguiBean seguiBean= new SeguiBean();
+			seguiBean.setIdFollower(idFollower);
+			seguiBean.setIdFollowing(idFollowing);
+			SeguiDAO seguiDAO= new SeguiDAO();
 			try {
-				seguiBeanDao.doSave(seguiBean);
+				seguiDAO.doSave(seguiBean);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

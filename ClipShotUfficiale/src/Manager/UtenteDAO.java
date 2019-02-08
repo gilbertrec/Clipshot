@@ -13,9 +13,9 @@ import com.mysql.jdbc.Statement;
 
 import Model.UtenteBean;
 
-public class UtenteBeanDao {
+public class UtenteDAO {
 	
-	public UtenteBeanDao() {	
+	public UtenteDAO() {	
 	}
 	
 	public void doSave(UtenteBean utente) throws SQLException {
@@ -30,8 +30,8 @@ public class UtenteBeanDao {
 		ps.setString(7, utente.getSesso());
 		ps.setString(8, utente.getIndirizzo());
 		ps.setString(9, utente.getStato());
-		ps.setString(10, utente.getTipo());
-		ps.setString(11, utente.getFotoProfilo());
+		ps.setString(10, "BASE");
+		ps.setString(11, null);
 		ps.executeUpdate();
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -95,19 +95,7 @@ public class UtenteBeanDao {
 			ps.executeUpdate();
 		}
 		else {
-			ps=(PreparedStatement) con.prepareStatement("insert into utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-			ps.setString(1, utente.getIdUtente());
-			ps.setString(2, utente.getPassword());
-			ps.setString(3, utente.getEmail());
-			ps.setString(4, utente.getNome());
-			ps.setString(5, utente.getCognome());
-			ps.setString(6, utente.getStringData());
-			ps.setString(7, utente.getSesso());
-			ps.setString(8, utente.getIndirizzo());
-			ps.setString(9, utente.getStato());
-			ps.setString(10, utente.getTipo());
-			ps.setString(11, utente.getFotoProfilo());
-			ps.executeUpdate();
+			this.doSave(utente);
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);

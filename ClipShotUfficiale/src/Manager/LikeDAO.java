@@ -12,9 +12,9 @@ import com.mysql.jdbc.Statement;
 import Model.LikeBean;
 import Model.SeguiBean;
 
-public class LikeBeanDao {
+public class LikeDAO {
 	
-	public LikeBeanDao() {
+	public LikeDAO() {
 		
 	}
 	

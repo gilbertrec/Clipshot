@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.FotoBeanDao;
-import Manager.PostBeanDao;
-import Manager.UtenteBeanDao;
+import Manager.FotoDAO;
+import Manager.PostDAO;
+import Manager.UtenteDAO;
 import Model.FotoBean;
 import Model.PostBean;
 import Model.UtenteBean;
@@ -40,14 +40,16 @@ public class AggiungiPost extends HttpServlet {
 		//campi foto;
 		idFoto=Integer.parseInt(request.getParameter("idFotoFoto"));
 		pathFoto=request.getParameter("pathFoto");
-		FotoBean fotoBean= new FotoBean(idFoto, pathFoto);
+		FotoBean fotoBean= new FotoBean();
+		fotoBean.setIdFoto(idFoto);
+		fotoBean.setPath(pathFoto);
 		if (tipo.equals("ARTISTA")) {
 			prezzo=Double.parseDouble(request.getParameter("prezzoFoto"));
 			fotoBean.setPrezzo(prezzo);
 		}
-		FotoBeanDao fotoBeanDao= new FotoBeanDao();
+		FotoDAO fotoDAO= new FotoDAO();
 		try {
-			fotoBeanDao.doSave(fotoBean);
+			fotoDAO.doSave(fotoBean);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -62,10 +64,17 @@ public class AggiungiPost extends HttpServlet {
 		data=new GregorianCalendar();
 		ora= new GregorianCalendar();
 		if (idUtente!=null) {
-			PostBean postBean= new PostBean(idPost, idUtente, idFoto, descrizione, data, ora, "FREE");
-			PostBeanDao postBeanDao= new PostBeanDao();
+			PostBean postBean= new PostBean();
+			postBean.setIdPost(idPost);
+			postBean.setIdUtente(idUtente);
+			postBean.setIdFoto(idFoto);
+			postBean.setDescrizione(descrizione);
+			postBean.setData(data);
+			postBean.setOra(ora);
+			postBean.setStato("FREE");
+			PostDAO postDAO= new PostDAO();
 			try {
-				postBeanDao.doSave(postBean);
+				postDAO.doSave(postBean);
 			} 
 			catch (SQLException e) {
 				// TODO Auto-generated catch block

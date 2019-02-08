@@ -12,12 +12,6 @@ public class AcquistiBean {
 	public AcquistiBean() {
 	}
 	
-	public AcquistiBean(String idUtente, int idFoto, GregorianCalendar data){
-		this.idUtente = idUtente;
-		this.idFoto = idFoto;
-		this.data = data;
-	}
-
 	public String getIdUtente() {
 		return idUtente;
 	}

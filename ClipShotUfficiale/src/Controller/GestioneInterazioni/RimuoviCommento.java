@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.CommentoBeanDao;
+import Manager.CommentoDAO;
 import Model.CommentoBean;
 
 @WebServlet("/RimuoviCommento")
@@ -23,13 +23,13 @@ public class RimuoviCommento extends HttpServlet{
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		HttpSession session;
-		String idUtente, idUtentePost, dataCommento, oraCommento;
+		String idUtente, idUtentePost, dataCommento, oraCommento, annoData, meseData, giornoData, oraString, minutiString, secondiString;
 		int idPost;
-		java.sql.Date dataCommentoDate=null;
-		java.sql.Time oraCommentoTime= null;
-		java.util.Date fromDate;
-		GregorianCalendar data= new GregorianCalendar();
-		GregorianCalendar ora= new GregorianCalendar();
+		String arrayDataString[];
+		String arrayOraString[];
+		int anno, mese, giorno, ore, minuti, secondi;
+		GregorianCalendar data;
+		GregorianCalendar ora;
 		
 		session=request.getSession();
 		idUtente=(String) session.getAttribute("idUtente");
@@ -37,26 +37,23 @@ public class RimuoviCommento extends HttpServlet{
 		idUtentePost=request.getParameter("idUtentePostCommento");
 		oraCommento=request.getParameter("oraCommento");
 		dataCommento=request.getParameter("dataCommento");
-		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			fromDate=dateFormat.parse(dataCommento);
-			dataCommentoDate=new java.sql.Date(fromDate.getTime());
-			data.setTime(dataCommentoDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		dateFormat= new SimpleDateFormat("HH:mm:ss");
-		try {
-			fromDate=dateFormat.parse(oraCommento);
-			oraCommentoTime=new java.sql.Time(fromDate.getTime());
-			ora.setTime(oraCommentoTime);
-			System.out.println(ora.get(GregorianCalendar.HOUR_OF_DAY)+" "+ora.get(GregorianCalendar.MINUTE)+" "+ora.get(GregorianCalendar.SECOND));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		arrayDataString=dataCommento.split("-");
+		annoData=arrayDataString[0];
+		meseData=arrayDataString[1];
+		giornoData=arrayDataString[2];
+		anno=Integer.parseInt(annoData);
+		mese=Integer.parseInt(meseData);
+		mese=mese-1;
+		giorno=Integer.parseInt(giornoData);
+		data= new GregorianCalendar(anno, mese, giorno);
+		arrayOraString=oraCommento.split(":");
+		oraString=arrayOraString[0];
+		minutiString=arrayOraString[1];
+		secondiString=arrayOraString[2];
+		ore=Integer.parseInt(oraString);
+		minuti=Integer.parseInt(minutiString);
+		secondi=Integer.parseInt(secondiString);
+		ora=new GregorianCalendar(anno, mese, giorno, ore, minuti, secondi);
 		if (idUtente!=null) {
 			CommentoBean commentoBean= new CommentoBean();
 			commentoBean.setIdUtente(idUtente);
@@ -64,9 +61,10 @@ public class RimuoviCommento extends HttpServlet{
 			commentoBean.setIdUtentePost(idUtentePost);
 			commentoBean.setData(data);
 			commentoBean.setOra(ora);
-			CommentoBeanDao commentoBeanDao= new CommentoBeanDao();
+			System.out.println(idUtente+" "+idPost+" "+idUtentePost+" "+data+" "+ora);
+			CommentoDAO commentoDAO= new CommentoDAO();
 			try {
-				commentoBeanDao.doDelete(commentoBean);
+				commentoDAO.doDelete(commentoBean);
 				//effettuare il dispatcher alla jsp della foto
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

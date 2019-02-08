@@ -8,12 +8,6 @@ public class LikeBean {
 	
 	public LikeBean() {
 	}
-	
-	public LikeBean(String idUtente, int idPost, String idUtentePost) {
-		this.idUtente=idUtente;
-		this.idPost=idPost;
-		this.idUtentePost=idUtentePost;
-	}
 
 	public String getIdUtente() {
 		return idUtente;

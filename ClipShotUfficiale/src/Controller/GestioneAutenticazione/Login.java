@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.UtenteBeanDao;
+import Manager.UtenteDAO;
 import Model.UtenteBean;
 import sun.rmi.server.Dispatcher;
 
@@ -26,7 +26,7 @@ public class Login extends HttpServlet{
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		String idUtente=null, password=null;
-		UtenteBeanDao utenteBeanDao;
+		UtenteDAO utenteDAO;
 		ArrayList<UtenteBean> listaUtenti;
 		UtenteBean utenteBean;
 		HttpSession session;
@@ -48,9 +48,9 @@ public class Login extends HttpServlet{
 			if ((idUtente!=null)&&(password!=null)) {
 				 session= request.getSession();
 				 session.setAttribute("idUtente", idUtente);
-				 utenteBeanDao= new UtenteBeanDao();
+				 utenteDAO= new UtenteDAO();
 				 try {
-					utenteBean=utenteBeanDao.doRetrieveByKey(idUtente);
+					utenteBean=utenteDAO.doRetrieveByKey(idUtente);
 					session.setAttribute("tipo", utenteBean.getTipo());
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -70,12 +70,12 @@ public class Login extends HttpServlet{
 			password=request.getParameter("passwordUtente");
 			if ((idUtente!=null)&&(password!=null)) {
 				System.out.println("request");
-				utenteBeanDao= new UtenteBeanDao();
+				utenteDAO= new UtenteDAO();
 				utenteBean= new UtenteBean();
 				utenteBean.setIdUtente(idUtente);
 				utenteBean.setPassword(password);
 				try {
-					listaUtenti=utenteBeanDao.doRetrieveByCond(utenteBean);
+					listaUtenti=utenteDAO.doRetrieveByCond(utenteBean);
 					//login effettuato
 					if (listaUtenti.size()==1) {
 						utenteBean=listaUtenti.get(0);

@@ -12,9 +12,9 @@ import com.mysql.jdbc.Statement;
 import Model.SeguiBean;
 import Model.UtenteBean;
 
-public class SeguiBeanDao {
+public class SeguiDAO {
 	
-	public SeguiBeanDao() {
+	public SeguiDAO() {
 	}
 	
 	public void doSave(SeguiBean seguiBean) throws SQLException {

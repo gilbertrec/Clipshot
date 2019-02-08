@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Manager.CommentoBeanDao;
+import Manager.CommentoDAO;
 import Model.CommentoBean;
 
 @WebServlet("/AggiungiCommento")
@@ -35,10 +35,16 @@ public class AggiungiCommento extends HttpServlet {
 		GregorianCalendar data= new GregorianCalendar();
 		GregorianCalendar ora= new GregorianCalendar();
 		if (idUtente!=null) {
-			CommentoBean commentoBean= new CommentoBean(idUtente, idPost, idUtentePost, data, ora, descrizione);
-			CommentoBeanDao commentoBeanDao= new CommentoBeanDao();
+			CommentoBean commentoBean= new CommentoBean();
+			commentoBean.setIdUtente(idUtente);
+			commentoBean.setIdPost(idPost);
+			commentoBean.setIdUtentePost(idUtentePost);
+			commentoBean.setData(data);
+			commentoBean.setOra(ora);
+			commentoBean.setDescrizione(descrizione);
+			CommentoDAO commentoDAO= new CommentoDAO();
 			try {
-				commentoBeanDao.doSave(commentoBean);
+				commentoDAO.doSave(commentoBean);
 				//effettuare il dispatcher alla jsp inserendo nella request idUtente, descrizione, data ed ora
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

@@ -15,14 +15,6 @@ public class CommentoBean {
 	
 	public CommentoBean() {
 	}
-	public CommentoBean(String idUtente, int idPost, String idUtentePost, GregorianCalendar data, GregorianCalendar ora, String descrizione) {
-		this.idUtente = idUtente;
-		this.idPost = idPost;
-		this.idUtentePost=idUtentePost;
-		this.data = data;
-		this.ora = ora;
-		this.descrizione = descrizione;
-	}
 	public String getIdUtente() {
 		return idUtente;
 	}
