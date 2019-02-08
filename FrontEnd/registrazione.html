@@ -1,16 +1,10 @@
-<!--
-Author: Colorlib
-Author URL: https://colorlib.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
 <html>
 <head>
 <title>ClipShot</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script type="application/x-javascript">addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- Custom Theme files -->
 <link href="css/styleRegistrazione.css" rel="stylesheet" type="text/css" media="all" />
 <!-- //Custom Theme files -->
@@ -21,19 +15,23 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body>
 	<!-- main -->
 	<div class="main-w3layouts wrapper">
-		<img src="img/logo_ClipShot.png">
+		<img src="logo_ClipShot.png">
 		<div class="main-agileinfo">
 			<div class="agileits-top">
-				<form action="#" method="post">
-					<input class="text" type="text" name="Username" placeholder="Username" required="">
-					<input class="text email" type="email" name="email" placeholder="Email" required="">
-					<input class="text" type="password" name="password" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
-					<input class="text" type="text" name="nome" placeholder="Nome" required="">
-					<input class="text" type="text" name="cognome" placeholder="Cognome" required="">
-					<input type="radio" name="gender" value="male" > M
- 					<input type="radio" name="gender" value="female"> F
- 					<input type="date" name="data">
+				<form action="Registrazione" method="post">
+					<input class="text" type="text" name="idUtenteUtente" placeholder="Username" required="">
+					<input class="text email" type="email" name="emailUtente" placeholder="Email" required="">
+					<input class="text" type="password" name="passwordUtente" placeholder="Password" required="">
+					<input class="text w3lpass" type="password" name="confirm_password" placeholder="Confirm Password" required="">
+					<input class="text" type="text" name="nomeUtente" placeholder="Nome" required="">
+					<input class="text" type="text" name="cognomeUtente" placeholder="Cognome" required="">
+					<input type="radio" name="sessoUtente" value="M" > M
+ 					<input type="radio" name="sessoUtente" value="F"> F
+ 					<input type="date" name="dataUtente">
+ 					<input type="text" name="indirizzoUtente">
+ 					<!-- <input type="file"
+       							id="avatar" name="fotoProfiloUtente"
+       							accept="image/png, image/jpeg"> -->
 					<div class="wthree-text">
 						<label class="anim">
 							<input type="checkbox" class="checkbox" required="">
