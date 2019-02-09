@@ -27,23 +27,12 @@ public class CreaOperatore extends HttpServlet {
 			String username = (String) ssn.getAttribute("username");
 			if(username != null) {
 				OperatoreBean operatoreBean = new OperatoreBean();
-				OperatoreBean temp = new OperatoreBean();
 				OperatoreDAO operatoreDAO = new OperatoreDAO();
-				
 				String user = (String) request.getAttribute("usernameOperatore");
-				try {
-					temp = operatoreDAO.doRetrieveByKey(user);
-					if(!username.equals(temp.getUsername())) {
-						operatoreBean.setUsername(user);
-					} else { //username operatore già esistente
-						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
-						requestDispatcher.forward(request, response);
-					}
-				} catch (Exception e) { //nessun operatore corrispondente a quella username
-					e.printStackTrace();
+				if(!user.equals("")) {
 					operatoreBean.setUsername(user);
-					request.setAttribute("user", operatoreBean.getUsername());
-					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); // si continua con la compilazione del form 
+				} else { //nome vuoto
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
 				}
 				String password = (String) request.getAttribute("passwordOperatore");

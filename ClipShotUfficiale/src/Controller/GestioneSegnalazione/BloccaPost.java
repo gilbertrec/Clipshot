@@ -44,8 +44,9 @@ public class BloccaPost extends HttpServlet {
 				}
 				PostDAO postDAO = new PostDAO();
 				PostBean postBean = new PostBean();
-				String idPost = String.valueOf(segnalazioneBean.getIdPost());
+				String idPostString = String.valueOf(segnalazioneBean.getIdPost());
 				try {
+					int idPost = Integer.parseInt(idPostString);
 					postBean = postDAO.doRetrieveByKey(idPost, segnalazioneBean.getIdUtentePost());
 				} catch (SQLException e1) { //post segnalato - not exist
 					e1.printStackTrace();

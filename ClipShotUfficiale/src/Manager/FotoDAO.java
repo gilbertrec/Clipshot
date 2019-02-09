@@ -79,7 +79,7 @@ public class FotoDAO {
 	
 	public ArrayList<FotoBean> doRetrieveByAll() throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		ArrayList<FotoBean> listaFoto= new ArrayList<FotoBean>();
+		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
 		Statement query=(Statement) con.createStatement();
 		ResultSet resultSet=query.executeQuery("select * from foto;");
 		while (resultSet.next()) {
@@ -90,6 +90,23 @@ public class FotoDAO {
 			listaFoto.add(fotoBean);
 		}
 		query.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+		return listaFoto;	
+	}
+	
+	public ArrayList<FotoBean> doRetrieveByCondFoto(String idUtente) throws Exception {
+		Connection con = DriverManagerConnectionPool.getConnection();
+		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
+		PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT f.idFoto, f.path FROM post p JOIN foto f ON (p.idFoto = f.idFoto) WHERE p.idUtente = '?' ORDER BY p.data DESC");
+		ps.setString(1, idUtente);
+		ResultSet resultSet = ps.executeQuery();
+		while (resultSet.next()) {
+			FotoBean fotoBean = new FotoBean();
+			fotoBean.setIdFoto(resultSet.getInt("idFoto"));
+			fotoBean.setPath(resultSet.getString("path"));
+			listaFoto.add(fotoBean);
+		}
+		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaFoto;	
 	}

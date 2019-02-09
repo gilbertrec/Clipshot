@@ -1,6 +1,7 @@
 package Controller.GestioneStatistiche;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Manager.AbbonamentoDAO;
+import Manager.FotoDAO;
 import Manager.StatisticheDAO;
 import Model.AbbonamentoBean;
+import Model.FotoBean;
 import Model.StatisticheBean;
 
 @WebServlet("/StatisticheVisualizzazioni")
@@ -43,17 +46,25 @@ public class StatisticheVisualizzazioni extends HttpServlet {
 					StatisticheBean statisticheBean = new StatisticheBean();
 					try {
 						statisticheBean = statisticheDAO.doRetrieveByKey(idUtente);
-						request.setAttribute("numeroVisualizzazioni", statisticheBean.getNumeroVisualizzazioni());
-						
-						
-						
-						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
-						requestDispatcher.forward(request, response);
+						request.setAttribute("StatisticheVisualizzazioni", statisticheBean);						
 					} catch (Exception e) { //nessuna statistica
 						e.printStackTrace();
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);
 					}
+					ArrayList<FotoBean> listaFotoBean = new ArrayList<>();
+					FotoDAO fotoDAO = new FotoDAO();
+					try {
+						listaFotoBean = fotoDAO.doRetrieveByCondFoto(idUtente);
+						request.setAttribute("listaFoto", listaFotoBean);
+					} catch (Exception e) { //nessuna foto
+						e.printStackTrace();
+						request.setAttribute("listaFoto", null);
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}//tutto va a buon fine disp
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
 				} else { // abbonamento SOSPESO opp. SCADUTO dispatch ad AttivaAbbonamento
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);

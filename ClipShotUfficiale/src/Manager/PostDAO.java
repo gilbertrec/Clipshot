@@ -41,10 +41,10 @@ public class PostDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public PostBean doRetrieveByKey(String idPost, String idUtente) throws SQLException {
+	public PostBean doRetrieveByKey(int idPost, String idUtente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
-		ps.setString(1, idPost);
+		PreparedStatement ps = (PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
+		ps.setInt(1, idPost);
 		ps.setString(2, idUtente);
 		ResultSet resultSet=ps.executeQuery();
 		PostBean postBean= new PostBean();
@@ -53,7 +53,7 @@ public class PostDAO {
 			postBean.setIdUtente(resultSet.getString("idUtente"));
 			postBean.setIdFoto(resultSet.getInt("idFoto"));
 			postBean.setDescrizione(resultSet.getString("descrizione"));
-			Date dataFrom=resultSet.getDate("data");
+			Date dataFrom = resultSet.getDate("data");
 			GregorianCalendar data= new GregorianCalendar();
 			data.setTime(dataFrom);
 			Time oraFrom=resultSet.getTime("ora");
@@ -106,10 +106,10 @@ public class PostDAO {
 			Date dataFrom=resultSet.getDate("data");
 			GregorianCalendar data= new GregorianCalendar();
 			data.setTime(dataFrom);
+			postBean.setData(data);
 			Time oraFrom=resultSet.getTime("ora");
 			GregorianCalendar ora=new GregorianCalendar();
 			ora.setTime(oraFrom);
-			postBean.setData(data);
 			postBean.setOra(ora);
 			postBean.setStato(resultSet.getString("stato"));
 			listaPost.add(postBean);
@@ -117,5 +117,21 @@ public class PostDAO {
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaPost;
+	}
+	
+	public synchronized PostBean doRetrieveByCond(int idFoto, String idUtente) throws Exception{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		PostBean postBean = new PostBean();
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT p.descrizione, f.idFoto FROM post p JOIN foto f ON (p.idFoto = f.idFoto) WHERE p.idFoto = '?' AND p.idUtente = '?'");
+		query.setInt(1, idFoto);
+		query.setString(2, idUtente);
+		ResultSet result = query.executeQuery();
+		if(!result.next()) {
+			throw new Exception();
+		}
+		postBean.setDescrizione(result.getString("p.descrizione"));
+		query.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+		return postBean;	
 	}
 }
