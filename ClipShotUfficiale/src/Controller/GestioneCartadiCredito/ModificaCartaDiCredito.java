@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Manager.AbbonamentoDAO;
 import Manager.CartaDiCreditoDAO;
+import Model.AbbonamentoBean;
 import Model.CartaDiCreditoBean;
 
 @WebServlet("/ModificaCartaDiCredito")
@@ -68,13 +70,32 @@ public class ModificaCartaDiCredito extends HttpServlet {
 		        }
 		        try {
 					cartaDiCreditoDAO.doSaveOrUpdate(cartaDiCreditoBean);
-					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
-					requestDispatcher.forward(request, response);
 				} catch (Exception e) { //update fallito
 					e.printStackTrace();
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
 				}
+		        AbbonamentoBean abbonamentoBean = new AbbonamentoBean();
+		        AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO();
+		        try {
+					abbonamentoBean = abbonamentoDAO.doRetrieveByKey(idUtente);
+				} catch (Exception e) { //dispatch per l'utente base, nessun abbonamento
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+		        if(abbonamentoBean != null) { //se l'abbonamento esiste..
+		        	abbonamentoBean.setNumeroCarta(cartaDiCreditoBean.getNumeroCarta());
+		        	try {
+						abbonamentoDAO.doSaveOrUpdate(abbonamentoBean);
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					} catch (Exception e) {//update fallito
+						e.printStackTrace();
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}
+		        }
 			} else { // idUtente == null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);

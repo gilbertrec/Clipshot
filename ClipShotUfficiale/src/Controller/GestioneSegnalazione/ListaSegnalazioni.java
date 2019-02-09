@@ -31,7 +31,15 @@ public class ListaSegnalazioni extends HttpServlet {
 				ArrayList<SegnalazioneBean> segnalazioniBean = new ArrayList<>();
 				try {
 					segnalazioniBean = segnalazioneDAO.doRetrieveByCond("in_attesa");
-					request.setAttribute("segnalazioni", segnalazioniBean);
+					request.setAttribute("segnalazioniInAttesa", segnalazioniBean);
+				} catch (Exception e) { //nessuna segnalazione
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+					requestDispatcher.forward(request, response);
+				}
+				try { //per sbloccare utenti e post
+					segnalazioniBean = segnalazioneDAO.doRetrieveByCond("completata");
+					request.setAttribute("segnalazioniCompletate", segnalazioniBean);
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);
 				} catch (Exception e) { //nessuna segnalazione
