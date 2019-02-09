@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
 import com.mysql.jdbc.PreparedStatement;
 import Model.StatisticheBean;
 
@@ -89,7 +88,7 @@ public class StatisticheDAO {
 	public synchronized String doRetrieveByCondNLike(String idUtentePost, int idFoto) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		String numeroLike = null;
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT COUNT(l.idUtente) AS numeroLike FROM post p JOIN clipshot.like l ON (l.idUtentePost = p.idUtente AND l.idPost = p.idPost) JOIN foto f ON (f.idFoto = p.idFoto) WHERE l.idUtentePost = '?' AND f.idFoto = '?'");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT COUNT(l.idUtente) AS numeroLike FROM clipshot.post p JOIN clipshot.like l ON (l.idUtentePost = p.idUtente AND l.idPost = p.idPost) JOIN clipshot.foto f ON (f.idFoto = p.idFoto) WHERE l.idUtentePost = ? AND f.idFoto = ?");
 		query.setString(1, idUtentePost);
 		query.setInt(2, idFoto);
 		ResultSet result = query.executeQuery();
@@ -104,7 +103,7 @@ public class StatisticheDAO {
 	public synchronized String doRetrieveByCondNAcquisti(int idFoto) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		String numeroAcquisti = null;
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT COUNT(a.idFoto) AS numeroAcquisti FROM acquisto a WHERE a.idFoto = '?'");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT COUNT(a.idFoto) AS numeroAcquisti FROM clipshot.acquisto a WHERE a.idFoto = ?");
 		query.setInt(1, idFoto);
 		ResultSet result = query.executeQuery();
 		if(!result.next()) {

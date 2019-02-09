@@ -12,13 +12,11 @@ import Model.AcquistiBean;
 
 public class AcquistiDAO {
 	
-	public AcquistiDAO() {
-		
-	}
+	public AcquistiDAO() {	}
 	
 	public void doSave (AcquistiBean acquistiBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into acquisto values(?, ?, ?);");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.acquisto values(?, ?, ?);");
 		ps.setString(1, acquistiBean.getIdUtente());
 		ps.setInt(2, acquistiBean.getIdFoto());
 		ps.setString(3, acquistiBean.getStringData());
@@ -27,19 +25,9 @@ public class AcquistiDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public void doDelete (AcquistiBean acquistiBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from acquisto where idUtente=? and idFoto=?;");
-		ps.setString(1, acquistiBean.getIdUtente());
-		ps.setInt(2, acquistiBean.getIdFoto());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
-	}
-	
 	public AcquistiBean doRetrieveByKey (String idUtente, int idFoto) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from acquisto where idUtente=? and idFoto=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.acquisto where idUtente=? and idFoto=?;");
 		ps.setString(1, idUtente);
 		ps.setInt(2, idFoto);
 		ResultSet resultSet=ps.executeQuery();
@@ -58,12 +46,12 @@ public class AcquistiDAO {
 	}
 	public void doSaveOrUpdate (AcquistiBean acquistiBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement)con.prepareStatement("select * from acquisto where idUtente=? and idFoto=?;");
+		PreparedStatement ps=(PreparedStatement)con.prepareStatement("select * from clipshot.acquisto where idUtente=? and idFoto=?;");
 		ps.setString(1, acquistiBean.getIdUtente());
 		ps.setInt(2, acquistiBean.getIdFoto());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update acquisto set dataAcquisto=? where idUtente=? and idFoto=?");
+			ps=(PreparedStatement) con.prepareStatement("update clipshot.acquisto set dataAcquisto=? where idUtente=? and idFoto=?");
 			ps.setString(1, acquistiBean.getStringData());
 			ps.setString(2, acquistiBean.getIdUtente());
 			ps.setInt(3, acquistiBean.getIdFoto());
@@ -80,7 +68,7 @@ public class AcquistiDAO {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<AcquistiBean> listaAcquisti= new ArrayList<AcquistiBean>();
 		Statement query=(Statement) con.createStatement();
-		ResultSet resultSet=query.executeQuery("select * from acquisto");
+		ResultSet resultSet=query.executeQuery("select * from clipshot.acquisto");
 		while (resultSet.next()) {
 			AcquistiBean acquistiBean= new AcquistiBean();
 			acquistiBean.setIdUtente(resultSet.getString("idUtente"));
@@ -99,7 +87,7 @@ public class AcquistiDAO {
 	public ArrayList<AcquistiBean> doRetrieveByCond(String idUtente) throws SQLException {
 		Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<AcquistiBean> listaAcquisti= new ArrayList<AcquistiBean>();
-		PreparedStatement query = (PreparedStatement)con.prepareStatement("SELECT * FROM acquisto WHERE idUtente = ?");
+		PreparedStatement query = (PreparedStatement)con.prepareStatement("SELECT * FROM clipshot.acquisto WHERE idUtente = ?");
 		query.setString(1, idUtente);
 		ResultSet resultSet = query.executeQuery();
 		while (resultSet.next()) {
@@ -115,5 +103,15 @@ public class AcquistiDAO {
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaAcquisti;
+	}
+	
+	public void doDelete (AcquistiBean acquistiBean) throws SQLException {
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.acquisto where idUtente=? and idFoto=?;");
+		ps.setString(1, acquistiBean.getIdUtente());
+		ps.setInt(2, acquistiBean.getIdFoto());
+		ps.executeUpdate();
+		ps.close();
+		DriverManagerConnectionPool.releaseConnection(con);
 	}
 }

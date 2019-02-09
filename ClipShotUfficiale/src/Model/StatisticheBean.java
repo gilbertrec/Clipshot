@@ -70,4 +70,5 @@ public class StatisticheBean {
 	public String getStringDataFine() {
 		return this.getYearFine()+"-"+this.getMonthFine()+"-"+this.getDayFine();
 	}
+	
 }

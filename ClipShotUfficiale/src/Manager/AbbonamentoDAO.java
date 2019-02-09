@@ -3,7 +3,6 @@ package Manager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-
 import com.mysql.jdbc.PreparedStatement;
 import Model.AbbonamentoBean;
 

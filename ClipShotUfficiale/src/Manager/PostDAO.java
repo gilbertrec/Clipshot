@@ -13,12 +13,11 @@ import Model.PostBean;
 
 public class PostDAO {
 	
-	public PostDAO() {
-	}
+	public PostDAO() { }
 	
 	public void doSave(PostBean postBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into post values(?, ?, ?, ?, ?, ?, ?);");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.post values(?, ?, ?, ?, ?, ?, ?);");
 		ps.setInt(1, postBean.getIdPost());
 		ps.setString(2, postBean.getIdUtente());
 		ps.setInt(3, postBean.getIdFoto());
@@ -31,19 +30,9 @@ public class PostDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public void doDelete (PostBean postBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from post where idPost=? and idUtente=?;");
-		ps.setInt(1, postBean.getIdPost());
-		ps.setString(2, postBean.getIdUtente());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
-	}
-	
 	public PostBean doRetrieveByKey(int idPost, String idUtente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps = (PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
+		PreparedStatement ps = (PreparedStatement) con.prepareStatement("select * from clipshot.post where idPost=? and idUtente=?;");
 		ps.setInt(1, idPost);
 		ps.setString(2, idUtente);
 		ResultSet resultSet=ps.executeQuery();
@@ -70,12 +59,12 @@ public class PostDAO {
 	
 	public void doSaveOrUpdate(PostBean postBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from segui where idPost=? and idUtente=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.post where idPost=? and idUtente=?;");
 		ps.setInt(1, postBean.getIdPost());
 		ps.setString(2, postBean.getIdUtente());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update segui set idFoto=?, descrizione=?, data=?, ora=?, stato=? where idPost=? and idUtente=?;");
+			ps=(PreparedStatement) con.prepareStatement("update clipshot.post set idFoto=?, descrizione=?, data=?, ora=?, stato=? where idPost=? and idUtente=?;");
 			ps.setInt(1, postBean.getIdFoto());
 			ps.setString(2, postBean.getDescrizione());
 			ps.setString(3, postBean.getStringData());
@@ -96,7 +85,7 @@ public class PostDAO {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
 		Statement query=(Statement) con.createStatement();
-		ResultSet resultSet=query.executeQuery("select *from segui");
+		ResultSet resultSet=query.executeQuery("select *from clipshot.post");
 		while (resultSet.next()) {
 			PostBean postBean= new PostBean();
 			postBean.setIdPost(resultSet.getInt("idPost"));
@@ -122,7 +111,7 @@ public class PostDAO {
 	public synchronized PostBean doRetrieveByCond(int idFoto, String idUtente) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PostBean postBean = new PostBean();
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT p.descrizione, f.idFoto FROM post p JOIN foto f ON (p.idFoto = f.idFoto) WHERE p.idFoto = '?' AND p.idUtente = '?'");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT p.descrizione FROM clipshot.post p JOIN clipshot.foto f ON (p.idFoto = f.idFoto) WHERE p.idFoto = '?' AND p.idUtente = '?'");
 		query.setInt(1, idFoto);
 		query.setString(2, idUtente);
 		ResultSet result = query.executeQuery();
@@ -133,5 +122,15 @@ public class PostDAO {
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		return postBean;	
+	}
+	
+	public void doDelete (PostBean postBean) throws SQLException {
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.post where idPost=? and idUtente=?;");
+		ps.setInt(1, postBean.getIdPost());
+		ps.setString(2, postBean.getIdUtente());
+		ps.executeUpdate();
+		ps.close();
+		DriverManagerConnectionPool.releaseConnection(con);
 	}
 }

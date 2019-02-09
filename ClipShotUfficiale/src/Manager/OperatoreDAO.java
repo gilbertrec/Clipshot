@@ -6,6 +6,7 @@ import com.mysql.jdbc.PreparedStatement;
 import Model.OperatoreBean;
 
 public class OperatoreDAO {
+	
 	public synchronized void doSave(OperatoreBean o) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(

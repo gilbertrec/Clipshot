@@ -1,33 +1,34 @@
 package Model;
 
 public class LikeBean {
-	private String idFollower;
-	private String idFollowing;
+	private String idUtente;
+	private int idPost;
+	private String idUtentePost;
 	
-	
-	public LikeBean() {
-	}
-	
-	public LikeBean(String idFollower, String idFollowing) {
+	public LikeBean() {	}
 
-		this.idFollower = idFollower;
-		this.idFollowing = idFollowing;
+	public String getIdUtente() {
+		return idUtente;
 	}
 
-	public String getIdFollower() {
-		return idFollower;
+	public void setIdUtente(String idUtente) {
+		this.idUtente = idUtente;
 	}
 
-	public void setIdFollower(String idFollower) {
-		this.idFollower = idFollower;
+	public int getIdPost() {
+		return idPost;
 	}
 
-	public String getIdFollowing() {
-		return idFollowing;
+	public void setIdPost(int idPost) {
+		this.idPost = idPost;
 	}
 
-	public void setIdFollowing(String idFollowing) {
-		this.idFollowing = idFollowing;
+	public String getIdUtentePost() {
+		return idUtentePost;
 	}
-	
+
+	public void setIdUtentePost(String idUtentePost) {
+		this.idUtentePost = idUtentePost;
+	}
 }
+

@@ -12,18 +12,7 @@ public class PostBean {
 	private String stato;
 	
 	
-	public PostBean() {
-	}
-	
-	public PostBean(int idPost, String idUtente, int idFoto, String descrizione, GregorianCalendar data, GregorianCalendar ora, String stato) {
-		this.idPost = idPost;
-		this.idUtente=idUtente;
-		this.idFoto=idFoto;
-		this.descrizione = descrizione;
-		this.data = data;
-		this.ora=ora;
-		this.stato = stato;
-	}
+	public PostBean() { }
 
 	public int getIdPost() {
 		return idPost;

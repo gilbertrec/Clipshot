@@ -12,18 +12,7 @@ public class MessaggioAssistenzaBean {
 	private String tipo;
 	private String corpo;
 	
-	
-	public MessaggioAssistenzaBean() {
-	}
-	
-	public MessaggioAssistenzaBean(String idDestinatario, String idMittente, Date data, Time ora, String corpo) {
-		
-		this.idOperatore = idDestinatario;
-		this.idUtente = idMittente;
-		this.dataMessaggio = data;
-		this.ora = ora;
-		this.corpo = corpo;
-	}
+	public MessaggioAssistenzaBean() { }
 	
 	public String getOggetto() {
 		return oggetto;

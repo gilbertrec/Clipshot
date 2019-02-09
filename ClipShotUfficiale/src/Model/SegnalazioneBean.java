@@ -13,16 +13,7 @@ public class SegnalazioneBean {
 	private String descrizione;
 	
 	
-	public SegnalazioneBean() {
-		
-	}
-	
-	public SegnalazioneBean(int idSegnalazione, String causa, String stato, Date data) {
-		this.idSegnalazione = idSegnalazione;
-		this.causa = causa;
-		this.stato = stato;
-		this.data = data;
-	}
+	public SegnalazioneBean() { }
 
 	public String getIdUtente() {
 		return idUtente;
@@ -87,6 +78,5 @@ public class SegnalazioneBean {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
-	
 	
 }

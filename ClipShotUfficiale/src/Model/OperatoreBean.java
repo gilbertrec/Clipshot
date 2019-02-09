@@ -8,17 +8,7 @@ public class OperatoreBean {
 	private String email;
 	private String tipo;
 	
-	public OperatoreBean() {
-		
-	}
-	public OperatoreBean(String username, String password, String nome, String cognome, String email, String tipo) {
-		this.username = username;
-		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.email = email;
-		this.tipo = tipo;
-	}
+	public OperatoreBean() { }
 
 	public String getUsername() {
 		return username;
@@ -65,7 +55,5 @@ public class OperatoreBean {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
-	
 	
 }

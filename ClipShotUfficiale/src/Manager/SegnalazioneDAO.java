@@ -107,6 +107,7 @@ public class SegnalazioneDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return segnalazioni;		
 	}
+	
 	public void doDelete(int idSegnalazione, String idUtente) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("DELETE FROM clipshot.segnalazione WHERE idSegnalazione =?, idUtente=?");

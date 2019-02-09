@@ -9,17 +9,10 @@ public class AbbonamentoBean {
 	private String stato;
 	
 	public AbbonamentoBean() {}	
-	public AbbonamentoBean(String idUtente, GregorianCalendar dataScadenza, String ncarta, String stato) {
-		
-		this.idUtente = idUtente;
-		this.dataScadenza = dataScadenza;
-		this.numeroCarta = ncarta;
-		this.stato = stato;
-	}
+	
 	public boolean isScaduto(GregorianCalendar dataScadenza) {
 		return new GregorianCalendar().before(dataScadenza);
 	}
-	
 	public String getIdUtente() {
 		return idUtente;
 	}

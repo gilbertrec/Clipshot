@@ -3,7 +3,6 @@ package Manager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-
 import com.mysql.jdbc.PreparedStatement;
 import Model.CartaDiCreditoBean;
 
@@ -28,7 +27,7 @@ public class CartaDiCreditoDAO {
 		else {
 			java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 			PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
-					"update clipshot.cartadiCredito set idUtente=? , intestatario=? , dataScadenza=? , cvv=? where numeroCarta =?");	
+					"update clipshot.cartadiCredito set idUtente=? , intestatario=? , dataScadenza=? , cvv=? where numeroCarta = ?");	
 			query.setString(1, c.getIdUtente());
 			query.setString(2, c.getIntestatario());
 			query.setString(3, c.getStringDataScadenza());
@@ -84,7 +83,7 @@ public class CartaDiCreditoDAO {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		CartaDiCreditoBean c = new CartaDiCreditoBean();
 		c.setIdUtente(idUtente);
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM utente u JOIN cartadicredito c WHERE u.idUtente = c.idUtente AND c.idUtente = ?");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT c.numeroCarta FROM clipshot.utente u JOIN clipshot.cartadicredito c WHERE u.idUtente = c.idUtente AND c.idUtente = ?");
 		query.setString(1, c.getIdUtente());
 		ResultSet result = query.executeQuery();
 		if(!result.next()) {

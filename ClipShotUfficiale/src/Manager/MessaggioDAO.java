@@ -8,6 +8,7 @@ import com.mysql.jdbc.PreparedStatement;
 import Model.MessaggioBean;
 
 public class MessaggioDAO {
+	
 	public synchronized void doSave(MessaggioBean m) throws Exception{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(

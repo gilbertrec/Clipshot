@@ -10,20 +10,18 @@ import Model.FotoBean;
 
 public class FotoDAO {
 	
-	public FotoDAO() {
-		
-	}
+	public FotoDAO() { }
 	
 	public void doSave (FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps;
 		if (fotoBean.getPrezzo()==null) {
-			ps=(PreparedStatement) con.prepareStatement("insert into foto (idFoto, path) values(?, ?);");
+			ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto (idFoto, path) values(?, ?);");
 			ps.setInt(1, fotoBean.getIdFoto());
 			ps.setString(2, fotoBean.getPath());
 		}
 		else {
-		ps=(PreparedStatement) con.prepareStatement("insert into foto values(?, ?, ?);");
+		ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto values(?, ?, ?);");
 		ps.setInt(1, fotoBean.getIdFoto());
 		ps.setString(2, fotoBean.getPath());
 		ps.setDouble(3,fotoBean.getPrezzo());
@@ -33,18 +31,9 @@ public class FotoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public void doDelete (FotoBean fotoBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from foto where idFoto=?;");
-		ps.setInt(1, fotoBean.getIdFoto());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
-	}
-	
 	public FotoBean doRetrieveByKey (int idFoto) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from foto where idFoto=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.foto where idFoto=?;");
 		ps.setInt(1, idFoto);
 		ResultSet resultSet=ps.executeQuery();
 		FotoBean fotoBean= new FotoBean();
@@ -60,11 +49,11 @@ public class FotoDAO {
 	
 	public void doSaveOrUpdate(FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from foto where idFoto=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.foto where idFoto=?;");
 		ps.setInt(1, fotoBean.getIdFoto());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update foto set path=?, prezzo=? where idFoto=?;");
+			ps=(PreparedStatement) con.prepareStatement("update clipshot.foto set path=?, prezzo=? where idFoto=?;");
 			ps.setString(1, fotoBean.getPath());
 			ps.setDouble(2, fotoBean.getPrezzo());
 			ps.setInt(3, fotoBean.getIdFoto());
@@ -81,7 +70,7 @@ public class FotoDAO {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
 		Statement query=(Statement) con.createStatement();
-		ResultSet resultSet=query.executeQuery("select * from foto;");
+		ResultSet resultSet=query.executeQuery("select * from clipshot.foto;");
 		while (resultSet.next()) {
 			FotoBean fotoBean= new FotoBean();
 			fotoBean.setIdFoto(resultSet.getInt("idFoto"));
@@ -97,7 +86,7 @@ public class FotoDAO {
 	public ArrayList<FotoBean> doRetrieveByCondFoto(String idUtente) throws Exception {
 		Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
-		PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT f.idFoto, f.path FROM post p JOIN foto f ON (p.idFoto = f.idFoto) WHERE p.idUtente = '?' ORDER BY p.data DESC");
+		PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT f.idFoto, f.path FROM clipshot.post p JOIN clipshot.foto f ON (p.idFoto = f.idFoto) WHERE p.idUtente = ? ORDER BY p.data DESC");
 		ps.setString(1, idUtente);
 		ResultSet resultSet = ps.executeQuery();
 		while (resultSet.next()) {
@@ -113,7 +102,7 @@ public class FotoDAO {
 	
 	public FotoBean doRetrieveByCond (String idUtente, int idFoto) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("SELECT f.path FROM acquisto a JOIN foto f ON (a.idFoto = f.idFoto) WHERE a.idUtente = '?' AND a.idFoto = '?'");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("SELECT f.path FROM clipshot.acquisto a JOIN clipshot.foto f ON (a.idFoto = f.idFoto) WHERE a.idUtente = ? AND a.idFoto = ?");
 		ps.setString(1, idUtente);
 		ps.setInt(2, idFoto);
 		ResultSet resultSet=ps.executeQuery();
@@ -125,5 +114,13 @@ public class FotoDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return fotoBean;
 	}
-	
+
+	public void doDelete (FotoBean fotoBean) throws SQLException {
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.foto where idFoto=?;");
+		ps.setInt(1, fotoBean.getIdFoto());
+		ps.executeUpdate();
+		ps.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+	}
 }

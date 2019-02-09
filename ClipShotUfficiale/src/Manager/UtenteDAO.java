@@ -16,7 +16,7 @@ public class UtenteDAO {
 	
 	public void doSave(UtenteBean utente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		ps.setString(1, utente.getIdUtente());
 		ps.setString(2, utente.getPassword());
 		ps.setString(3, utente.getEmail());
@@ -33,20 +33,11 @@ public class UtenteDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
-	public void doDelete(UtenteBean utente) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from utente where idUtente=?;");
-		ps.setString(1, utente.getIdUtente());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
-	}
-	
 	public UtenteBean doRetrieveByKey(String key) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		UtenteBean utente= new UtenteBean();
 		ResultSet result;
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from utente where idUtente=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.utente where idUtente=?;");
 		ps.setString(1, key);
 		result=ps.executeQuery();
 		if (result.next()) {
@@ -72,11 +63,11 @@ public class UtenteDAO {
 	
 	public void doSaveOrUpdate(UtenteBean utente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from utente where idUtente=?;");
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.utente where idUtente=?;");
 		ps.setString(1, utente.getIdUtente());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update utente set password=?, email=?, nome=?, cognome=?, dataNascita=?, sesso=?, indirizzo=?, stato=?, tipo=?, fotoProfilo=? where idUtente=?;");
+			ps=(PreparedStatement) con.prepareStatement("update clipshot.utente set password=?, email=?, nome=?, cognome=?, dataNascita=?, sesso=?, indirizzo=?, stato=?, tipo=?, fotoProfilo=? where idUtente=?;");
 			ps.setString(1, utente.getPassword());
 			ps.setString(2, utente.getEmail());
 			ps.setString(3, utente.getNome());
@@ -100,7 +91,7 @@ public class UtenteDAO {
 	public ArrayList<UtenteBean> doRetrieveByCond (UtenteBean utenteBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<UtenteBean> listaUtente= new ArrayList<UtenteBean>();
-		String sql="select * from utente where ";
+		String sql="select * from clipshot.utente where ";
 		int flag=0;
 		if (utenteBean.getIdUtente()!=null) {
 			sql=sql+"idUtente='"+utenteBean.getIdUtente()+"'";
@@ -224,7 +215,7 @@ public class UtenteDAO {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<UtenteBean> listaUtente= new ArrayList<UtenteBean>();
 		Statement query=(Statement) con.createStatement();
-		ResultSet result=query.executeQuery("select * from utente;");
+		ResultSet result=query.executeQuery("select * from clipshot.utente;");
 		while (result.next()) {
 			UtenteBean utente= new UtenteBean();
 			utente.setIdUtente(result.getString("idUtente"));
@@ -246,5 +237,14 @@ public class UtenteDAO {
 		query.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaUtente;
+	}
+	
+	public void doDelete(UtenteBean utente) throws SQLException {
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.utente where idUtente=?;");
+		ps.setString(1, utente.getIdUtente());
+		ps.executeUpdate();
+		ps.close();
+		DriverManagerConnectionPool.releaseConnection(con);
 	}
 }
