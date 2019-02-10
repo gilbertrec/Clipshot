@@ -45,6 +45,11 @@ h1{
 	background-size: 20px 20px;
 }
 
+.leggi-segnalazione{
+	background: url('img/chat-1.png') no-repeat center;
+	background-size: 20px 20px;
+}
+
 .transp{
 	background-color: transparent;
 	border-color: transparent;
@@ -96,7 +101,7 @@ th {
 
 .des{
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 }
 
 .link-post{
@@ -134,4 +139,27 @@ th {
 .shop{
 	display: flex;
 	flex-direction: row;
+}
+
+.risp-ig{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.oggetto{
+	display: flex;
+	flex-direction: row;
+}
+
+.ls p{
+	text-align: left;
+}
+
+.is p{
+	text-align: left;
+}
+
+.ip p{
+	text-align: left;
 }
