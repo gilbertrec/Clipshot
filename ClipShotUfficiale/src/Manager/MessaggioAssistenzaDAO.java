@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Manager;
 
 import java.sql.Date;

@@ -1,3 +1,6 @@
+/**
+ * @author Adalgiso Della Calce
+ */
 package Controller.GestioneAutenticazione;
 
 import java.io.IOException;

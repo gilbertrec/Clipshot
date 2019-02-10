@@ -1,6 +1,10 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneAbbonamento;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.servlet.RequestDispatcher;
@@ -12,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Manager.AbbonamentoDAO;
 import Manager.StatisticheDAO;
+import Manager.UtenteDAO;
 import Model.AbbonamentoBean;
 import Model.StatisticheBean;
+import Model.UtenteBean;
 
 @WebServlet("/SottoscrizioneAbbonamento")
 public class SottoscrizioneAbbonamento extends HttpServlet {
@@ -78,10 +84,27 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					statisticheBean.setDataFine(dataFine);
 					statisticheBean.setNumeroVisualizzazioni(0);
 					try {
-						statisticheDAO.doSave(statisticheBean); //abbonamento completato
+						statisticheDAO.doSave(statisticheBean);
+					} catch (Exception e) { //errore creazione statistiche
+						e.printStackTrace();
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);
-					} catch (Exception e) { //errore creazione statistiche
+					}
+					UtenteBean utenteBean = new UtenteBean();
+					UtenteDAO utenteDAO = new UtenteDAO();
+					try {
+						utenteBean = utenteDAO.doRetrieveByKey(idUtente);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}
+					utenteBean.setStato("ARTISTA");
+					try { 
+						utenteDAO.doSaveOrUpdate(utenteBean); //anche utente aggiornato, abbonamento creato con successo
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					} catch (SQLException e) { //utente non salvato
 						e.printStackTrace();
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);

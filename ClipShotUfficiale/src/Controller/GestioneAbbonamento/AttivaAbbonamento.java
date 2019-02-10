@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneAbbonamento;
 
 import java.io.IOException;

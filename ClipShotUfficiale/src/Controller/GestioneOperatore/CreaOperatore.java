@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneOperatore;
 
 import java.io.IOException;

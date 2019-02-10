@@ -1,3 +1,6 @@
+/**
+ * @author Adalgiso Della Calce
+ */
 package Controller.GestioneFotoAcquistate;
 
 import java.io.IOException;

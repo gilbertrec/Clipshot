@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 import Model.StatisticheBean;
 
 public class StatisticheDAO {
-	public synchronized void doSave(StatisticheBean s) throws Exception{
+	public synchronized void doSave(StatisticheBean s) throws Exception {
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 			"insert into clipshot.statistiche (idUtente, dataInizio, dataFine, numeroVisualizzazioni) values (?, ?, ?, ?)");
@@ -23,7 +23,7 @@ public class StatisticheDAO {
 		query.executeUpdate();
 		DriverManagerConnectionPool.releaseConnection(con);
 	}
-	public synchronized void doSaveOrUpdate(StatisticheBean s) throws Exception{
+	public synchronized void doSaveOrUpdate(StatisticheBean s) throws Exception {
 		StatisticheBean temp = doRetrieveByKey(s.getIdUtente());
 		if(temp==null) {
 			doSave(s);
@@ -33,6 +33,7 @@ public class StatisticheDAO {
 			PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 					"update clipshot.statistiche set numeroVisualizzazioni=? where idUtente =?, dataInizio = ?, dataFine = ?");	
 			query.setString(2, s.getIdUtente());
+			//gilberto ha detto che non fa niente se la funzione è fatta male
 			if(new GregorianCalendar().before(s.getDataFine())) { //se la settimana di valutazione statistiche non è ancora finita
 				query.setInt(1, s.getNumeroVisualizzazioni());
 				query.setString(3, s.getStringDataInizio());

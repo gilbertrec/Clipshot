@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneSegnalazione;
 
 import java.io.IOException;

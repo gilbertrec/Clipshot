@@ -1,3 +1,6 @@
+/**
+ * @author Adalgiso Della Calce
+ */
 package Manager;
 
 import java.sql.Connection;

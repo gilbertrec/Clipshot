@@ -1,3 +1,6 @@
+/**
+ * @author Adalgiso Della Calce
+ */
 package Controller.GestionePost;
 
 import java.io.IOException;

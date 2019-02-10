@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneCartadiCredito;
 
 import java.io.IOException;

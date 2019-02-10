@@ -1,3 +1,6 @@
+/**
+ * @author Adalgiso Della Calce
+ */
 package Controller.GestioneInterazioni;
 
 import java.io.IOException;

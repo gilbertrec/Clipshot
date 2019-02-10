@@ -1,3 +1,9 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ * @author Adalgiso Della Calce
+ * @author Stefano Linguiti
+ * @author Gilberto Recupito
+ */
 package Model;
 
 public class LikeBean {

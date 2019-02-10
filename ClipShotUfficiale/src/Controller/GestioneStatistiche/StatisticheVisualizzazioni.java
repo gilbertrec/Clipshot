@@ -1,3 +1,6 @@
+/**
+ * @author Carmine Cristian Cruoglio
+ */
 package Controller.GestioneStatistiche;
 
 import java.io.IOException;
@@ -32,7 +35,7 @@ public class StatisticheVisualizzazioni extends HttpServlet {
 		String idUtenteVisitato = (String) request.getAttribute("idUtenteVisitato");
 		if(idUtenteVisitato != null) {
 			try {//controllo se è pro
-				abbonamentoBean = abbonamentoDAO.doRetrieveByCond(idUtenteVisitato);
+				abbonamentoBean = abbonamentoDAO.doRetrieveByKey(idUtenteVisitato);
 			} catch (Exception e1) { //nessun abbonamento
 				e1.printStackTrace();
 				request.setAttribute("idUtenteVisitato", null); //così non entro più qui dentro perchè l'utente visitato non è un PRO
