@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Manager.AbbonamentoDAO;
+import Manager.StatisticheDAO;
 import Model.AbbonamentoBean;
+import Model.StatisticheBean;
 
 @WebServlet("/SottoscrizioneAbbonamento")
 public class SottoscrizioneAbbonamento extends HttpServlet {
@@ -62,6 +64,24 @@ public class SottoscrizioneAbbonamento extends HttpServlet {
 					try {
 						abbonamentoDAO.doSave(abbonamentoBean);
 					} catch (Exception e) { //errore di salvataggio
+						e.printStackTrace();
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					}
+					//creo le statistiche per il nuovo artista
+					StatisticheBean statisticheBean = new StatisticheBean();
+					StatisticheDAO statisticheDAO = new StatisticheDAO();
+					statisticheBean.setIdUtente(abbonamentoBean.getIdUtente());
+					statisticheBean.setDataInizio(new GregorianCalendar());
+					GregorianCalendar dataFine = statisticheBean.getDataFine();
+					dataFine.add(Calendar.DAY_OF_MONTH, 7); //7 giorni dopo
+					statisticheBean.setDataFine(dataFine);
+					statisticheBean.setNumeroVisualizzazioni(0);
+					try {
+						statisticheDAO.doSave(statisticheBean); //abbonamento completato
+						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
+						requestDispatcher.forward(request, response);
+					} catch (Exception e) { //errore creazione statistiche
 						e.printStackTrace();
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 						requestDispatcher.forward(request, response);

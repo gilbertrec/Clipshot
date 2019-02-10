@@ -2,6 +2,7 @@ package Manager;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import com.mysql.jdbc.PreparedStatement;
@@ -14,6 +15,9 @@ public class StatisticheDAO {
 			"insert into clipshot.statistiche (idUtente, dataInizio, dataFine, numeroVisualizzazioni) values (?, ?, ?, ?)");
 		query.setString(1, s.getIdUtente());
 		query.setString(2, s.getStringDataInizio());
+		GregorianCalendar dataFine = s.getDataFine();
+		dataFine.add(Calendar.DAY_OF_MONTH, 7); //7 giorni dopo
+		s.setDataFine(dataFine);
 		query.setString(3, s.getStringDataFine());
 		query.setInt(4, s.getNumeroVisualizzazioni());
 		query.executeUpdate();
@@ -28,10 +32,20 @@ public class StatisticheDAO {
 			java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 			PreparedStatement query=(PreparedStatement) ((java.sql.Connection) con).prepareStatement(
 					"update clipshot.statistiche set numeroVisualizzazioni=? where idUtente =?, dataInizio = ?, dataFine = ?");	
-			query.setInt(1, s.getNumeroVisualizzazioni());
 			query.setString(2, s.getIdUtente());
-			query.setString(3, s.getStringDataInizio());
-			query.setString(4, s.getStringDataFine());
+			if(new GregorianCalendar().before(s.getDataFine())) { //se la settimana di valutazione statistiche non è ancora finita
+				query.setInt(1, s.getNumeroVisualizzazioni());
+				query.setString(3, s.getStringDataInizio());
+				query.setString(4, s.getStringDataFine());
+			} else { 
+				query.setInt(1, 1); //nuova settimana, nuovo conteggio partenda da 1 perchè viene chiamato la prima volta
+				s.setDataInizio(s.getDataFine()); //inizia quando finisce la settimana precedente
+				query.setString(3, s.getStringDataInizio());
+				GregorianCalendar dataFine = s.getDataFine();
+				dataFine.add(Calendar.DAY_OF_MONTH, 7); //7 giorni dopo
+				s.setDataFine(dataFine);
+				query.setString(4, s.getStringDataFine());
+			}
 			query.executeUpdate();
 			DriverManagerConnectionPool.releaseConnection(con);
 		}
