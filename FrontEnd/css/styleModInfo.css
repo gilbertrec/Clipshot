@@ -103,3 +103,74 @@ body {
 h1{
   text-align: center;
 }
+
+.messaggio-c{
+  display: flex;
+  flex-direction: column;
+}
+
+.gcic{
+  font-size: 0.8em;
+}
+button.mfp-close,
+button.mfp-arrow {
+  overflow: visible;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  display: block;
+  outline: none;
+  padding: 0;
+  z-index: 1046;
+  box-shadow: none;
+  touch-action: manipulation; 
+  width: 10%;
+}
+
+.butconf{
+  display: flex;
+  flex-direction: row;
+}
+
+.butconf a,ul{
+  width: 50%;
+}
+
+.nome{
+  display: flex;
+  flex-direction: row;
+}
+
+.cognome{
+  display: flex;
+  flex-direction: row;
+}
+
+.numcart{
+  display: flex;
+  flex-direction: row;
+}
+
+.data{
+  display: flex;
+  flex-direction: row;
+}
+
+.button-m-d{
+  display: flex;
+  flex-direction: row;
+}
+
+.lb{
+  width: 50%;
+}
+
+.space{
+  padding-left: 4%;
+}
+
+.nscc{
+  text-align: left;
+}
+
