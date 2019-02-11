@@ -1,0 +1,71 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+  
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}
+
+.foto-nome{
+	display: flex;
+	flex-direction: row;
+}
+
+.row{
+	display: flex;
+	flex-direction: row;
+}
+
+.img-profile {
+   max-width: inherit;
+}
+
+.img-box {
+	display: flex;
+}
+.mp{
+	margin-top: auto 15px;
+}
+
+.interazione {
+    display: flex;
+    flex-direction: column;
+}
+
+.commento {
+    margin: 78% 0;
+}
+
+ul{
+	margin: 0px;
+	padding: 0px;
+}
+
+#dati_segnala{
+	display: flex;
+	flex-direction: row;
+}
+
+#dati_idUtente{
+	justify-content: flex-start;
+}
+#dati_idMittente{
+	justify-content: flex-end;
+	margin-left: 65%;
+}
+
+.post-box{
+	width: 80%;
+	margin: 5% auto;
+}
+
+.col-md-5{
+	margin-left: 2%;
+}
+.nome-profilo {
+    margin: auto 2%;
+}
