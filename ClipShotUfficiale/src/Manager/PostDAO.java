@@ -122,4 +122,58 @@ public class PostDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return listaPost;
 	}
+	
+	public ArrayList<PostBean> doRetrievePostOfFollowing (String idUtente) throws SQLException {
+		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement(" select * from post p join segui s on p.idUtente=s.idFollowing where s.idFollower=? order by p.data desc;");
+		ps.setString(1, idUtente);
+		ResultSet resultSet=ps.executeQuery();
+		while (resultSet.next()) {
+			PostBean postBean= new PostBean();
+			postBean.setIdPost(resultSet.getInt("idPost"));
+			postBean.setIdUtente(resultSet.getString("idUtente"));
+			postBean.setIdFoto(resultSet.getInt("idFoto"));
+			postBean.setDescrizione(resultSet.getString("descrizione"));
+			Date dateFrom=resultSet.getDate("data");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dateFrom);
+			Time oraFrom=resultSet.getTime("ora");
+			GregorianCalendar ora= new GregorianCalendar();
+			ora.setTime(oraFrom);
+			postBean.setData(data);
+			postBean.setOra(ora);
+			postBean.setStato(resultSet.getString("stato"));
+			listaPost.add(postBean);
+		}
+		ps.close();
+		return listaPost;	
+	}
+	
+	public ArrayList<PostBean> doRetrievePostByIdUtente (String idUtente) throws SQLException {
+		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from post where idUtente=? order by data desc;");
+		ps.setString(1, idUtente);
+		ResultSet resultSet=ps.executeQuery();
+		while (resultSet.next()) {
+			PostBean postBean= new PostBean();
+			postBean.setIdPost(resultSet.getInt("idPost"));
+			postBean.setIdUtente(resultSet.getString("idUtente"));
+			postBean.setIdFoto(resultSet.getInt("idFoto"));
+			postBean.setDescrizione(resultSet.getString("descrizione"));
+			Date dateFrom=resultSet.getDate("data");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dateFrom);
+			Time oraFrom=resultSet.getTime("ora");
+			GregorianCalendar ora= new GregorianCalendar();
+			ora.setTime(oraFrom);
+			postBean.setData(data);
+			postBean.setOra(ora);
+			postBean.setStato(resultSet.getString("stato"));
+			listaPost.add(postBean);
+		}
+		ps.close();
+		return listaPost;
+	}
 }

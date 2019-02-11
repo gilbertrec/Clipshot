@@ -21,12 +21,11 @@ public class RicercaUtente extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		String campoRicerca;
-		ArrayList<UtenteBean> lista;
+		ArrayList<UtenteBean> listaUtentti;
 		campoRicerca=request.getParameter("campoRicerca");
 		UtenteDAO utenteDAO= new UtenteDAO();
 		try {
-			lista=utenteDAO.doRetrieveByKeyOrNomeOrCognome(campoRicerca);
-			System.out.println(lista.size());
+			listaUtentti=utenteDAO.doRetrieveByKeyOrNomeOrCognome(campoRicerca);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

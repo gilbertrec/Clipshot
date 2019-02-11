@@ -52,12 +52,14 @@ public class Login extends HttpServlet{
 				 try {
 					utenteBean=utenteDAO.doRetrieveByKey(idUtente);
 					session.setAttribute("tipo", utenteBean.getTipo());
+					//effettuare il dispatcher alla home dell'applicazione
+					System.out.println("login attraverso i cookie");
+					RequestDispatcher view=request.getRequestDispatcher("/HomePage");
+					view.forward(request, response);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//effettuare il dispatcher alla home dell'applicazione
-				System.out.println("login attraverso i cookie");
 			}
 		}
 		
@@ -90,6 +92,8 @@ public class Login extends HttpServlet{
 						response.addCookie(c);
 						response.addCookie(c2);
 						System.out.println("login effettuato");
+						RequestDispatcher view=request.getRequestDispatcher("/HomePage");
+						view.forward(request, response);
 					}
 					else {
 						//effettuare il dispatcher alla pagina di login

@@ -283,7 +283,6 @@ public class UtenteDAO {
 			lista.add(utente);
 		}
 		return lista;
-		
 	}
 	
 	
