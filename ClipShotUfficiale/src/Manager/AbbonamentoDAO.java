@@ -88,6 +88,8 @@ public class AbbonamentoDAO {
 			throw new Exception();
 		}
 		a.setNumeroCarta(result.getString("c.numeroCarta"));
+		query.close();
+		DriverManagerConnectionPool.releaseConnection(con);
 		return a;
 	}
 	public void doDelete(String idUtente) throws Exception {

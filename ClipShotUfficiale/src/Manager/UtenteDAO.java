@@ -242,6 +242,41 @@ public class UtenteDAO {
 		return listaUtente;
 	}
 	
+	public ArrayList<UtenteBean> doRetrieveByKeyOrNomeOrCognome (String x) throws SQLException {
+		ArrayList<UtenteBean> lista= new ArrayList<UtenteBean>();
+		Connection con=DriverManagerConnectionPool.getConnection();
+		/*Statement query=(Statement) con.createStatement();
+		String s="select * from utente idUtente like'%"+x+"%' or nome like%'"+x+"'% or cognome like%'"+x+"'%;";
+		System.out.println(s);
+		ResultSet result=query.executeQuery(s);*/
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from utente where idUtente like ? or nome like ? or cognome like ?;");
+		ps.setString(1, "%"+x+"%");
+		ps.setString(2, "%"+x+"%");
+		ps.setString(3, "%"+x+"%");
+		ResultSet result=ps.executeQuery();
+		while (result.next()) {
+			UtenteBean utente= new UtenteBean();
+			utente.setIdUtente(result.getString("idUtente"));
+			utente.setPassword(result.getString("password"));
+			utente.setEmail(result.getString("email"));
+			utente.setNome(result.getString("nome"));
+			utente.setCognome(result.getString("cognome"));
+			Date dataFrom=result.getDate("dataNascita");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dataFrom);
+			utente.setDataNascita(data);
+			utente.setSesso(result.getString("sesso"));
+			utente.setIndirizzo(result.getString("indirizzo"));
+			utente.setStato(result.getString("stato"));
+			utente.setTipo(result.getString("tipo"));
+			utente.setFotoProfilo(result.getString("fotoProfilo"));
+			lista.add(utente);
+		}
+		ps.close();
+		DriverManagerConnectionPool.releaseConnection(con);
+		return lista;
+	}
+	
 	public void doDelete(UtenteBean utente) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.utente where idUtente=?;");
