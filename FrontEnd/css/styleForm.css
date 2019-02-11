@@ -71,3 +71,24 @@ button.mfp-arrow {
   touch-action: manipulation; 
   width: 10%;
 }
+
+
+.info a{
+  color: #e76100;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.acquisti a {
+  color: #e76100;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.info{
+  margin-left: 4%;
+}
+
+.acquisti{
+  margin-left: 4%;
+}
