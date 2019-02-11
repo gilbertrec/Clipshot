@@ -50,6 +50,7 @@ public class HomePage extends HttpServlet{
 					if (flag==0)
 						listaPost.add(y, postBean2);
 				}
+				//dispatcher jsp inserendo listPost nella request
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
