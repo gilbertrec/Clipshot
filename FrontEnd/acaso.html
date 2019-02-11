@@ -2,6 +2,8 @@
 <html>
 <head>
   <title></title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css'>
   <link href="css/sb-admin-2.css" rel="stylesheet">
   <link href="vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
@@ -18,15 +20,14 @@
 <body>
   <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
           <div id="logo">
-            <a href=""><img class="logo" src="img/logo_ClipShot2.png" ></a>
+            <a href=""><img class="logo" src="img/logo_ClipShot2.png"></a>
           </div>
-        <div class="info">
-          <a href="">Informazioni</a>
-        </div>
-        <div class="acquisti">
-          <a href="">Acquisti</a>
-        </div>
-  
+          <div class="pubblica-post">
+            <ul class="inline-popups">
+              <a href="#test-popup" data-effect="mfp-zoom-in">Pubblica Post</a>
+            </ul>
+          </div>
+ 
 
 
           <!-- Sidebar Toggle (Topbar) -->
@@ -95,7 +96,146 @@
           </ul>
 
         </nav>
+<div id="user-profile-2" class="user-profile">
+    <div class="tabbable">
 
+      <div class="tab-content no-border padding-24">
+        <div id="home" class="tab-pane in active">
+          <div class="row">
+            <div class="col-xs-12 col-sm-3 center">
+              <span class="profile-picture">
+                <img class="editable img-responsive" alt=" Avatar" id="avatar2" src="http://bootdey.com/img/Content/avatar/avatar6.png">
+              </span>
+
+              <div class="space space-4"></div>
+
+              <button>ABBONAMENTO</button>
+              <ul class="inline-popups">
+                    <a href="#test-popup6" data-effect="mfp-zoom-in"><button>ELIMINA ACCOUNT</button></a>
+                  </ul>
+              
+            </div><!-- /.col -->
+
+            <div class="col-xs-12 col-sm-9">
+              <h4 class="blue">
+                <span class="middle">INFO</span>
+              </h4>
+
+              <div class="profile-user-info">
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Nome</div>
+
+                  <div class="profile-info-value">
+                    <span>Giulio</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Cognome</div>
+
+                  <div class="profile-info-value">
+                    <span>Rossi</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Email</div>
+
+                  <div class="profile-info-value">
+                    <span>giuliorossi@email.com</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Professione</div>
+
+                  <div class="profile-info-value">
+                    <span>Fotografo</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Indirizzo</div>
+
+                  <div class="profile-info-value">
+                    <span>Via Roma, Salerno</span>
+                  </div>
+                </div>
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Sesso</div>
+
+                  <div class="profile-info-value">
+                    <span>M</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Data di Nascita</div>
+
+                  <div class="profile-info-value">
+                    <span>20/12/1990</span>
+                  </div>
+                </div>
+                <a href="">Modifica</a> 
+              </div>  
+                
+                <h4 class="blue">
+                <span class="middle">DATI DI PAGAMENTO</span>
+              </h4>
+
+              <div class="profile-user-info">
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Titolare</div>
+
+                  <div class="profile-info-value">
+                    <span>Giulio Rossi</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Numero Carta</div>
+
+                  <div class="profile-info-value">
+                    <span>xxxx-xxxx-xxxx-xxxx</span>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Scadenza</div>
+
+                  <div class="profile-info-value">
+                    <span>12/2021</span>
+                  </div>
+                </div>
+                <div class="profile-info-row">
+                  <div class="profile-info-name">CVV</div>
+
+                  <div class="profile-info-value">
+                    <span>524</span>
+                  </div>
+                </div>
+                <a href="">Modifica</a>
+              </div>
+
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+          <div class="space-20"></div>
+
+          
+        </div><!-- /#home -->
+
+        
+      </div>
+    </div>
+  </div>
+  <div id="test-popup6" class="white-popup mfp-with-anim mfp-hide">
+        <p>
+          Sei sicuro di volere eliminare l'account?
+        </p>
+        <a href=""><button>Si</button></a>
+        <a href=""><button>No</button></a>
+      </div>
         <div id="test-popup" class="white-popup mfp-with-anim mfp-hide form">
           <form id="post">
             <p>PUBBLICA POST</p>
