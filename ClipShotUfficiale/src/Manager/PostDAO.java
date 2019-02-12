@@ -18,19 +18,31 @@ public class PostDAO {
 	
 	public PostDAO() { }
 	
-	public void doSave(PostBean postBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.post values(?, ?, ?, ?, ?, ?, ?);");
-		ps.setInt(1, postBean.getIdPost());
-		ps.setString(2, postBean.getIdUtente());
-		ps.setInt(3, postBean.getIdFoto());
-		ps.setString(4, postBean.getDescrizione());
-		ps.setString(5, postBean.getStringData());
-		ps.setString(6, postBean.getStringOra());
-		ps.setString(7, postBean.getStato());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave(PostBean postBean) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("insert into clipshot.post values(?, ?, ?, ?, ?, ?, ?);");
+			ps.setInt(1, postBean.getIdPost());
+			ps.setString(2, postBean.getIdUtente());
+			ps.setInt(3, postBean.getIdFoto());
+			ps.setString(4, postBean.getDescrizione());
+			ps.setString(5, postBean.getStringData());
+			ps.setString(6, postBean.getStringOra());
+			ps.setString(7, postBean.getStato());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
 	}
 	
 	public PostBean doRetrieveByKey(int idPost, String idUtente) throws SQLException {
@@ -60,7 +72,7 @@ public class PostDAO {
 		return postBean;
 	}
 	
-	public void doSaveOrUpdate(PostBean postBean) throws SQLException {
+	public PostBean doSaveOrUpdate(PostBean postBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.post where idPost=? and idUtente=?;");
 		ps.setInt(1, postBean.getIdPost());
@@ -79,9 +91,11 @@ public class PostDAO {
 		}
 		else {
 			doSave(postBean);
+			return postBean;
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
+		return postBean;
 	}
 	
 	public ArrayList<PostBean> doRetrieveAll() throws SQLException {
@@ -111,15 +125,15 @@ public class PostDAO {
 		return listaPost;
 	}
 	
-	public synchronized PostBean doRetrieveByCond(int idFoto, String idUtente) throws Exception{
+	public synchronized PostBean doRetrieveByCond(int idFoto, String idUtente) throws SQLException{
 		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
 		PostBean postBean = new PostBean();
-		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT p.descrizione FROM clipshot.post p JOIN clipshot.foto f ON (p.idFoto = f.idFoto) WHERE p.idFoto = '?' AND p.idUtente = '?'");
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT p.descrizione FROM clipshot.post p JOIN clipshot.foto f ON (p.idFoto = f.idFoto) WHERE p.idFoto = ? AND p.idUtente = ?");
 		query.setInt(1, idFoto);
 		query.setString(2, idUtente);
 		ResultSet result = query.executeQuery();
 		if(!result.next()) {
-			throw new Exception();
+			throw new SQLException();
 		}
 		postBean.setDescrizione(result.getString("p.descrizione"));
 		query.close();
@@ -127,13 +141,99 @@ public class PostDAO {
 		return postBean;	
 	}
 	
-	public void doDelete (PostBean postBean) throws SQLException {
+	public synchronized int doRetrieveMaxId(String idUtente) throws SQLException{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT MAX(idPost) as maxid FROM clipshot.post p WHERE p.idUtente = ?");
+		query.setString(1, idUtente);
+		ResultSet result = query.executeQuery();
+		int id;
+		if(!result.next()) {
+			id = 0;
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+		}
+		else {
+			id = result.getInt("maxid");
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+			
+		}	
+		return id;
+	}
+	
+	public ArrayList<PostBean> doRetrievePostOfFollowing (String idUtente) throws SQLException {
+		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
 		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.post where idPost=? and idUtente=?;");
-		ps.setInt(1, postBean.getIdPost());
-		ps.setString(2, postBean.getIdUtente());
-		ps.executeUpdate();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement(" select * from post p join segui s on p.idUtente=s.idFollowing where s.idFollower=? order by p.data desc;");
+		ps.setString(1, idUtente);
+		ResultSet resultSet=ps.executeQuery();
+		while (resultSet.next()) {
+			PostBean postBean= new PostBean();
+			postBean.setIdPost(resultSet.getInt("idPost"));
+			postBean.setIdUtente(resultSet.getString("idUtente"));
+			postBean.setIdFoto(resultSet.getInt("idFoto"));
+			postBean.setDescrizione(resultSet.getString("descrizione"));
+			Date dateFrom=resultSet.getDate("data");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dateFrom);
+			Time oraFrom=resultSet.getTime("ora");
+			GregorianCalendar ora= new GregorianCalendar();
+			ora.setTime(oraFrom);
+			postBean.setData(data);
+			postBean.setOra(ora);
+			postBean.setStato(resultSet.getString("stato"));
+			listaPost.add(postBean);
+		}
 		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+		return listaPost;	
+	}
+	
+	public ArrayList<PostBean> doRetrievePostByIdUtente (String idUtente) throws SQLException {
+		ArrayList<PostBean> listaPost= new ArrayList<PostBean>();
+		Connection con=DriverManagerConnectionPool.getConnection();
+		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from post where idUtente=? order by data desc;");
+		ps.setString(1, idUtente);
+		ResultSet resultSet=ps.executeQuery();
+		while (resultSet.next()) {
+			PostBean postBean= new PostBean();
+			postBean.setIdPost(resultSet.getInt("idPost"));
+			postBean.setIdUtente(resultSet.getString("idUtente"));
+			postBean.setIdFoto(resultSet.getInt("idFoto"));
+			postBean.setDescrizione(resultSet.getString("descrizione"));
+			Date dateFrom=resultSet.getDate("data");
+			GregorianCalendar data= new GregorianCalendar();
+			data.setTime(dateFrom);
+			Time oraFrom=resultSet.getTime("ora");
+			GregorianCalendar ora= new GregorianCalendar();
+			ora.setTime(oraFrom);
+			postBean.setData(data);
+			postBean.setOra(ora);
+			postBean.setStato(resultSet.getString("stato"));
+			listaPost.add(postBean);
+		}
+		ps.close();
+		return listaPost;
+	}
+	
+	public boolean doDelete (PostBean postBean) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("delete from clipshot.post where idPost=? and idUtente=?;");
+			ps.setInt(1, postBean.getIdPost());
+			ps.setString(2, postBean.getIdUtente());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
 	}
 }

@@ -41,14 +41,12 @@ public class CancellaAccount extends HttpServlet {
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 					requestDispatcher.forward(request, response);	
 				}
-				try {
-					utenteDAO.doDelete(utenteBean);
+				if(utenteDAO.doDelete(utenteBean)) {
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
-					requestDispatcher.forward(request, response);	
-				} catch (SQLException e) { // utente non cancellato
-					e.printStackTrace();
+					requestDispatcher.forward(request, response);
+				} else { //errore di cancellazione
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
-					requestDispatcher.forward(request, response);	
+					requestDispatcher.forward(request, response);
 				}
 			} else {//idUtente == null
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 

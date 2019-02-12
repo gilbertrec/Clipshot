@@ -6,6 +6,7 @@
  */
 package Model;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class StatisticheBean {
@@ -49,29 +50,29 @@ public class StatisticheBean {
 		this.numeroVisualizzazioni = numeroVisualizzazioni;
 	}
 	public int getYearInizio() {
-		return this.dataInizio.get(GregorianCalendar.YEAR);
+		return this.dataInizio.get(Calendar.YEAR);
 	}
 	
 	public int getMonthInizio() {
-		return this.dataInizio.get(GregorianCalendar.MONTH)+1;
+		return this.dataInizio.get(Calendar.MONTH)+1;
 	}
 	
 	public int getDayInizio() {
-		return this.dataInizio.get(GregorianCalendar.DAY_OF_MONTH);
+		return this.dataInizio.get(Calendar.DAY_OF_MONTH);
 	}
 	public String getStringDataInizio () {
 		return this.getYearInizio()+"-"+this.getMonthInizio()+"-"+this.getDayInizio();
 	}
 	public int getYearFine() {
-		return this.dataFine.get(GregorianCalendar.YEAR);
+		return this.dataFine.get(Calendar.YEAR);
 	}
 	
 	public int getMonthFine() {
-		return this.dataFine.get(GregorianCalendar.MONTH)+1;
+		return this.dataFine.get(Calendar.MONTH)+1;
 	}
 	
 	public int getDayFine() {
-		return this.dataFine.get(GregorianCalendar.DAY_OF_MONTH);
+		return this.dataFine.get(Calendar.DAY_OF_MONTH);
 	}
 	public String getStringDataFine() {
 		return this.getYearFine()+"-"+this.getMonthFine()+"-"+this.getDayFine();

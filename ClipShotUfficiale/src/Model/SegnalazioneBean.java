@@ -6,7 +6,7 @@
  */
 package Model;
 
-import java.sql.Date;
+import java.util.GregorianCalendar;
 
 public class SegnalazioneBean {
 	private int idSegnalazione;
@@ -15,7 +15,7 @@ public class SegnalazioneBean {
 	private String idUtentePost;
 	private String causa;
 	private String stato;
-	private Date data;
+	private GregorianCalendar data;
 	private String descrizione;
 	
 	
@@ -69,12 +69,28 @@ public class SegnalazioneBean {
 		this.stato = stato;
 	}
 
-	public Date getData() {
+	public GregorianCalendar getData() {
 		return data;
 	}
-
-	public void setData(Date data) {
+	
+	public void setData(GregorianCalendar data) {
 		this.data = data;
+	}
+	
+	public int getYear() {
+		return this.data.get(GregorianCalendar.YEAR);
+	}
+	
+	public int getMonth() {
+		return this.data.get(GregorianCalendar.MONTH)+1;
+	}
+	
+	public int getDay() {
+		return this.data.get(GregorianCalendar.DAY_OF_MONTH);
+	}
+	
+	public String getStringData() {
+		return this.getYear()+"-"+this.getMonth()+"-"+this.getDay();
 	}
 
 	public String getDescrizione() {
