@@ -76,16 +76,7 @@ public class AggiungiPost extends HttpServlet {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		try {
 			fotoDAO.doSave(fotoBean);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		//fine
-		
-		
-		//campi post
 		
 		idUtente=u_session.getIdUtente();
 		descrizione=request.getParameter("descrizionePost");

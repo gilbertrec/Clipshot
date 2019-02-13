@@ -66,14 +66,7 @@ public class Registrazione extends HttpServlet{
 		
 		
 		UtenteDAO utenteDAO= new UtenteDAO();
-		try {
-			utenteDAO.doSave(utenteBean);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//errore inserimento
-			e.printStackTrace();
-		}
-		
+		utenteDAO.doSave(utenteBean);
 		RequestDispatcher view=request.getRequestDispatcher("login.jsp");
 		view.forward(request, response);
 	}

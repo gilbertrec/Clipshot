@@ -30,12 +30,8 @@ public class RimuoviSegui extends HttpServlet{
 			seguiBean.setIdFollower(idFollower);
 			seguiBean.setIdFollowing(idFollowing);
 			SeguiDAO seguiDAO= new SeguiDAO();
-			try {
+			
 				seguiDAO.doDelete(seguiBean);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	

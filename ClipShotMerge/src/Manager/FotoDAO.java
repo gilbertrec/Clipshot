@@ -15,23 +15,33 @@ public class FotoDAO {
 	
 	public FotoDAO() { }
 	
-	public void doSave (FotoBean fotoBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps;
-		if (fotoBean.getPrezzo()==null) {
-			ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto (idFoto, path) values(?, ?);");
-			ps.setInt(1, fotoBean.getIdFoto());
-			ps.setString(2, fotoBean.getPath());
+	public boolean doSave (FotoBean fotoBean) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			if (fotoBean.getPrezzo()==null) {
+				ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto (idFoto, path) values(?, ?);");
+				ps.setInt(1, fotoBean.getIdFoto());
+				ps.setString(2, fotoBean.getPath());
+			} else {
+				ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto values(?, ?, ?);");
+				ps.setInt(1, fotoBean.getIdFoto());
+				ps.setString(2, fotoBean.getPath());
+				ps.setDouble(3,fotoBean.getPrezzo());
+			}
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		else {
-		ps=(PreparedStatement) con.prepareStatement("insert into clipshot.foto values(?, ?, ?);");
-		ps.setInt(1, fotoBean.getIdFoto());
-		ps.setString(2, fotoBean.getPath());
-		ps.setDouble(3,fotoBean.getPrezzo());
-		}
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
 	}
 	
 	public FotoBean doRetrieveByKey (int idFoto) throws SQLException {
@@ -50,7 +60,7 @@ public class FotoDAO {
 		return fotoBean;
 	}
 	
-	public void doSaveOrUpdate(FotoBean fotoBean) throws SQLException {
+	public FotoBean doSaveOrUpdate(FotoBean fotoBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from clipshot.foto where idFoto=?;");
 		ps.setInt(1, fotoBean.getIdFoto());
@@ -64,12 +74,32 @@ public class FotoDAO {
 		}
 		else {
 			doSave(fotoBean);
+			return fotoBean;
 		}
 		ps.close();
 		DriverManagerConnectionPool.releaseConnection(con);
+		return fotoBean;
 	}
 	
-	public ArrayList<FotoBean> doRetrieveByAll() throws SQLException {
+	public int doRetrieveMaxId() throws SQLException {
+		Connection con = DriverManagerConnectionPool.getConnection();
+		Statement query = (Statement) con.createStatement();
+		ResultSet resultSet=query.executeQuery("select MAX(idFoto) as maxid from clipshot.foto;");
+		int id; //id da ritornare
+		if(!resultSet.next()) {
+			id = 0;
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+		}
+		else {
+			id = resultSet.getInt("maxid");
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+		}	
+		return id;
+	}
+	
+	public ArrayList<FotoBean> doRetrieveAll() throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
 		Statement query=(Statement) con.createStatement();
@@ -86,28 +116,7 @@ public class FotoDAO {
 		return listaFoto;	
 	}
 	
-	public int doRetrieveMaxId() throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
-		Statement query=(Statement) con.createStatement();
-		ResultSet resultSet=query.executeQuery("select MAX(idFoto) as maxid from clipshot.foto;");
-		int id; //id da ritornare
-		if(!resultSet.next()) {
-			
-			id= 0;
-			query.close();
-			DriverManagerConnectionPool.releaseConnection(con);
-		}
-		else {
-			
-			id=resultSet.getInt("maxid");
-			query.close();
-			DriverManagerConnectionPool.releaseConnection(con);
-		}	
-		return id;
-	}
-	
-	public ArrayList<FotoBean> doRetrieveByCondFoto(String idUtente) throws Exception {
+	public ArrayList<FotoBean> doRetrieveByCondFoto(String idUtente) throws SQLException {
 		Connection con = DriverManagerConnectionPool.getConnection();
 		ArrayList<FotoBean> listaFoto = new ArrayList<FotoBean>();
 		PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT f.idFoto, f.path FROM clipshot.post p JOIN clipshot.foto f ON (p.idFoto = f.idFoto) WHERE p.idUtente = ? ORDER BY p.data DESC");
@@ -139,12 +148,24 @@ public class FotoDAO {
 		return fotoBean;
 	}
 
-	public void doDelete (FotoBean fotoBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.foto where idFoto=?;");
-		ps.setInt(1, fotoBean.getIdFoto());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doDelete (FotoBean fotoBean) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("delete from clipshot.foto where idFoto=?;");
+			ps.setInt(1, fotoBean.getIdFoto());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
 	}
 }

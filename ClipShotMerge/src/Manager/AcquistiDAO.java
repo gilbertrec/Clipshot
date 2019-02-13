@@ -17,15 +17,27 @@ public class AcquistiDAO {
 	
 	public AcquistiDAO() {	}
 	
-	public void doSave (AcquistiBean acquistiBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.acquisto values(?, ?, ?);");
-		ps.setString(1, acquistiBean.getIdUtente());
-		ps.setInt(2, acquistiBean.getIdFoto());
-		ps.setString(3, acquistiBean.getStringData());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave (AcquistiBean acquistiBean) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("insert into clipshot.acquisto values(?, ?, ?);");
+			ps.setString(1, acquistiBean.getIdUtente());
+			ps.setInt(2, acquistiBean.getIdFoto());
+			ps.setString(3, acquistiBean.getStringData());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public AcquistiBean doRetrieveByKey (String idUtente, int idFoto) throws SQLException {
@@ -47,14 +59,14 @@ public class AcquistiDAO {
 		DriverManagerConnectionPool.releaseConnection(con);
 		return acquistiBean;
 	}
-	public void doSaveOrUpdate (AcquistiBean acquistiBean) throws SQLException {
+	public AcquistiBean doSaveOrUpdate (AcquistiBean acquistiBean) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement ps=(PreparedStatement)con.prepareStatement("select * from clipshot.acquisto where idUtente=? and idFoto=?;");
 		ps.setString(1, acquistiBean.getIdUtente());
 		ps.setInt(2, acquistiBean.getIdFoto());
 		ResultSet resultSet=ps.executeQuery();
 		if (resultSet.next()) {
-			ps=(PreparedStatement) con.prepareStatement("update clipshot.acquisto set dataAcquisto=? where idUtente=? and idFoto=?");
+			ps=(PreparedStatement) con.prepareStatement("update clipshot.acquisto set data=? where idUtente=? and idFoto=?");
 			ps.setString(1, acquistiBean.getStringData());
 			ps.setString(2, acquistiBean.getIdUtente());
 			ps.setInt(3, acquistiBean.getIdFoto());
@@ -62,9 +74,11 @@ public class AcquistiDAO {
 		}
 		else {
 			doSave(acquistiBean);
+			return acquistiBean;
 		}
 		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+		DriverManagerConnectionPool.releaseConnection(con);		
+		return acquistiBean;
 	}
 	
 	public ArrayList<AcquistiBean> doRetrieveByAll() throws SQLException {
@@ -108,13 +122,25 @@ public class AcquistiDAO {
 		return listaAcquisti;
 	}
 	
-	public void doDelete (AcquistiBean acquistiBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from clipshot.acquisto where idUtente=? and idFoto=?;");
-		ps.setString(1, acquistiBean.getIdUtente());
-		ps.setInt(2, acquistiBean.getIdFoto());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doDelete (AcquistiBean acquistiBean) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("delete from clipshot.acquisto where idUtente=? and idFoto=?;");
+			ps.setString(1, acquistiBean.getIdUtente());
+			ps.setInt(2, acquistiBean.getIdFoto());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}	
 	}
 }

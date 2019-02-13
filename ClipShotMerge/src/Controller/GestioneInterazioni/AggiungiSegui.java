@@ -30,12 +30,7 @@ public class AggiungiSegui extends HttpServlet {
 			seguiBean.setIdFollower(idFollower);
 			seguiBean.setIdFollowing(idFollowing);
 			SeguiDAO seguiDAO= new SeguiDAO();
-			try {
-				seguiDAO.doSave(seguiBean);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			seguiDAO.doSave(seguiBean) ;
 		}
 	}
 	

@@ -15,15 +15,27 @@ public class LikeDAO {
 	
 	public LikeDAO() {}
 	
-	public void doSave(LikeBean likeBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into clipshot.like values (?, ?, ?);");
-		ps.setString(1, likeBean.getIdUtente());
-		ps.setInt(2, likeBean.getIdPost());
-		ps.setString(3, likeBean.getIdUtentePost());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave(LikeBean likeBean) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("insert into clipshot.like values (?, ?, ?);");
+			ps.setString(1, likeBean.getIdUtente());
+			ps.setInt(2, likeBean.getIdPost());
+			ps.setString(3, likeBean.getIdUtentePost());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+		}
 	}
 	
 	public LikeBean doRetrieveByKey (String idUtente, int idPost, String idUtentePost) throws SQLException {
@@ -35,7 +47,7 @@ public class LikeDAO {
 		ResultSet resultSet=ps.executeQuery();
 		LikeBean likeBean= new LikeBean();
 		if (resultSet.next()) {
-			likeBean.setIdUtente(resultSet.getString("idUtentePost"));
+			likeBean.setIdUtente(resultSet.getString("idUtente"));
 			likeBean.setIdPost(resultSet.getInt("idPost"));
 			likeBean.setIdUtentePost(resultSet.getString("idUtentePost"));
 		}
@@ -44,7 +56,7 @@ public class LikeDAO {
 		return likeBean;
 	}
 	
-	public ArrayList<LikeBean> doRetrieveByAll() throws SQLException {
+	public ArrayList<LikeBean> doRetrieveAll() throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
 		ArrayList<LikeBean> listaLike= new ArrayList<LikeBean>();
 		Statement query=(Statement) con.createStatement();
@@ -61,14 +73,26 @@ public class LikeDAO {
 		return listaLike;
 	}
 
-	public void doDelete (LikeBean likeBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		java.sql.PreparedStatement ps=con.prepareStatement("delete from clipshot.like where idUtente=? and idPost=? and idUtentePost=?;");
-		ps.setString(1, likeBean.getIdUtente());
-		ps.setInt(2, likeBean.getIdPost());
-		ps.setString(3, likeBean.getIdUtentePost());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doDelete (LikeBean likeBean) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("delete from clipshot.like where idUtente=? and idPost=? and idUtentePost=?;");
+			ps.setString(1, likeBean.getIdUtente());
+			ps.setInt(2, likeBean.getIdPost());
+			ps.setString(3, likeBean.getIdUtentePost());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
 	}
 }

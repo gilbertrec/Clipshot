@@ -45,8 +45,9 @@ public class StatisticheVisualizzazioni extends HttpServlet {
 			StatisticheBean statisticheBean = new StatisticheBean();
 			StatisticheDAO statisticheDAO = new StatisticheDAO();
 			try {
-				statisticheBean = statisticheDAO.doRetrieveByKey(abbonamentoBean.getIdUtente());
+				ArrayList<StatisticheBean> bean = statisticheDAO.doRetrieveByCond(abbonamentoBean.getIdUtente());
 			} catch (Exception e) { //nessuna statistica
+				
 				e.printStackTrace();
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 
 				requestDispatcher.forward(request, response);
@@ -80,9 +81,10 @@ public class StatisticheVisualizzazioni extends HttpServlet {
 				if(abbonamentoBean.getStato().equals("ATTIVO") && abbonamentoBean.isScaduto(abbonamentoBean.getDataScadenza())) {
 					StatisticheDAO statisticheDAO = new StatisticheDAO();
 					StatisticheBean statisticheBean = new StatisticheBean();
+					ArrayList<StatisticheBean> statistiche_list=new ArrayList<StatisticheBean>();
 					try {
-						statisticheBean = statisticheDAO.doRetrieveByKey(idUtente);
-						request.setAttribute("StatisticheVisualizzazioni", statisticheBean);						
+						statistiche_list = statisticheDAO.doRetrieveByCond(idUtente);
+						request.setAttribute("StatisticheVisualizzazioni", statistiche_list);						
 					} catch (Exception e) { //nessuna statistica
 						e.printStackTrace();
 						RequestDispatcher requestDispatcher = request.getRequestDispatcher(""); 

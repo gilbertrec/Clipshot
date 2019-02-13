@@ -34,12 +34,8 @@ public class AcquistaFoto extends HttpServlet{
 			acquistiBean.setIdUtente(idUtente);
 			acquistiBean.setIdFoto(idFoto);
 			acquistiBean.setData(data);
-			try {
-				acquistiDAO.doSave(acquistiBean);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			acquistiDAO.doSave(acquistiBean);
+			
 		}	
 	}
 	
