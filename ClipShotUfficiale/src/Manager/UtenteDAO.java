@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Manager;
 
 import java.sql.Connection;
@@ -18,23 +22,37 @@ public class UtenteDAO {
 	public UtenteDAO() {	
 	}
 	
-	public void doSave(UtenteBean utente) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-		ps.setString(1, utente.getIdUtente());
-		ps.setString(2, utente.getPassword());
-		ps.setString(3, utente.getEmail());
-		ps.setString(4, utente.getNome());
-		ps.setString(5, utente.getCognome());
-		ps.setString(6, utente.getStringData());
-		ps.setString(7, utente.getSesso());
-		ps.setString(8, utente.getIndirizzo());
-		ps.setString(9, utente.getStato());
-		ps.setString(10, "BASE");
-		ps.setString(11, null);
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave(UtenteBean utente){
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("insert into utente values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			ps.setString(1, utente.getIdUtente());
+			ps.setString(2, utente.getPassword());
+			ps.setString(3, utente.getEmail());
+			ps.setString(4, utente.getNome());
+			ps.setString(5, utente.getCognome());
+			ps.setString(6, utente.getStringData());
+			ps.setString(7, utente.getSesso());
+			ps.setString(8, utente.getIndirizzo());
+			ps.setString(9, utente.getStato());
+			ps.setString(10, "BASE");
+			ps.setString(11, null);
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+		finally {
+			try {
+				DriverManagerConnectionPool.releaseConnection(con);
+				ps.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void doDelete(UtenteBean utente) throws SQLException {
@@ -48,12 +66,13 @@ public class UtenteDAO {
 	
 	public UtenteBean doRetrieveByKey(String key) throws SQLException {
 		Connection con=DriverManagerConnectionPool.getConnection();
-		UtenteBean utente= new UtenteBean();
 		ResultSet result;
 		PreparedStatement ps=(PreparedStatement) con.prepareStatement("select * from utente where idUtente=?;");
 		ps.setString(1, key);
+		UtenteBean utente=null;
 		result=ps.executeQuery();
 		if (result.next()) {
+			utente= new UtenteBean();
 			utente.setIdUtente(result.getString("idUtente"));
 			utente.setPassword(result.getString("password"));
 			utente.setEmail(result.getString("email"));

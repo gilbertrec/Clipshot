@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Manager;
 
 import java.sql.Connection;
@@ -20,29 +24,59 @@ public class PostDAO {
 	public PostDAO() {
 	}
 	
-	public void doSave(PostBean postBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into post values(?, ?, ?, ?, ?, ?, ?);");
-		ps.setInt(1, postBean.getIdPost());
-		ps.setString(2, postBean.getIdUtente());
-		ps.setInt(3, postBean.getIdFoto());
-		ps.setString(4, postBean.getDescrizione());
-		ps.setString(5, postBean.getStringData());
-		ps.setString(6, postBean.getStringOra());
-		ps.setString(7, postBean.getStato());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave(PostBean postBean) {
+		Connection con=null;
+		PreparedStatement ps=null;
+		try {
+			con=DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("insert into post values(?, ?, ?, ?, ?, ?, ?);");
+			ps.setInt(1, postBean.getIdPost());
+			ps.setString(2, postBean.getIdUtente());
+			ps.setInt(3, postBean.getIdFoto());
+			ps.setString(4, postBean.getDescrizione());
+			ps.setString(5, postBean.getStringData());
+			ps.setString(6, postBean.getStringOra());
+			ps.setString(7, postBean.getStato());
+			ps.executeUpdate();
+			return false;
+		} 
+		catch (SQLException e) {
+			return false;
+		}
+		finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	public void doDelete (PostBean postBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from post where idPost=? and idUtente=?;");
-		ps.setInt(1, postBean.getIdPost());
-		ps.setString(2, postBean.getIdUtente());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doDelete (PostBean postBean) {
+		Connection con=null;
+		PreparedStatement ps=null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("delete from post where idPost=? and idUtente=?;");
+			ps.setInt(1, postBean.getIdPost());
+			ps.setString(2, postBean.getIdUtente());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+		finally {
+		try {
+			ps.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 	}
 	
 	public PostBean doRetrieveByKey(int idPost, String idUtente) throws SQLException {
@@ -51,8 +85,9 @@ public class PostDAO {
 		ps.setInt(1, idPost);
 		ps.setString(2, idUtente);
 		ResultSet resultSet=ps.executeQuery();
-		PostBean postBean= new PostBean();
+		PostBean postBean=null;
 		if (resultSet.next()) {
+			postBean=new PostBean();
 			postBean.setIdPost(resultSet.getInt("idPost"));
 			postBean.setIdUtente(resultSet.getString("idUtente"));
 			postBean.setIdFoto(resultSet.getInt("idFoto"));
@@ -176,4 +211,28 @@ public class PostDAO {
 		ps.close();
 		return listaPost;
 	}
+	
+	public synchronized int doRetrieveMaxId(String idUtente) throws Exception{
+		java.sql.Connection con = DriverManagerConnectionPool.getConnection();
+		PostBean postBean = new PostBean();
+		PreparedStatement query = (PreparedStatement) ((java.sql.Connection) con).prepareStatement("SELECT MAX(idPost) as maxid FROM clipshot.post p WHERE p.idUtente = ?");
+		query.setString(1, idUtente);
+		ResultSet result = query.executeQuery();
+		int id;
+		if(!result.next()) {
+			id= 0;
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+			
+		}
+		else {
+			id=result.getInt("maxid");
+			query.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+			
+		}	
+		return id;
+	}
+	
+	
 }

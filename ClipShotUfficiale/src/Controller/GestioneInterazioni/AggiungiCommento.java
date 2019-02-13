@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Controller.GestioneInterazioni;
 
 import java.io.IOException;
@@ -7,6 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,26 +21,30 @@ import javax.servlet.http.HttpSession;
 
 import Manager.CommentoDAO;
 import Model.CommentoBean;
+import Model.UtenteBean;
 
 @WebServlet("/AggiungiCommento")
 
 public class AggiungiCommento extends HttpServlet {
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		HttpSession session;
 		String idUtente, idUtentePost, descrizione;
+		UtenteBean utenteBean=null;
 		int idPost;
+		boolean result;
 		
 		session=request.getSession();
-		idUtente=(String) session.getAttribute("idUtente");
+		utenteBean=(UtenteBean) session.getAttribute("utente");
 		idPost=Integer.parseInt(request.getParameter("idPostCommento"));
 		idUtentePost=request.getParameter("idUtentePostCommento");
 		descrizione=request.getParameter("descrizioneCommento");
 		GregorianCalendar data= new GregorianCalendar();
 		GregorianCalendar ora= new GregorianCalendar();
-		if (idUtente!=null) {
+		if (utenteBean!=null) {
+			idUtente=utenteBean.getIdUtente();
 			CommentoBean commentoBean= new CommentoBean();
 			commentoBean.setIdUtente(idUtente);
 			commentoBean.setIdPost(idPost);
@@ -43,18 +53,28 @@ public class AggiungiCommento extends HttpServlet {
 			commentoBean.setOra(ora);
 			commentoBean.setDescrizione(descrizione);
 			CommentoDAO commentoDAO= new CommentoDAO();
-			try {
-				commentoDAO.doSave(commentoBean);
-				//effettuare il dispatcher alla jsp inserendo nella request idUtente, descrizione, data ed ora
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			result=commentoDAO.doSave(commentoBean);
+			//effettuare il dispatcher alla jsp inserendo nella request idUtente, descrizione, data ed ora
+			if (result==false) {
+				System.out.println("errore inserimento commento");
+				/*RequestDispatcher dispatcher=request.getRequestDispatcher("");
+				request.setAttribute("errore", true);
+				dispatcher.forward(request, response);*/
 			}
+			else {
+				System.out.println("commento inserito");
+				request.setAttribute("commentoBean", commentoBean);
+				//effettuare il dispatche
+			}
+		}
+		else {
+			RequestDispatcher dispatcher=request.getRequestDispatcher("/Login");
+			dispatcher.forward(request, response);
 		}
 		
 	}
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		this.doGet(request, response);
 	}
 

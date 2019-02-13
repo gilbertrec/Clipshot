@@ -1,3 +1,6 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
 package Controller.GestioneInterazioni;
 
 import java.io.IOException;
@@ -7,6 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,24 +20,27 @@ import javax.servlet.http.HttpSession;
 
 import Manager.CommentoDAO;
 import Model.CommentoBean;
+import Model.UtenteBean;
 
 @WebServlet("/RimuoviCommento")
 public class RimuoviCommento extends HttpServlet{
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		HttpSession session;
 		String idUtente, idUtentePost, dataCommento, oraCommento, annoData, meseData, giornoData, oraString, minutiString, secondiString;
 		int idPost;
+		UtenteBean utenteBean;
 		String arrayDataString[];
 		String arrayOraString[];
 		int anno, mese, giorno, ore, minuti, secondi;
 		GregorianCalendar data;
 		GregorianCalendar ora;
+		boolean result;
 		
 		session=request.getSession();
-		idUtente=(String) session.getAttribute("idUtente");
+		utenteBean=(UtenteBean) session.getAttribute("utente");
 		idPost=Integer.parseInt(request.getParameter("idPostCommento"));
 		idUtentePost=request.getParameter("idUtentePostCommento");
 		oraCommento=request.getParameter("oraCommento");
@@ -54,28 +62,37 @@ public class RimuoviCommento extends HttpServlet{
 		minuti=Integer.parseInt(minutiString);
 		secondi=Integer.parseInt(secondiString);
 		ora=new GregorianCalendar(anno, mese, giorno, ore, minuti, secondi);
-		if (idUtente!=null) {
+		if (utenteBean!=null) {
+			idUtente=utenteBean.getIdUtente();
 			CommentoBean commentoBean= new CommentoBean();
 			commentoBean.setIdUtente(idUtente);
 			commentoBean.setIdPost(idPost);
 			commentoBean.setIdUtentePost(idUtentePost);
 			commentoBean.setData(data);
 			commentoBean.setOra(ora);
-			System.out.println(idUtente+" "+idPost+" "+idUtentePost+" "+data+" "+ora);
 			CommentoDAO commentoDAO= new CommentoDAO();
-			try {
-				commentoDAO.doDelete(commentoBean);
-				//effettuare il dispatcher alla jsp della foto
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			result=commentoDAO.doDelete(commentoBean);
+			if (result==true) {
+				/*
+				Ritornare alla jsp chiamante
+				RequestDispatcher dispatcher=request.getRequestDispatcher("");
+				dispatcher.forward(request, response);*/
+			} 
+			else {
+				/*RequestDispatcher dispatcher=request.getRequestDispatcher("");
+				request.setAttribute("errorElimCommento", true);
+				dispatcher.forward(request, response);*/
 			}
+		}
+		else {
+			RequestDispatcher dispatcher=request.getRequestDispatcher("/Login");
+			dispatcher.forward(request, response);
 		}
 		
 		
 	}
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		this.doPost(request, response);
 	}
 

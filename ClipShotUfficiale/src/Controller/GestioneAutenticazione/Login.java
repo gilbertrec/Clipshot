@@ -1,3 +1,5 @@
+/* @author Adalgiso Della Calce*/
+
 package Controller.GestioneAutenticazione;
 
 import java.io.IOException;
@@ -23,7 +25,6 @@ import sun.rmi.server.Dispatcher;
 public class Login extends HttpServlet{ 
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		String idUtente=null, password=null;
 		UtenteDAO utenteDAO;
@@ -46,13 +47,17 @@ public class Login extends HttpServlet{
 				}
 			}
 			if ((idUtente!=null)&&(password!=null)) {
-				 session= request.getSession();
-				 session.setAttribute("idUtente", idUtente);
 				 utenteDAO= new UtenteDAO();
 				 try {
+					session= request.getSession();
+					session.setMaxInactiveInterval(60*30);
 					utenteBean=utenteDAO.doRetrieveByKey(idUtente);
-					session.setAttribute("tipo", utenteBean.getTipo());
-					//effettuare il dispatcher alla home dell'applicazione
+					UtenteBean u_session=new UtenteBean();
+					u_session.setIdUtente(utenteBean.getIdUtente());
+					u_session.setTipo(utenteBean.getTipo());
+					u_session.setNome(utenteBean.getNome());
+					u_session.setCognome(utenteBean.getCognome());
+					session.setAttribute("utente", u_session);
 					System.out.println("login attraverso i cookie");
 					RequestDispatcher view=request.getRequestDispatcher("/HomePage");
 					view.forward(request, response);
@@ -82,8 +87,13 @@ public class Login extends HttpServlet{
 					if (listaUtenti.size()==1) {
 						utenteBean=listaUtenti.get(0);
 						session=request.getSession();//creo la sessione
-						session.setAttribute("idUtente", utenteBean.getIdUtente());
-						session.setAttribute("tipo", utenteBean.getTipo());
+						session.setMaxInactiveInterval(60*30);
+						UtenteBean u_session=new UtenteBean();
+						u_session.setIdUtente(utenteBean.getIdUtente());
+						u_session.setTipo(utenteBean.getTipo());
+						u_session.setNome(utenteBean.getNome());
+						u_session.setCognome(utenteBean.getCognome());
+						session.setAttribute("utente", u_session);
 						//creo i cookie e li inserisco all'interno della response
 						Cookie c= new Cookie("idUtente", idUtente);
 						c.setMaxAge(2000);
@@ -92,11 +102,12 @@ public class Login extends HttpServlet{
 						response.addCookie(c);
 						response.addCookie(c2);
 						System.out.println("login effettuato");
-						RequestDispatcher view=request.getRequestDispatcher("/HomePage");
-						view.forward(request, response);
+						RequestDispatcher dispatcher=request.getRequestDispatcher("/HomePage");
+						dispatcher.forward(request, response);
 					}
 					else {
-						//effettuare il dispatcher alla pagina di login
+						RequestDispatcher view=request.getRequestDispatcher("login.jsp");
+						view.forward(request, response);
 						System.out.println("errore login");
 					}
 				} 

@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Manager;
 
 import java.sql.Connection;
@@ -20,31 +24,61 @@ public class CommentoDAO {
 		
 	}
 	
-	public void doSave (CommentoBean commentoBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into commento values(?, ?, ?, ?, ?, ?);");
-		ps.setString(1, commentoBean.getIdUtente());
-		ps.setInt(2, commentoBean.getIdPost());
-		ps.setString(3, commentoBean.getIdUtentePost());
-		ps.setString(4, commentoBean.getStringData());
-		ps.setString(5, commentoBean.getStringOra());
-		ps.setString(6, commentoBean.getDescrizione());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave (CommentoBean commentoBean) {
+		Connection con=null;
+		PreparedStatement ps=null;
+		
+		try {
+			con=DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("insert into commento values(?, ?, ?, ?, ?, ?);");
+			ps.setString(1, commentoBean.getIdUtente());
+			ps.setInt(2, commentoBean.getIdPost());
+			ps.setString(3, commentoBean.getIdUtentePost());
+			ps.setString(4, commentoBean.getStringData());
+			ps.setString(5, commentoBean.getStringOra());
+			ps.setString(6, commentoBean.getDescrizione());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+		finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	public void doDelete(CommentoBean commentoBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from commento where idUtente=? and idPost=? and idUtentePost=? and data=? and ora=?;");
-		ps.setString(1, commentoBean.getIdUtente());
-		ps.setInt(2, commentoBean.getIdPost());
-		ps.setString(3, commentoBean.getIdUtentePost());
-		ps.setString(4, commentoBean.getStringData());
-		ps.setString(5, commentoBean.getStringOra());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);	
+	public boolean doDelete(CommentoBean commentoBean) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("delete from commento where idUtente=? and idPost=? and idUtentePost=? and data=? and ora=?;");
+			ps.setString(1, commentoBean.getIdUtente());
+			ps.setInt(2, commentoBean.getIdPost());
+			ps.setString(3, commentoBean.getIdUtentePost());
+			ps.setString(4, commentoBean.getStringData());
+			ps.setString(5, commentoBean.getStringOra());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+		finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public CommentoBean doRetrieveByKey (String idUtente, int idPost, String idUtentePost, GregorianCalendar data, GregorianCalendar ora) throws SQLException {
@@ -65,8 +99,9 @@ public class CommentoDAO {
 		String oraCommentoPost=hour+":"+minute+":"+second;
 		ps.setString(5, oraCommentoPost);
 		ResultSet resultSet=ps.executeQuery();
-		CommentoBean commentoBean= new CommentoBean();
+		CommentoBean commentoBean=null;
 		if (resultSet.next()) {
+			commentoBean= new CommentoBean();
 			commentoBean.setIdUtente(resultSet.getString("idUtente"));
 			commentoBean.setIdPost(resultSet.getInt("idPost"));
 			commentoBean.setIdUtentePost(resultSet.getString("idUtentePost"));

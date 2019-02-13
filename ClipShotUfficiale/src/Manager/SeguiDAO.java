@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Manager;
 
 import java.sql.Connection;
@@ -17,24 +21,53 @@ public class SeguiDAO {
 	public SeguiDAO() {
 	}
 	
-	public void doSave(SeguiBean seguiBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("insert into segui values(?, ?);");
-		ps.setString(1, seguiBean.getIdFollower());
-		ps.setString(2, seguiBean.getIdFollowing());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doSave(SeguiBean seguiBean) {
+		Connection con=null;
+		PreparedStatement ps=null;
+		try {
+			con=DriverManagerConnectionPool.getConnection();
+			ps=(PreparedStatement) con.prepareStatement("insert into segui values(?, ?);");
+			ps.setString(1, seguiBean.getIdFollower());
+			ps.setString(2, seguiBean.getIdFollowing());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+		finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	public void doDelete(SeguiBean seguiBean) throws SQLException {
-		Connection con=DriverManagerConnectionPool.getConnection();
-		PreparedStatement ps=(PreparedStatement) con.prepareStatement("delete from segui where idFollower=? and idFollowing=?;");
-		ps.setString(1, seguiBean.getIdFollower());
-		ps.setString(2, seguiBean.getIdFollowing());
-		ps.executeUpdate();
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
+	public boolean doDelete(SeguiBean seguiBean) {
+		Connection con=null;
+		PreparedStatement ps=null;
+		try {
+			con=DriverManagerConnectionPool.getConnection();
+			ps = (PreparedStatement) con.prepareStatement("delete from segui where idFollower=? and idFollowing=?;");
+			ps.setString(1, seguiBean.getIdFollower());
+			ps.setString(2, seguiBean.getIdFollowing());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+		finally {
+			try {
+				ps.close();
+				DriverManagerConnectionPool.releaseConnection(con);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public SeguiBean doRetrieveByKey(String idFollower, String idFollowing) throws SQLException {
@@ -43,14 +76,18 @@ public class SeguiDAO {
 		ps.setString(1, idFollower);
 		ps.setString(2, idFollowing);
 		ResultSet resultSet=ps.executeQuery();
-		SeguiBean seguiBean= new SeguiBean();
+		SeguiBean seguiBean=null;
 		if (resultSet.next()) {
+			seguiBean= new SeguiBean();
 			seguiBean.setIdFollower(resultSet.getString("idFollower"));
 			seguiBean.setIdFollowing(resultSet.getString("idFollowing"));
+			ps.close();
+			DriverManagerConnectionPool.releaseConnection(con);
+			return seguiBean;
 		}
-		ps.close();
-		DriverManagerConnectionPool.releaseConnection(con);
-		return seguiBean;
+		else {
+			return null;
+		}
 	}
 	
 	public ArrayList<SeguiBean> doRetrieveAll() throws SQLException {

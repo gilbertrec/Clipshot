@@ -1,9 +1,14 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
 package Controller.GestioneInterazioni;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,35 +17,29 @@ import javax.servlet.http.HttpSession;
 
 import Manager.SeguiDAO;
 import Model.SeguiBean;
+import Model.UtenteBean;
 
 @WebServlet("/RimuoviSegui")
 
 public class RimuoviSegui extends HttpServlet{
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
-		HttpSession session;
 		String idFollower, idFollowing;
+		boolean result;
 		
-		session=request.getSession();
-		idFollower=(String) session.getAttribute("idUtente");
-		idFollowing=request.getParameter("idFollowingSegui");
-		if (idFollower!=null) {
-			SeguiBean seguiBean= new SeguiBean();
-			seguiBean.setIdFollower(idFollower);
-			seguiBean.setIdFollowing(idFollowing);
-			SeguiDAO seguiDAO= new SeguiDAO();
-			try {
-				seguiDAO.doDelete(seguiBean);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		idFollower=(String) request.getAttribute("idFollower");
+		idFollowing=(String) request.getAttribute("idFollowing");
+		SeguiBean seguiBean= new SeguiBean();
+		seguiBean.setIdFollower(idFollower);
+		seguiBean.setIdFollowing(idFollowing);
+		SeguiDAO seguiDAO= new SeguiDAO();
+		result=seguiDAO.doDelete(seguiBean);
+		
 	}
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		this.doGet(request, response);
 	}
 

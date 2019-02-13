@@ -1,4 +1,7 @@
-package Controller.GestioneAutenticazione;
+/*
+ * 
+ @author Adalgiso Della Calce*/
+package Controller.GestioneInterazioni;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,11 +24,12 @@ public class RicercaUtente extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		String campoRicerca;
-		ArrayList<UtenteBean> listaUtentti;
+		ArrayList<UtenteBean> listaUtenti;;
 		campoRicerca=request.getParameter("campoRicerca");
 		UtenteDAO utenteDAO= new UtenteDAO();
 		try {
-			listaUtentti=utenteDAO.doRetrieveByKeyOrNomeOrCognome(campoRicerca);
+			listaUtenti=utenteDAO.doRetrieveByKeyOrNomeOrCognome(campoRicerca);
+			request.setAttribute("listaUtenti", listaUtenti);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Controller.GestioneAutenticazione;
 
 import java.io.IOException;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import Manager.PostDAO;
 import Model.PostBean;
+import Model.UtenteBean;
 
 @WebServlet("/HomePage")
 public class HomePage extends HttpServlet{
@@ -24,13 +29,15 @@ public class HomePage extends HttpServlet{
 		HttpSession session = null;
 		String idUtente=null;
 		PostDAO postDAO;
+		UtenteBean utenteBean;
 		ArrayList<PostBean> listaPost;
 		ArrayList<PostBean> listaPost2;
 		
 		
 		session=request.getSession();
-		idUtente=(String) session.getAttribute("idUtente");
-		if (idUtente!=null) {
+		utenteBean=(UtenteBean) session.getAttribute("utente");
+		if (utenteBean!=null) {
+			idUtente=utenteBean.getIdUtente();
 			postDAO= new PostDAO();
 			try {
 				listaPost=postDAO.doRetrievePostOfFollowing(idUtente);
@@ -50,7 +57,8 @@ public class HomePage extends HttpServlet{
 					if (flag==0)
 						listaPost.add(y, postBean2);
 				}
-				//dispatcher jsp inserendo listPost nella request
+				//effettuare il dispatch
+				request.setAttribute("listaPost", listaPost);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,7 +1,6 @@
 /*
  * 
  @author Adalgiso Della Calce*/
-
 package Controller.GestioneInterazioni;
 
 import java.io.IOException;
@@ -20,28 +19,43 @@ import Manager.LikeDAO;
 import Model.LikeBean;
 import Model.UtenteBean;
 
-@WebServlet("/AggiungiLike")
+@WebServlet("/GetLike")
 
-public class AggiungiLike extends HttpServlet{
+public class GetLike extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		HttpSession session;
 		String idUtente, idUtentePost;
-		UtenteBean utenteBean;
 		int idPost;
-		boolean result;
+		UtenteBean utenteBean;
+		LikeBean likeBean=null;
 		
-		idUtente=(String) request.getAttribute("idUtente");
-		idPost=(int) request.getAttribute("idPost");
-		idUtentePost=(String) request.getAttribute("idUtentePost");
-		LikeBean likeBean= new LikeBean();
-		likeBean.setIdUtente(idUtente);
-		likeBean.setIdPost(idPost);
-		likeBean.setIdUtentePost(idUtentePost);
-		LikeDAO likeDAO= new LikeDAO();
-		likeDAO.doSave(likeBean);
+		session=request.getSession();
+		utenteBean=(UtenteBean) session.getAttribute("utente");
+		System.out.println(utenteBean);
+		idPost=Integer.parseInt(request.getParameter("idPostLike"));
+		idUtentePost=request.getParameter("idUtentePostLike");
+		if (utenteBean!=null) {
+			idUtente=utenteBean.getIdUtente();
+			LikeDAO likeDAO= new LikeDAO();
+			try {
+				likeBean=likeDAO.doRetrieveByKey(idUtente, idPost, idUtentePost);
+				RequestDispatcher dispatcher=request.getRequestDispatcher("");
+				request.setAttribute("likeBean", likeBean);
+				dispatcher.forward(request, response);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		else {
+			RequestDispatcher dispatcher=request.getRequestDispatcher("/Login");
+			dispatcher.forward(request, response);
+		}
+		
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

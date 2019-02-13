@@ -1,90 +1,126 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Controller.GestionePost;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Date;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import Manager.FotoDAO;
 import Manager.PostDAO;
-import Manager.UtenteDAO;
 import Model.FotoBean;
 import Model.PostBean;
 import Model.UtenteBean;
 
 @WebServlet("/AggiungiPost")
-
+@MultipartConfig
 public class AggiungiPost extends HttpServlet {
-	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		PrintWriter out=response.getWriter();
+	private static final String SAVE_DIR = "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\photopost\\";
+	private static final long serialVersionUID = 1L;
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("text/html");
 		HttpSession session;
-		String idUtente, descrizione, dataPost, oraPost, tipo, pathFoto, pathPost;
+		String idUtente, descrizione, tipo, pathFoto;
 		int idPost, idFoto;
 		Double prezzo;
 		GregorianCalendar data, ora;
+		boolean result;
 		
 		session=request.getSession();
-		tipo=(String) session.getAttribute("tipo");
-		//campi foto;
-		idFoto=Integer.parseInt(request.getParameter("idFotoFoto"));
-		pathFoto=request.getParameter("pathFoto");
+		UtenteBean u_session=(UtenteBean) session.getAttribute("utente");
+		tipo=u_session.getTipo();
+		
+		//UploadingFile
+		Part filePart = request.getPart("fileFoto");
+		
+        String fileName = filePart.getSubmittedFileName(); 
+        InputStream is = filePart.getInputStream();
+        pathFoto=fileName;
+        Files.copy(is, Paths.get(SAVE_DIR + fileName),
+                StandardCopyOption.REPLACE_EXISTING);//carica l'immagine
+        
+        
+		//Preparazione Bean da inserire
 		FotoBean fotoBean= new FotoBean();
-		fotoBean.setIdFoto(idFoto);
 		fotoBean.setPath(pathFoto);
-		if (tipo.equals("ARTISTA")) {
+		if (tipo.equalsIgnoreCase("ARTISTA")) {
 			prezzo=Double.parseDouble(request.getParameter("prezzoFoto"));
 			fotoBean.setPrezzo(prezzo);
 		}
+		else {
+			fotoBean.setPrezzo(0.0);
+		}
 		FotoDAO fotoDAO= new FotoDAO();
 		try {
-			fotoDAO.doSave(fotoBean);
-		} catch (SQLException e1) {
+			int last_id= fotoDAO.doRetrieveMaxId(); //Ricavo l'id più grande per effettuare l'autoincrement
+			fotoBean.setIdFoto(last_id+1);
+		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
+		}
+		result=fotoDAO.doSave(fotoBean);
+		if (result==false) {
+			System.out.println("errore inserimento foto");
+			//effettuare il dispatcher
 		}
 		//fine
 		
 		
 		//campi post
-		idPost=Integer.parseInt(request.getParameter("idPostPost"));
-		idUtente=(String) session.getAttribute("idUtente");
+		
+		idUtente=u_session.getIdUtente();
 		descrizione=request.getParameter("descrizionePost");
 		data=new GregorianCalendar();
 		ora= new GregorianCalendar();
+		PostDAO postDAO=new PostDAO();
+		
 		if (idUtente!=null) {
+			int last_id;
 			PostBean postBean= new PostBean();
-			postBean.setIdPost(idPost);
+			try {
+				last_id= postDAO.doRetrieveMaxId(idUtente);//Ricavo l'id più grande per effettuare l'autoincrement
+				postBean.setIdPost(last_id+1);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			postBean.setIdUtente(idUtente);
-			postBean.setIdFoto(idFoto);
+			postBean.setIdFoto(fotoBean.getIdFoto());
 			postBean.setDescrizione(descrizione);
 			postBean.setData(data);
 			postBean.setOra(ora);
 			postBean.setStato("FREE");
-			PostDAO postDAO= new PostDAO();
-			try {
-				postDAO.doSave(postBean);
-			} 
-			catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			result=postDAO.doSave(postBean);
+			if (result==false) {
+				//errore inserimento foto effettaure il dispatcher
+			}
+			else {
+				//effettuare il dispatcher
 			}
 			
 		}
 	}
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		this.doPost(request, response);
 	}
 	

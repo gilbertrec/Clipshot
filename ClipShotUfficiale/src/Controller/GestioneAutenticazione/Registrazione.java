@@ -1,3 +1,7 @@
+/*
+ * 
+ @author Adalgiso Della Calce*/
+
 package Controller.GestioneAutenticazione;
 
 import java.io.IOException;
@@ -8,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +26,13 @@ import Model.UtenteBean;
 
 public class Registrazione extends HttpServlet{
 	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		String idUtente, email, password, nome, cognome, data, sesso, tipo,indirizzo, fotoProfilo, stato, dataNascitaString, annoData, meseData, giornoData;
 		String arrayDataString[];
 		int anno, mese, giorno;
+		boolean result;
 		GregorianCalendar dataNascita;
 		
 		idUtente=request.getParameter("idUtenteUtente");
@@ -68,16 +75,21 @@ public class Registrazione extends HttpServlet{
 			utenteBean.setFotoProfilo(fotoProfilo);
 		}
 		UtenteDAO utenteDAO= new UtenteDAO();
-		try {
-			utenteDAO.doSave(utenteBean);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//errore inserimento
-			e.printStackTrace();
+		result=utenteDAO.doSave(utenteBean);
+		if (result==true) {
+			System.out.println("inserimento");
+			RequestDispatcher view=request.getRequestDispatcher("/Login");
+			view.forward(request, response);
+		}
+		if (result==false) {
+			System.out.println("errore inserimento");
+			//RequestDispatcher view=request.getRequestDispatcher("registrazione.jsp");
+			request.setAttribute("errore", true);
+			//view.forward(request, response);
 		}
 	}
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		this.doPost(request, response);
 	}
 
