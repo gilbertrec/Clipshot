@@ -1,0 +1,17 @@
+.mp{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 2% 0 6% 0;
+}
+.nome{
+	padding: 10% 0;
+	margin-left: 2%;
+}
+.segui{
+	padding: 8% 0;
+	margin: 0 2%;
+}
+.messaggio{
+	padding: 8% 0;
+}

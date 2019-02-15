@@ -1,0 +1,52 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.foto{
+	max-width: 20%;
+	padding: 2%
+}
+.img-foto{
+	display: flex;
+	justify-content: center;
+}
+
+.grafico {
+    background-color: #A3A;
+    max-width: 60%;
+    margin: 3% auto;
+    padding: 8%;
+}
+
+.pci{
+	display: flex;
+	flex-direction: column;
+}
+.sopra{
+	display: flex;
+	flex-direction: row;
+}
+.sotto{
+	display: flex;
+	flex-direction: row;
+	padding-top: 10%;
+	
+}
+.acquisti{
+	width: 50%
+}
+
+.like{
+	width: 50%
+}
+
+.foto-stat{
+	width: 50%;
+}
+
+.descrizione{
+	width: 50%;
+}
+
+

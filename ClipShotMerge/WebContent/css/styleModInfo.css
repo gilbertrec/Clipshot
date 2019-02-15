@@ -1,0 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.sesso {
+    display: flex;
+    flex-direction: row;
+}
+h1{
+	text-align: center;
+}
+
+#preview{
+	width: 100%;
+	
+}
