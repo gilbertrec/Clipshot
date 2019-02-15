@@ -4,7 +4,8 @@
 <%@ page import ="java.util.ArrayList"%>	
 <%@ page import ="Manager.FotoDAO" %>
 <%@ page import ="Manager.LikeDAO" %>
- <%@page import ="Model.FotoBean" %> 																																																																																																																																																
+ <%@page import ="Model.FotoBean" %> 	
+ <%@page import ="Model.LikeBean" %> 																																																																																																																																															
 <!DOCTYPE html >
 <html>
 <head>
