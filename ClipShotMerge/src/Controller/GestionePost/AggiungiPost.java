@@ -43,8 +43,8 @@ import Model.UtenteBean;
 @WebServlet("/AggiungiPost")
 @MultipartConfig
 public class AggiungiPost extends HttpServlet {
-	private static final String SAVE_DIR = "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\photopost\\";
-	private static final String WM_DIR = "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\png\\";
+	private static final String SAVE_DIR = "C:\\Users\\Prova\\Documents\\GitHub\\clipshot\\ClipShotMerge\\WebContent\\photopost\\";
+	private static final String WM_DIR = "C:\\Users\\Prova\\Documents\\GitHub\\clipshot\\ClipShotMerge\\WebContent\\png\\";
 	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -27,7 +27,7 @@ import Model.UtenteBean;
 @MultipartConfig
 public class ModificaDati extends HttpServlet{
 	private static final long serialVersionUID = 5497876428877631316L;
-	private static final String SAVE_DIR = "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\profile_photo\\";
+	private static final String SAVE_DIR = "C:\\Users\\Prova\\Documents\\GitHub\\clipshot\\ClipShotMerge\\WebContent\\profile_photo\\";
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}

@@ -37,7 +37,7 @@ import proxy.ProxyImage;
 public class FotoProxyController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  private static final String SAVE_DIR =  "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\photopost";
+  private static final String SAVE_DIR =  "C:\\Users\\Prova\\Documents\\GitHub\\clipshot\\ClipShotMerge\\WebContent\\photopost";
 
   public FotoProxyController() {
     super();

@@ -32,7 +32,7 @@ import proxy.ProxyImage;
 public class ImageProxyController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  private static final String SAVE_DIR =  "C:\\Users\\Gilbert\\eclipse-workspace\\ClipShotMerge\\WebContent\\profile_photo";
+  private static final String SAVE_DIR =  "C:\\Users\\Prova\\Documents\\GitHub\\clipshot\\ClipShotMerge\\WebContent\\profile_photo";
 
   public ImageProxyController() {
     super();
