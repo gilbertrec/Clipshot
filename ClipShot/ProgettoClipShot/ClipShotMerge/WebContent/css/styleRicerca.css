@@ -1,0 +1,9 @@
+.mp{
+	display: flex;
+	flex-direction: row;
+	padding: 2% 0 3% 6%;
+}
+.nome{
+	padding: 3% 0;
+	margin-left: 2%;
+}
